@@ -45,6 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
       navLinks.classList.toggle('active');
     });
 
+    // Fechar ao clicar no botão "X"
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    if (closeMenuBtn) {
+      closeMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menuBtn.click(); // Reutiliza a função do menu hambúrguer para fechar
+      });
+    }
+
     // Fechar ao clicar em qualquer link
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
@@ -56,6 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fechar ao clicar fora do menu
     document.addEventListener('click', (e) => {
       if (!navLinks.contains(e.target) && !menuBtn.contains(e.target)) {
+        menuBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+      }
+    });
+
+    // Fechar ao pressionar a tecla ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
         menuBtn.classList.remove('active');
         navLinks.classList.remove('active');
       }

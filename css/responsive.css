@@ -1,13 +1,73 @@
 /* =============================================================
    Responsive System – Clínica Zoe
-   Breakpoints: 2560 / 1920 / 1366 / 1024 / 768 / 480 / 320
+   Breakpoints: 2560 / 1920 / 1440 / 1366 / 1280 / 1024 / 912 /
+                820 / 768 / 600 / 480 / 430 / 412 / 390 / 375 /
+                360 / 320
    ============================================================= */
 
-/* ---- UltraWide 2560px+ ---- */
+/* ================================================================
+   0. GLOBAL RESPONSIVE FOUNDATIONS
+   Applied at all sizes to prevent overflow and improve fluidity.
+   ================================================================ */
+
+/* Prevent horizontal overflow from 100vw including scrollbar */
+html {
+  overflow-x: hidden;
+}
+
+.close-menu-btn {
+  display: none;
+}
+
+/* Ensure all images and media respect containers */
+img, video, iframe, embed, object {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Map iframes need explicit override since they have height="100%" inline */
+.map-iframe-container iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/* Page titles (inline font-size: 3.5rem) – use clamp for fluid scaling */
+.page-title {
+  font-size: clamp(1.8rem, 5vw, 3.5rem) !important;
+}
+
+.page-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem) !important;
+}
+
+/* Hero title – fluid scaling at all sizes */
+.hero-title {
+  font-size: clamp(2rem, 5vw, 4rem) !important;
+}
+
+.hero-desc {
+  font-size: clamp(1rem, 2vw, 1.25rem) !important;
+}
+
+/* Stat numbers – fluid scaling */
+.stat-card span:first-child {
+  font-size: clamp(2rem, 4vw, 3.5rem) !important;
+}
+
+/* Section header h2 – fluid */
+.section-header h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+}
+
+/* Ensure inline-styled grids with minmax(300px+) don't overflow small screens */
+
+
+/* ================================================================
+   1. ULTRAWIDE 2560px+
+   ================================================================ */
 @media (min-width: 2560px) {
   :root { --max-width: 1600px; }
 
-  .section-header h2 { font-size: clamp(2.5rem, 2.8vw, 3.5rem); }
   .hero-title { font-size: clamp(4rem, 4.5vw, 6rem) !important; }
   .hero-desc { font-size: clamp(1.2rem, 1.4vw, 1.6rem) !important; }
 
@@ -16,7 +76,9 @@
   }
 }
 
-/* ---- Large Desktop 1920px ---- */
+/* ================================================================
+   2. LARGE DESKTOP 1920px
+   ================================================================ */
 @media (min-width: 1920px) and (max-width: 2559px) {
   :root { --max-width: 1400px; }
 
@@ -25,7 +87,9 @@
   }
 }
 
-/* ---- Notebook 1366px ---- */
+/* ================================================================
+   3. NOTEBOOK 1366px
+   ================================================================ */
 @media (max-width: 1366px) {
   .hero-title { font-size: clamp(2.4rem, 3.5vw, 3.8rem) !important; }
   .hero-desc { font-size: clamp(1.0rem, 1.2vw, 1.2rem) !important; }
@@ -35,12 +99,14 @@
   }
 }
 
-/* ---- Tablet / iPad & Small Notebook 1024px ---- */
+/* ================================================================
+   4. SMALL NOTEBOOK / LARGE TABLET 1024px
+   ================================================================ */
 @media (max-width: 1024px) {
-  /* Menu Hamburguer do Site (Landing Page) */
+  /* ── Menu Hamburguer do Site (Landing Page) ── */
   .menu-btn {
     display: flex !important;
-    order: 3; /* Hamburger no canto direito */
+    order: 3;
   }
 
   .header-actions {
@@ -64,12 +130,39 @@
     transform: translateY(-8px) rotate(-45deg);
   }
 
+  .close-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1010;
+    padding: 0;
+  }
+
+  .close-menu-btn i {
+    font-size: 32px;
+    color: #fff !important;
+    transition: color var(--transition-fast);
+  }
+
+  .close-menu-btn:hover i {
+    color: var(--primary) !important;
+  }
+
   .nav-links {
     position: fixed;
     top: 0;
     right: -100%;
     width: 280px;
     height: 100vh;
+    height: 100dvh; /* modern mobile viewport fix */
     background-color: var(--bg-surface);
     border-left: 1px solid var(--border-color);
     flex-direction: column;
@@ -78,7 +171,7 @@
     padding: 100px 40px;
     gap: 24px;
     box-shadow: var(--shadow-lg);
-    transition: right var(--transition-normal);
+    transition: right var(--transition-slow);
     z-index: 999;
   }
 
@@ -96,16 +189,12 @@
     bottom: -4px;
   }
 
-  .section-header h2 {
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-  }
-
   .footer-grid {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
   }
 
-  /* Landing Page Hero Section Responsivo */
+  /* ── Landing Page Hero Section ── */
   .hero-grid {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
@@ -139,19 +228,44 @@
     margin: 20px auto 0 auto;
   }
 
-  /* Dashboard: layout vira 1 coluna com topbar mobile */
+  /* ── Hero section padding-top adjustment ── */
+  .hero-section {
+    padding-top: 130px !important;
+    min-height: auto !important;
+  }
+
+  /* ── Location section: 2-col → 1-col ── */
+  .location-section .container > div[style*="grid-template-columns: 1.2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+
+  /* ── Sobre page: history section 2-col grid ── */
+  div[style*="grid-template-columns: 1fr 1.2fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+
+  /* ── Contato page: 2-col grid ── */
+  div[style*="grid-template-columns: 1fr 1.2fr"][style*="gap: 60px"],
+  div[style*="grid-template-columns: 1.2fr 1fr"][style*="gap: 60px"] {
+    gap: 30px !important;
+  }
+
+  /* ── Dashboard Admin: layout vira 1 coluna ── */
   .dashboard-layout {
     grid-template-columns: 1fr !important;
     grid-template-rows: auto 1fr;
   }
 
-  /* Sidebar vira gaveta (drawer) oculta por padrão */
+  /* ── Sidebar vira gaveta (drawer) ── */
   .admin-sidebar {
     position: fixed !important;
     top: 0;
-    left: -290px !important; /* Escondido à esquerda */
+    left: -290px !important;
     width: 280px !important;
     height: 100vh !important;
+    height: 100dvh !important;
     flex-direction: column !important;
     padding: 28px 20px !important;
     z-index: 500 !important;
@@ -163,10 +277,9 @@
   }
 
   .admin-sidebar.sidebar-open {
-    left: 0 !important; /* Desliza para dentro da tela */
+    left: 0 !important;
   }
 
-  /* Overlay de fundo da sidebar drawer */
   .sidebar-overlay {
     display: none;
     position: fixed;
@@ -210,7 +323,7 @@
     margin-top: 16px;
   }
 
-  /* Mobile Top Bar (sempre visível no admin < 1024px) */
+  /* ── Mobile Top Bar (admin) ── */
   .mobile-topbar {
     display: flex !important;
     align-items: center;
@@ -291,7 +404,26 @@
   }
 }
 
-/* ---- Tablet / iPad Portrait 768px ---- */
+/* ================================================================
+   5. TABLET PORTRAIT / iPad / Surface 912px
+   ================================================================ */
+@media (max-width: 912px) {
+  /* ── Contato & Sobre: 2-col grids → 1 col ── */
+  div[style*="grid-template-columns: 1fr 1.2fr"],
+  div[style*="grid-template-columns: 1.2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+
+  /* ── Trabalhe conosco: form grids with 1.5fr 1fr ── */
+  div[style*="grid-template-columns: 1.5fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ================================================================
+   6. TABLET / iPad Portrait 768px
+   ================================================================ */
 @media (max-width: 768px) {
   :root {
     --radius-lg: 16px;
@@ -306,11 +438,66 @@
     margin-bottom: 40px;
   }
 
-  .section-header h2 {
-    font-size: clamp(1.5rem, 4vw, 1.9rem);
+  /* ── Hero section ── */
+  .hero-section {
+    padding-top: 120px !important;
+    min-height: auto !important;
   }
 
-  /* Footer */
+  /* ── Page hero sections on subpages (inline padding-top: 150px) ── */
+  section[style*="padding-top: 150px"],
+  section[style*="padding-top: 130px"] {
+    padding-top: 110px !important;
+  }
+
+  /* ── Stat cards: reduce font-size inline ── */
+  .stat-card span:first-child {
+    font-size: clamp(1.8rem, 5vw, 2.8rem) !important;
+  }
+
+  /* ── Diferenciais / Highlight cards: minmax(320px) too wide ── */
+  div[style*="minmax(320px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Especialidades index grid: minmax(220px) still OK but reduce gap ── */
+
+  /* ── MVV Cards on Sobre page: minmax(300px) too wide ── */
+  div[style*="minmax(300px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Especialidades page grid: minmax(300px) too wide ── */
+  #specialties-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Gallery grid: minmax(250px) ── */
+  div[style*="minmax(250px"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* ── Location section ── */
+  .map-iframe-container {
+    height: 280px !important;
+  }
+
+  /* ── Location details heading ── */
+  .location-details h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem) !important;
+  }
+
+  /* ── Location buttons: stack if needed ── */
+  .location-details div[style*="display: flex"][style*="gap: 12px"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* ── Contato form: inline grid 1fr 1fr → 1 col ── */
+  div[style*="grid-template-columns: 1fr 1fr"][style*="gap: 20px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Footer ── */
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 30px;
@@ -326,7 +513,7 @@
     justify-content: center;
   }
 
-  /* Cookie Banner LGPD */
+  /* ── Cookie Banner LGPD ── */
   .cookie-banner {
     flex-direction: column;
     text-align: center;
@@ -340,7 +527,18 @@
     justify-content: center;
   }
 
-  /* Dashboard mobile */
+  /* ── Newsletter form in footer ── */
+  #newsletter-form {
+    flex-wrap: wrap !important;
+  }
+
+  #newsletter-form input[type="email"] {
+    min-width: 0 !important;
+    width: 100% !important;
+    flex: 1 1 200px !important;
+  }
+
+  /* ── Dashboard mobile ── */
   .admin-main {
     padding: 16px !important;
   }
@@ -358,7 +556,7 @@
     font-size: 1.8rem !important;
   }
 
-  /* Admin Header */
+  /* ── Admin Header ── */
   .admin-header {
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -378,20 +576,23 @@
     padding: 10px 12px;
   }
 
-  /* Modal Responsividade */
+  /* ── Modal Responsividade ── */
   .modal-content {
     margin: 20px 16px !important;
     padding: 24px !important;
+    max-height: 85vh;
+    overflow-y: auto;
   }
 
-  /* Grids de 1 coluna em mobile */
+  /* ── Grids de 1 coluna ── */
   .specialists-grid,
   .features-grid,
-  .team-grid {
+  .team-grid,
+  .view-prof-grid {
     grid-template-columns: 1fr !important;
   }
 
-  /* Formulários */
+  /* ── Formulários ── */
   .form-grid-2 {
     grid-template-columns: 1fr !important;
   }
@@ -399,22 +600,112 @@
   .schedule-layout {
     grid-template-columns: 1fr !important;
   }
+
+  /* ── Swiper slides: reduce padding ── */
+  .reviews-slider .swiper-slide {
+    padding: 24px !important;
+  }
+
+  /* ── Profissionais page: search filter bar ── */
+  .search-filters-bar {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Profissionais grid ── */
+  .grid-professionals {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Login container ── */
+  .login-container {
+    margin: 60px auto !important;
+    padding: 28px 20px !important;
+  }
+
+  /* ── Highlight cards reduce padding ── */
+  .highlight-card {
+    padding: 28px !important;
+  }
+
+  /* ── Review items (agendamento) on mobile ── */
+  .review-item {
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .review-value {
+    text-align: left !important;
+  }
 }
 
-/* ---- Mobile 480px ---- */
-@media (max-width: 480px) {
-  .header-actions .btn {
-    display: none; /* Esconde agendamento no mini header */
+/* ================================================================
+   7. LARGE PHONE / SMALL TABLET 600px
+   ================================================================ */
+@media (max-width: 600px) {
+  .container {
+    padding: 0 16px;
   }
 
-  .section-header h2 {
-    font-size: 1.6rem;
+  .section {
+    padding: 50px 0;
   }
 
+  /* ── Hero buttons: stack vertically ── */
+  .hero-buttons {
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  .hero-buttons .btn {
+    width: 100% !important;
+    max-width: 320px !important;
+    justify-content: center;
+  }
+
+  /* ── Stat grid: force 2 columns ── */
+  div[style*="grid-template-columns: repeat(auto-fit, minmax(200px"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+
+  /* ── Gallery: 1 col ── */
+  div[style*="minmax(250px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Specialty cards index: reduce minmax ── */
+  div[style*="minmax(220px"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  /* ── Specialty cards on index: reduce padding ── */
+  .specialty-card {
+    padding: 20px !important;
+  }
+
+  /* ── Location buttons: full width ── */
+  .location-details div[style*="display: flex"][style*="gap: 12px"] {
+    flex-direction: column !important;
+  }
+
+  .location-details div[style*="display: flex"][style*="gap: 12px"] .btn {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  /* ── Map height reduce ── */
+  .map-iframe-container {
+    height: 240px !important;
+  }
+
+  /* ── Toast position ── */
   .toast-container {
     left: 16px;
     right: 16px;
-    bottom: 16px;
+    top: auto;
+    bottom: 80px;
   }
 
   .toast {
@@ -422,7 +713,89 @@
     width: 100%;
   }
 
-  /* Stats em 1 coluna */
+  /* ── FAQ question text ── */
+  .faq-question {
+    font-size: 0.95rem !important;
+    padding: 16px 18px !important;
+  }
+
+  .faq-answer {
+    padding: 0 18px 16px 18px !important;
+  }
+
+  /* ── Cards on especialidades page ── */
+  .card-specialty-detailed {
+    padding: 28px !important;
+  }
+
+  /* ── Booking wrapper (agendamento) ── */
+  .booking-wrapper {
+    padding: 24px 16px !important;
+  }
+
+  /* ── Agendamento calendar layout ── */
+  .calendar-step-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Agendamento form grid ── */
+  .form-group-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Agendamento specialty card grid ── */
+  .grid-specialties {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── WhatsApp & Back to Top: smaller offset ── */
+  .whatsapp-float {
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    font-size: 1.5rem;
+  }
+
+  .back-to-top {
+    bottom: 20px;
+    left: 20px;
+    width: 42px;
+    height: 42px;
+  }
+}
+
+/* ================================================================
+   8. MOBILE 480px
+   ================================================================ */
+@media (max-width: 480px) {
+  /* ── Hide CTA button in header on very small screens ── */
+  .header-actions .btn {
+    display: none;
+  }
+
+  /* ── Hero section padding ── */
+  .hero-section {
+    padding-top: 100px !important;
+  }
+
+  section[style*="padding-top: 150px"],
+  section[style*="padding-top: 130px"] {
+    padding-top: 100px !important;
+  }
+
+  /* ── Hero buttons: reduce padding ── */
+  .hero-buttons .btn {
+    padding: 14px 24px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* ── Stats: 1 col ── */
+  div[style*="grid-template-columns: repeat(auto-fit, minmax(200px"] {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
   .dashboard-stats-grid {
     grid-template-columns: 1fr !important;
   }
@@ -431,29 +804,374 @@
     padding: 12px !important;
   }
 
+  /* ── Specialty index cards: 1 col ── */
+  div[style*="minmax(220px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Modal ── */
   .modal-content {
     margin: 10px 8px !important;
     padding: 20px 16px !important;
   }
+
+  /* ── Swiper slides ── */
+  .reviews-slider .swiper-slide {
+    padding: 20px !important;
+    min-height: 220px !important;
+  }
+
+  /* ── Hero title further reduced ── */
+  .hero-title {
+    font-size: clamp(1.8rem, 6vw, 2.4rem) !important;
+  }
+
+  /* ── Agendamento: funnel progress ── */
+  .funnel-progress {
+    gap: 0;
+  }
+
+  .progress-step {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+
+  /* ── Funnel step heading ── */
+  .funnel-step h2 {
+    font-size: 1.4rem !important;
+  }
+
+  /* ── Funnel actions: stack ── */
+  .funnel-actions {
+    flex-direction: column-reverse !important;
+    gap: 12px !important;
+  }
+
+  .funnel-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Success actions (agendamento) ── */
+  .success-actions {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .success-actions .btn {
+    width: 100% !important;
+  }
+
+  /* ── Prof actions grid ── */
+  .prof-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Footer newsletter ── */
+  #newsletter-form {
+    flex-direction: column !important;
+  }
+
+  #newsletter-form button {
+    width: 100% !important;
+    height: auto !important;
+    padding: 12px !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  /* ── Login container ── */
+  .login-container {
+    margin: 40px 8px !important;
+    padding: 24px 16px !important;
+  }
+
+  /* ── Contato form ── */
+  #contato-form {
+    padding: 24px 16px !important;
+  }
+
+  /* ── Careers form ── */
+  #careers-form {
+    padding: 24px 16px !important;
+  }
+
+  /* ── Location heading ── */
+  .location-details h2 {
+    font-size: 1.5rem !important;
+  }
 }
 
-/* ---- Small Mobile 320px ---- */
+/* ================================================================
+   9. SMALL MOBILE 430px (iPhone Pro Max etc.)
+   ================================================================ */
+@media (max-width: 430px) {
+  .container {
+    padding: 0 14px;
+  }
+
+  /* ── Highlight cards ── */
+  .highlight-card {
+    padding: 24px !important;
+  }
+
+  /* ── Card specialty detailed ── */
+  .card-specialty-detailed {
+    padding: 24px !important;
+  }
+
+  /* ── Cards MVV ── */
+  .card-mvv {
+    padding: 28px !important;
+  }
+}
+
+/* ================================================================
+   10. SMALL MOBILE 390px (iPhone 12/13/14)
+   ================================================================ */
+@media (max-width: 390px) {
+  .section-header h2 {
+    font-size: 1.4rem;
+  }
+
+  /* ── Header actions buttons ── */
+  .header-actions .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  /* ── Swiper slides ── */
+  .reviews-slider .swiper-slide {
+    padding: 16px !important;
+  }
+
+  /* ── Stat numbers ── */
+  .stat-card span:first-child {
+    font-size: 1.8rem !important;
+  }
+}
+
+/* ================================================================
+   11. SMALL MOBILE 360px (Samsung Galaxy etc.)
+   ================================================================ */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  /* ── Hero ── */
+  .hero-title {
+    font-size: 1.6rem !important;
+  }
+
+  /* ── Section headers ── */
+  .section-header h2 {
+    font-size: 1.3rem;
+  }
+
+  /* ── FAQ ── */
+  .faq-question {
+    font-size: 0.9rem !important;
+    padding: 14px 14px !important;
+  }
+
+  .faq-question span {
+    max-width: calc(100% - 30px);
+  }
+
+  /* ── Buttons global ── */
+  .btn {
+    padding: 10px 16px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .btn-lg {
+    padding: 12px 20px !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* ── Specialty card ── */
+  .specialty-card {
+    padding: 16px !important;
+  }
+
+  /* ── Calendar day size ── */
+  .calendar-day {
+    font-size: 0.8rem;
+  }
+}
+
+/* ================================================================
+   12. EXTRA SMALL MOBILE 320px
+   ================================================================ */
 @media (max-width: 320px) {
   :root {
     --radius-md: 8px;
     --radius-lg: 12px;
   }
 
-  .section-header h2 {
-    font-size: 1.4rem;
-  }
-
   .container {
-    padding: 0 12px;
+    padding: 0 10px;
   }
 
-  .btn {
-    padding: 10px 16px !important;
-    font-size: 0.85rem !important;
+  .section {
+    padding: 40px 0;
+  }
+
+  .section-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem !important;
+  }
+
+  .page-title {
+    font-size: 1.5rem !important;
+  }
+
+  /* ── Hero section ── */
+  .hero-section {
+    padding-top: 90px !important;
+  }
+
+  section[style*="padding-top: 150px"],
+  section[style*="padding-top: 130px"] {
+    padding-top: 90px !important;
+  }
+
+  /* ── Logo ── */
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  .logo i {
+    font-size: 1.3rem;
+  }
+
+  /* ── Header actions ── */
+  .header-actions {
+    gap: 8px;
+    margin-right: 8px;
+  }
+
+  .header-actions .theme-toggle-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  /* ── Stats ── */
+  .stat-card span:first-child {
+    font-size: 1.6rem !important;
+  }
+
+  /* ── Card padding reductions ── */
+  .highlight-card,
+  .card-specialty-detailed,
+  .card-mvv {
+    padding: 20px !important;
+  }
+
+  .specialty-card {
+    padding: 14px !important;
+  }
+
+  /* ── Cookie banner ── */
+  .cookie-banner {
+    bottom: 8px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+  }
+
+  .cookie-content p {
+    font-size: 0.8rem;
+  }
+
+  /* ── Login page ── */
+  .login-container {
+    margin: 30px 6px !important;
+    padding: 20px 12px !important;
+  }
+
+  .login-header h1 {
+    font-size: 1.3rem;
+  }
+
+  /* ── Booking wrapper ── */
+  .booking-wrapper {
+    padding: 16px 10px !important;
+  }
+
+  .progress-step {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+  }
+
+  /* ── Map ── */
+  .map-iframe-container {
+    height: 200px !important;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 50px 0 30px 0;
+  }
+
+  /* ── WhatsApp float ── */
+  .whatsapp-float {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+
+  .back-to-top {
+    bottom: 16px;
+    left: 16px;
+    width: 38px;
+    height: 38px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ================================================================
+   13. LANDSCAPE / SHORT VIEWPORT FIXES
+   Short mobile viewport (landscape or foldables)
+   ================================================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    min-height: auto !important;
+    padding-top: 80px !important;
+    padding-bottom: 40px !important;
+  }
+
+  .nav-links {
+    padding-top: 60px;
+    overflow-y: auto;
+  }
+}
+
+/* ================================================================
+   14. SAFE AREA INSETS (notch devices, iPhone etc.)
+   ================================================================ */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .whatsapp-float {
+    bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .back-to-top {
+    bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .cookie-banner {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .footer {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
   }
 }
