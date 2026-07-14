@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Especialidades | Clínica Zoe</title>
+  <meta name="description" content="Explore as especialidades médicas e terapêuticas oferecidas na Clínica Zoe. Psicologia, nutrição, pediatria e muito mais.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/darkmode.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div id="loader-overlay" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Clínica Zoe</p>
+  </div>
+
+  <header class="header-glass">
+    <div class="container nav-container">
+      <a href="../index.html" class="logo">
+        <i class="fas fa-hand-holding-heart"></i>
+        <span>Zoe</span>
+      </a>
+      <button class="menu-btn" id="menu-btn" aria-label="Abrir menu de navegação">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Início</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="especialidades.html" class="active">Especialidades</a></li>
+        <li><a href="profissionais.html">Profissionais</a></li>
+        <li><a href="contato.html">Contato</a></li>
+      </ul>
+      <div class="header-actions">
+        <a href="login.html" class="theme-toggle-btn" aria-label="Acesso Administrativo" title="Painel Administrativo">
+          <i class="fas fa-user-shield"></i>
+        </a>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Alternar tema">
+          <i class="fas fa-moon"></i>
+        </button>
+        <a href="agendamento.html" class="btn btn-primary">
+          <i class="far fa-calendar-check"></i> Agendar
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="section" style="padding-top: 150px; background: linear-gradient(135deg, rgba(46,139,87,0.05), rgba(155,89,182,0.05)); text-align: center;">
+    <div class="container">
+      <h1 class="page-title fade-slide-in delay-1" style="font-family: var(--font-title); font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px;">Nossas Especialidades</h1>
+      <p class="page-subtitle fade-slide-in delay-2" style="color: var(--text-muted); font-size: 1.25rem; max-width: 600px; margin: 0 auto 30px auto;">Cuidado completo e integrado em diversas áreas da saúde física e mental.</p>
+      
+      <!-- Campo de pesquisa inteligente -->
+      <div class="fade-slide-in delay-3" style="max-width: 500px; margin: 0 auto; position: relative;">
+        <input type="text" id="search-specialty" placeholder="Buscar especialidade... (Ex: Psicologia, Pediatria)" style="width: 100%; padding: 16px 24px; padding-left: 50px; border-radius: var(--radius-full); border: 1px solid var(--border-color); background-color: var(--bg-surface); font-size: 1rem; box-shadow: var(--shadow-sm);">
+        <i class="fas fa-search" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grade de Especialidades -->
+  <section class="section" style="background-color: var(--bg-surface); transition: background-color var(--transition-normal);">
+    <div class="container">
+      <div id="specialties-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <!-- Injetado dinamicamente via JS ou exibido via fallback HTML -->
+        <div class="card-specialty-detailed scale-hover" data-name="Psicologia" data-aos="fade-up" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <i class="fas fa-brain" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 24px;"></i>
+            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Psicologia</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Apoio emocional e tratamento de distúrbios comportamentais e mentais. Nossos especialistas trabalham com TCC, terapia sistêmica e análise comportamental.</p>
+          </div>
+          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+        </div>
+        
+        <div class="card-specialty-detailed scale-hover" data-name="Nutrição" data-aos="fade-up" data-aos-delay="50" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <i class="fas fa-apple-alt" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 24px;"></i>
+            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Nutrição</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Planos alimentares personalizados para saúde, bem-estar e performance. Foco em nutrição funcional, esportiva e reeducação alimentar duradoura.</p>
+          </div>
+          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+        </div>
+        
+        <div class="card-specialty-detailed scale-hover" data-name="Fisioterapia" data-aos="fade-up" data-aos-delay="100" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <i class="fas fa-running" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 24px;"></i>
+            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Fisioterapia</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Reabilitação física, alívio de dores corporais e melhora de mobilidade. Pilates clínico, quiropraxia leve e RPG corporal.</p>
+          </div>
+          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+        </div>
+
+        <div class="card-specialty-detailed scale-hover" data-name="Pediatria" data-aos="fade-up" data-aos-delay="150" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <i class="fas fa-child" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 24px;"></i>
+            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Pediatria</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Acompanhamento do desenvolvimento e saúde de crianças e adolescentes. Suporte humanizado e acompanhamento do crescimento.</p>
+          </div>
+          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+        </div>
+
+        <div class="card-specialty-detailed scale-hover" data-name="Clínica Geral" data-aos="fade-up" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <i class="fas fa-stethoscope" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 24px;"></i>
+            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Clínica Geral</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Consultas preventivas, check-ups de rotina, diagnósticos iniciais abrangentes e encaminhamentos especializados com rapidez.</p>
+          </div>
+          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+        </div>
+
+        <div class="card-specialty-detailed scale-hover" data-name="Dermatologia" data-aos="fade-up" data-aos-delay="50" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <i class="fas fa-spa" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 24px;"></i>
+            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Dermatologia</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Diagnóstico, tratamento médico e estético de patologias da pele, unhas, cabelos e rejuvenescimento facial saudável.</p>
+          </div>
+          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo"><i class="fas fa-hand-holding-heart"></i> <span>Zoe</span></a>
+          <p>Oferecendo saúde integrativa e atendimento médico premium com acolhimento digital de ponta.</p>
+        </div>
+        <div>
+          <h3 class="footer-heading">Navegação</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="especialidades.html">Especialidades</a></li>
+            <li><a href="profissionais.html">Profissionais</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Links Úteis</h3>
+          <ul class="footer-links">
+            <li><a href="trabalhe-conosco.html">Trabalhe Conosco</a></li>
+            <li><a href="login.html">Painel Administrativo</a></li>
+            <li><a href="politica.html">Política de Privacidade</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Contato</h3>
+          <ul class="footer-contact">
+            <li><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000, São Paulo</li>
+            <li><i class="fas fa-phone"></i> (11) 3214-5678</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Clínica Zoe. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    // Filtro em tempo real de especialidades
+    const searchInput = document.getElementById('search-specialty');
+    const cards = document.querySelectorAll('.card-specialty-detailed');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      cards.forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        if (name.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+  <script src="../js/notifications.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+/* Dark Mode Styling & Overrides for Clinica Zoe */
+
+body.dark-theme {
+  --bg-base: #121212;
+  --bg-surface: #1C1C1E;
+  --bg-glass: rgba(28, 28, 30, 0.75);
+  --bg-glass-hover: rgba(28, 28, 30, 0.88);
+  
+  --text-main: #F5F5F7;
+  --text-muted: #8E8E93;
+  
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-hover: rgba(255, 255, 255, 0.18);
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  
+  color-scheme: dark;
+}
+
+/* Custom Overrides for elements with fixed light colors in HTML or charts */
+body.dark-theme iframe {
+  filter: grayscale(1) invert(0.9) contrast(1.2); /* Invert Google Maps for Dark Mode */
+}
+
+/* Modal and inputs specific styling for Dark Mode */
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+  background-color: #2C2C2E;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+body.dark-theme input:focus,
+body.dark-theme select:focus,
+body.dark-theme textarea:focus {
+  border-color: var(--primary);
+  background-color: #3A3A3C;
+}
+
+body.dark-theme .calendar-day.empty {
+  background-color: transparent;
+}
+
+body.dark-theme .calendar-day.inactive {
+  opacity: 0.25;
+}
+
+/* Loader, skeleton and details overrides */
+body.dark-theme .skeleton {
+  background: linear-gradient(90deg, #2C2C2E 25%, #3A3A3C 50%, #2C2C2E 75%);
+  background-size: 200% 100%;
+}
+body.dark-theme .spinner {
+  border-color: rgba(255, 255, 255, 0.1);
+  border-top-color: var(--primary);
+}

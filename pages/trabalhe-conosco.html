@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabalhe Conosco | Clínica Zoe</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/darkmode.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div id="loader-overlay" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Clínica Zoe</p>
+  </div>
+
+  <header class="header-glass">
+    <div class="container nav-container">
+      <a href="../index.html" class="logo">
+        <i class="fas fa-hand-holding-heart"></i>
+        <span>Zoe</span>
+      </a>
+      <button class="menu-btn" id="menu-btn" aria-label="Abrir menu de navegação">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Início</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="especialidades.html">Especialidades</a></li>
+        <li><a href="profissionais.html">Profissionais</a></li>
+        <li><a href="contato.html">Contato</a></li>
+      </ul>
+      <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Alternar tema">
+          <i class="fas fa-moon"></i>
+        </button>
+        <a href="agendamento.html" class="btn btn-primary">
+          <i class="far fa-calendar-check"></i> Agendar
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top: 150px; background: linear-gradient(135deg, rgba(46,139,87,0.05), rgba(155,89,182,0.05)); text-align: center;">
+    <div class="container">
+      <h1 class="page-title fade-slide-in" style="font-family: var(--font-title); font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px;">Trabalhe Conosco</h1>
+      <p class="page-subtitle fade-slide-in delay-1" style="color: var(--text-muted); font-size: 1.25rem; max-width: 600px; margin: 0 auto;">Faça parte do nosso corpo clínico e ajude-nos a transformar vidas com cuidado premium.</p>
+    </div>
+  </section>
+
+  <section class="section" style="background-color: var(--bg-surface); transition: background-color var(--transition-normal);">
+    <div class="container" style="max-width: 700px;">
+      <form id="careers-form" style="background-color: var(--bg-base); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 40px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 20px; transition: background-color var(--transition-normal);">
+        
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="car-name" style="font-size: 0.85rem; font-weight: 600;">Nome Completo *</label>
+          <input type="text" id="car-name" placeholder="Seu nome" required style="padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-surface);">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="car-email" style="font-size: 0.85rem; font-weight: 600;">E-mail *</label>
+            <input type="email" id="car-email" placeholder="seu-email@email.com" required style="padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-surface);">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="car-phone" style="font-size: 0.85rem; font-weight: 600;">Celular/WhatsApp *</label>
+            <input type="text" id="car-phone" placeholder="(11) 99999-9999" required style="padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-surface);">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="car-role" style="font-size: 0.85rem; font-weight: 600;">Especialidade / Cargo Pretendido *</label>
+            <input type="text" id="car-role" placeholder="Ex: Psicólogo Clínico, Nutricionista, Recepcionista" required style="padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-surface);">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="car-registry" style="font-size: 0.85rem; font-weight: 600;">Registro Profissional (Ex: CRP, CRM)</label>
+            <input type="text" id="car-registry" placeholder="Ex: CRP 06/12345" style="padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-surface);">
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label for="car-resume" style="font-size: 0.85rem; font-weight: 600;">Apresentação Profissional / Resumo Curricular *</label>
+          <textarea id="car-resume" placeholder="Conte brevemente sobre sua formação, experiência clínica e por que gostaria de se juntar à Clínica Zoe..." rows="6" required style="padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background-color: var(--bg-surface); resize: none;"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="align-self: flex-start; padding: 14px 30px;"><i class="fas fa-paper-plane"></i> Enviar Candidatura</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="logo"><i class="fas fa-hand-holding-heart"></i> <span>Zoe</span></a>
+          <p>Oferecendo saúde integrativa e atendimento médico premium com acolhimento digital de ponta.</p>
+        </div>
+        <div>
+          <h3 class="footer-heading">Navegação</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="especialidades.html">Especialidades</a></li>
+            <li><a href="profissionais.html">Profissionais</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Links Úteis</h3>
+          <ul class="footer-links">
+            <li><a href="trabalhe-conosco.html">Trabalhe Conosco</a></li>
+            <li><a href="login.html">Painel Administrativo</a></li>
+            <li><a href="politica.html">Política de Privacidade</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Contato</h3>
+          <ul class="footer-contact">
+            <li><i class="fas fa-map-marker-alt"></i> Av. Paulista, 1000, São Paulo</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Clínica Zoe. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="../js/notifications.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    document.getElementById('careers-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+      setTimeout(() => {
+        window.Notifications.show('Candidatura Recebida', 'Seus dados foram salvos no nosso banco de talentos corporativo. Boa sorte!', 'success');
+        e.target.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Candidatura';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

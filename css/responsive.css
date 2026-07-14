@@ -1,0 +1,134 @@
+/* Responsive Styles for Clinica Zoe */
+
+@media (max-width: 1024px) {
+  .section-header h2 {
+    font-size: 2.2rem;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --radius-lg: 16px;
+    --radius-md: 10px;
+  }
+  
+  .section {
+    padding: 60px 0;
+  }
+  
+  .section-header {
+    margin-bottom: 40px;
+  }
+  
+  .section-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  /* Menu Mobile */
+  .menu-btn {
+    display: flex;
+  }
+  
+  .menu-btn.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  
+  .menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .menu-btn.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--bg-surface);
+    border-left: 1px solid var(--border-color);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 100px 40px;
+    gap: 24px;
+    box-shadow: var(--shadow-lg);
+    transition: right var(--transition-normal);
+    z-index: 999;
+  }
+  
+  .nav-links.active {
+    right: 0;
+  }
+  
+  .nav-links a {
+    font-size: 1.1rem;
+    width: 100%;
+    display: block;
+  }
+  
+  .nav-links a.active::after {
+    bottom: -4px;
+  }
+  
+  .header-actions {
+    margin-right: 15px;
+  }
+  
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .footer-legal-links {
+    justify-content: center;
+  }
+
+  /* Cookie Banner */
+  .cookie-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    bottom: 16px;
+    padding: 16px;
+  }
+  
+  .cookie-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions .btn {
+    display: none; /* Hide primary schedule button on ultra-small headers, menu can host it */
+  }
+  
+  .section-header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .toast-container {
+    left: 20px;
+    right: 20px;
+  }
+  
+  .toast {
+    min-width: unset;
+    width: 100%;
+  }
+}

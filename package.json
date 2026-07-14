@@ -1,0 +1,12 @@
+{
+  "name": "clinica-zoe",
+  "version": "1.0.0",
+  "description": "Sistema Web Premium da Clinica Zoe",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "Antigravity",
+  "license": "ISC"
+}

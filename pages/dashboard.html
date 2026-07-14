@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Controle | Clínica Zoe</title>
+  
+  <!-- CSS CDNs & Local Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/darkmode.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <script src="../js/theme.js"></script>
+
+  <!-- Estilos dedicados ao Painel Administrativo -->
+  <style>
+    body {
+      background-color: var(--bg-base);
+    }
+    
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Administrativa */
+    .admin-sidebar {
+      background-color: var(--bg-surface);
+      border-right: 1px solid var(--border-color);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 100;
+      transition: background-color var(--transition-normal);
+    }
+
+    .admin-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--text-main);
+      margin-bottom: 40px;
+    }
+
+    .admin-logo i {
+      color: var(--primary);
+    }
+
+    .admin-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .admin-nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-main);
+      opacity: 0.8;
+      transition: all var(--transition-fast);
+    }
+
+    .admin-nav-item a:hover,
+    .admin-nav-item.active a {
+      opacity: 1;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .hide-admin-only {
+      display: none !important;
+    }
+
+    /* Área Principal de Conteúdo */
+    .admin-main {
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .admin-header-title h1 {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Grid de Métricas */
+    .dashboard-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .dashboard-stat-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background-color var(--transition-normal);
+    }
+
+    .dashboard-stat-card .label {
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .dashboard-stat-card .num {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .dashboard-stat-card .footer-info {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+    }
+
+    /* Gráficos Canvas */
+    .dashboard-charts-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .dashboard-charts-grid-secondary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .chart-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      transition: background-color var(--transition-normal);
+    }
+
+    .chart-card h3 {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    .chart-container {
+      height: 250px;
+      position: relative;
+    }
+
+    /* Filtros e Tabela de Consultas */
+    .table-section {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: var(--shadow-sm);
+      transition: background-color var(--transition-normal);
+    }
+
+    .table-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .table-section-header h2 {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .table-filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .filter-input {
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-base);
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .filter-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      background-color: var(--bg-surface);
+    }
+
+    /* Tabela Estilo Apple */
+    .admin-table-container {
+      overflow-x: auto;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .admin-table th {
+      padding: 16px 20px;
+      border-bottom: 1.5px solid var(--border-color);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .admin-table td {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.925rem;
+      color: var(--text-main);
+    }
+
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .admin-table tr:hover td {
+      background-color: var(--primary-light);
+    }
+
+    /* Badges de Status */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.775rem;
+      font-weight: 600;
+    }
+
+    .badge-pending { background-color: rgba(52, 152, 219, 0.1); color: #3498DB; }
+    .badge-confirmed { background-color: rgba(46, 139, 87, 0.1); color: var(--primary); }
+    .badge-canceled { background-color: rgba(231, 76, 60, 0.1); color: #E74C3C; }
+    .badge-finalized { background-color: rgba(149, 165, 166, 0.1); color: #7F8C8D; }
+
+    /* Modais */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      overflow-y: auto;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 40px;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .close-modal-icon {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .close-modal-icon:hover {
+      color: var(--text-main);
+    }
+
+    .modal h2 {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: var(--text-main);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    
+    /* Layout Responsivo do Painel */
+    @media (max-width: 1024px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+      .admin-sidebar {
+        height: auto;
+        position: relative;
+        flex-direction: row;
+        align-items: center;
+        padding: 20px;
+      }
+      .admin-logo {
+        margin-bottom: 0;
+      }
+      .admin-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .admin-main {
+        padding: 20px;
+      }
+      .dashboard-charts-grid,
+      .dashboard-charts-grid-secondary {
+        grid-template-columns: 1fr;
+      }
+      .table-filters {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader Administrativo -->
+  <div id="loader-overlay" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Carregando Painel...</p>
+  </div>
+
+  <div class="dashboard-layout" id="dashboard-app">
+    
+    <!-- Sidebar -->
+    aside class="admin-sidebar">
+      <div>
+        <div class="admin-logo">
+          <i class="fas fa-hand-holding-heart"></i>
+          <span>Zoe Admin</span>
+        </div>
+        
+        <ul class="admin-nav" id="admin-sidebar-nav">
+          <li class="admin-nav-item active"><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+          <li class="admin-nav-item"><a href="#" id="btn-manage-professionals"><i class="fas fa-user-md"></i> Médicos</a></li>
+          <li class="admin-nav-item"><a href="#" id="btn-manage-specialties"><i class="fas fa-stethoscope"></i> Especialidades</a></li>
+          <li class="admin-nav-item"><a href="#" id="btn-manage-blocks"><i class="far fa-calendar-times"></i> Férias & Bloqueios</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <!-- Ações Inferiores da Sidebar -->
+        <button id="theme-toggle" class="theme-toggle-btn" style="margin-bottom: 16px; width: 100%;">
+          <i class="fas fa-moon"></i> Tema
+        </button>
+        <button id="logout-btn" class="btn btn-secondary" style="width: 100%; border-radius: var(--radius-md);">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      </div>
+    </aside>
+
+    <!-- Área Principal de Conteúdo -->
+    <main class="admin-main">
+      
+      <!-- Cabeçalho -->
+      <header class="admin-header">
+        <div class="admin-header-title">
+          <h1>Resumo da Clínica</h1>
+          <p style="color: var(--text-muted);">Acompanhamento da agenda e status operacional em tempo real.</p>
+        </div>
+        <div class="admin-header-actions">
+          <button id="btn-export-excel" class="btn btn-secondary"><i class="far fa-file-excel"></i> Exportar CSV</button>
+          <button id="btn-export-pdf" class="btn btn-primary"><i class="far fa-file-pdf"></i> Imprimir Agenda</button>
+        </div>
+      </header>
+
+      <!-- Grid de Métricas Rápida -->
+      <section class="dashboard-stats-grid">
+        <div class="dashboard-stat-card">
+          <span class="label">Consultas do Dia</span>
+          <span class="num" id="stat-consultas-dia">-</span>
+          <span class="footer-info">Agendamentos para hoje</span>
+        </div>
+        <div class="dashboard-stat-card">
+          <span class="label">Total de Pacientes</span>
+          <span class="num" id="stat-pacientes-total">-</span>
+          <span class="footer-info">Cadastros no sistema</span>
+        </div>
+        <div class="dashboard-stat-card">
+          <span class="label">Consultas Confirmadas</span>
+          <span class="num" id="stat-consultas-confirmadas">-</span>
+          <span class="footer-info">Aguardando atendimento</span>
+        </div>
+        <div class="dashboard-stat-card">
+          <span class="label">Taxa de Cancelamento</span>
+          <span class="num" id="stat-cancellation-rate">-</span>
+          <span class="footer-info">Média de faltas/desistências</span>
+        </div>
+      </section>
+
+      <!-- Métricas Ocultas Adicionais para o Dashboard detalhado -->
+      <div style="display: none;">
+        <span id="stat-consultas-pendentes">0</span>
+        <span id="stat-consultas-canceladas">0</span>
+      </div>
+
+      <!-- Gráficos Row 1 (Linha e Barras Horizontais) -->
+      <section class="dashboard-charts-grid">
+        <div class="chart-card">
+          <h3>Evolução de Agendamentos (Últimos 7 dias)</h3>
+          <div class="chart-container">
+            <canvas id="chart-evolucao"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <h3>Especialidades Mais Procuradas</h3>
+          <div class="chart-container">
+            <canvas id="chart-especialidades"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gráficos Row 2 (Doughnut e Pie) -->
+      <section class="dashboard-charts-grid-secondary">
+        <div class="chart-card">
+          <h3>Procura por Profissional</h3>
+          <div class="chart-container">
+            <canvas id="chart-profissionais"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <h3>Status Geral das Consultas</h3>
+          <div class="chart-container">
+            <canvas id="chart-status"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção da Tabela de Agendamentos -->
+      <section class="table-section">
+        <div class="table-section-header">
+          <h2>Fila de Agendamentos</h2>
+          <button id="btn-clear-filters" class="btn btn-secondary btn-sm"><i class="fas fa-undo"></i> Limpar Filtros</button>
+        </div>
+
+        <!-- Filtros Rápidos -->
+        <div class="table-filters">
+          <input type="text" id="search-patient-input" class="filter-input" placeholder="Buscar paciente por nome ou CPF...">
+          <select id="filter-status-select" class="filter-input">
+            <option value="">Todos os Status</option>
+            <option value="Agendado">Pendente/Agendado</option>
+            <option value="Confirmado">Confirmado</option>
+            <option value="Cancelado">Cancelado</option>
+            <option value="Finalizado">Finalizado</option>
+          </select>
+          <input type="date" id="filter-date-input" class="filter-input">
+        </div>
+
+        <!-- Tabela -->
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Profissional</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Telefone</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="table-appointments-body">
+              <!-- Injetado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =====================================================================
+       MODAIS ADMINISTRATIVOS (CRUD & CONFIGURAÇÕES)
+       ===================================================================== -->
+  
+  <!-- MODAL: GERENCIAMENTO DE PROFISSIONAIS -->
+  <div id="modal-professionals" class="modal">
+    <div class="modal-content" style="max-width: 900px;">
+      <i class="fas fa-times close-modal-icon"></i>
+      <h2>Gerenciamento de Médicos & Equipe</h2>
+      
+      <!-- Formulário de cadastro de Profissional -->
+      <form id="form-create-professional" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 24px; margin-bottom: 30px; transition: background-color var(--transition-normal);">
+        <h3 style="margin-bottom: 16px; font-family: var(--font-title); font-size: 1.1rem; font-weight:600;"><i class="fas fa-user-plus"></i> Adicionar Profissional</h3>
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <input type="text" id="prof-nome" placeholder="Nome Completo" required class="filter-input" style="background-color: var(--bg-surface);">
+          <select id="prof-especialidade" class="filter-input" style="background-color: var(--bg-surface);" required>
+            <!-- Carregado via JS -->
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <input type="email" id="prof-email" placeholder="E-mail Institucional" required class="filter-input" style="background-color: var(--bg-surface);">
+          <input type="text" id="prof-whatsapp" placeholder="WhatsApp (DDD+nº)" required class="filter-input" style="background-color: var(--bg-surface);">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <input type="time" id="prof-inicio" placeholder="Horário de Entrada (Ex: 08:00)" required class="filter-input" style="background-color: var(--bg-surface);">
+          <input type="time" id="prof-fim" placeholder="Horário de Saída (Ex: 18:00)" required class="filter-input" style="background-color: var(--bg-surface);">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <input type="text" id="prof-foto" placeholder="URL da foto de perfil" class="filter-input" style="background-color: var(--bg-surface);">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <textarea id="prof-mini-curriculo" placeholder="Mini Currículo do Médico..." required class="filter-input" style="background-color: var(--bg-surface); width:100%; resize:none;" rows="3"></textarea>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="font-size:0.85rem; font-weight:600; margin-bottom:8px; display:block;">Dias de Atendimento:</label>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <label><input type="checkbox" class="prof-days-checkbox" value="seg" checked> Seg</label>
+            <label><input type="checkbox" class="prof-days-checkbox" value="ter" checked> Ter</label>
+            <label><input type="checkbox" class="prof-days-checkbox" value="qua" checked> Qua</label>
+            <label><input type="checkbox" class="prof-days-checkbox" value="qui" checked> Qui</label>
+            <label><input type="checkbox" class="prof-days-checkbox" value="sex" checked> Sex</label>
+            <label><input type="checkbox" class="prof-days-checkbox" value="sab"> Sáb</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Cadastrar Médico</button>
+      </form>
+
+      <!-- Formulário de EDIÇÃO de Profissional (Oculto por padrão) -->
+      <div class="edit-form-container" style="display: none; background-color: rgba(155, 89, 182, 0.05); border: 1px solid rgba(155, 89, 182, 0.2); border-radius: var(--radius-md); padding: 24px; margin-bottom: 30px;">
+        <form id="form-edit-professional">
+          <input type="hidden" id="edit-prof-id">
+          <h3 style="margin-bottom: 16px; font-family: var(--font-title); font-size: 1.1rem; font-weight:600; color: var(--secondary);"><i class="fas fa-edit"></i> Editar Profissional</h3>
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <input type="text" id="edit-prof-nome" required class="filter-input" style="background-color: var(--bg-surface);">
+            <select id="edit-prof-especialidade" class="filter-input" style="background-color: var(--bg-surface);" required>
+              <!-- Carregado via JS -->
+            </select>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <input type="email" id="edit-prof-email" required class="filter-input" style="background-color: var(--bg-surface);">
+            <input type="text" id="edit-prof-whatsapp" required class="filter-input" style="background-color: var(--bg-surface);">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <input type="time" id="edit-prof-inicio" required class="filter-input" style="background-color: var(--bg-surface);">
+            <input type="time" id="edit-prof-fim" required class="filter-input" style="background-color: var(--bg-surface);">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <input type="text" id="edit-prof-foto" class="filter-input" style="background-color: var(--bg-surface);">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <textarea id="edit-prof-mini-curriculo" required class="filter-input" style="background-color: var(--bg-surface); width:100%; resize:none;" rows="3"></textarea>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size:0.85rem; font-weight:600; margin-bottom:8px; display:block;">Dias de Atendimento:</label>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <label><input type="checkbox" class="edit-prof-days-checkbox" value="seg"> Seg</label>
+              <label><input type="checkbox" class="edit-prof-days-checkbox" value="ter"> Ter</label>
+              <label><input type="checkbox" class="edit-prof-days-checkbox" value="qua"> Qua</label>
+              <label><input type="checkbox" class="edit-prof-days-checkbox" value="qui"> Qui</label>
+              <label><input type="checkbox" class="edit-prof-days-checkbox" value="sex"> Sex</label>
+              <label><input type="checkbox" class="edit-prof-days-checkbox" value="sab"> Sáb</label>
+            </div>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label><input type="checkbox" id="edit-prof-ativo"> Médico Ativo para Consultas</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm" style="background-color: var(--secondary);"><i class="fas fa-check"></i> Salvar Alterações</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="document.querySelector('.edit-form-container').style.display = 'none'">Cancelar</button>
+        </form>
+      </div>
+
+      <!-- Tabela de Médicos -->
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Especialidade</th>
+              <th>E-mail</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="admin-professionals-list">
+            <!-- Carregado dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- MODAL: GERENCIAMENTO DE ESPECIALIDADES -->
+  <div id="modal-specialties" class="modal">
+    <div class="modal-content">
+      <i class="fas fa-times close-modal-icon"></i>
+      <h2>Especialidades Clínicas</h2>
+      
+      <form id="form-create-specialty" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 24px; margin-bottom: 30px; display:flex; flex-direction:column; gap:16px;">
+        <h3 style="font-family: var(--font-title); font-size:1.1rem; font-weight:600;"><i class="fas fa-plus"></i> Adicionar Especialidade</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <input type="text" id="spec-nome" placeholder="Nome (Ex: Dermatologia)" required class="filter-input" style="background-color: var(--bg-surface);">
+          <input type="text" id="spec-icone" placeholder="Ícone FontAwesome (Ex: fa-spa)" required class="filter-input" style="background-color: var(--bg-surface);">
+        </div>
+        <textarea id="spec-descricao" placeholder="Breve descrição da especialidade..." required class="filter-input" style="background-color: var(--bg-surface); resize:none;" rows="3"></textarea>
+        <button type="submit" class="btn btn-primary btn-sm" style="align-self:flex-start;"><i class="fas fa-check"></i> Salvar Especialidade</button>
+      </form>
+
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Ícone</th>
+              <th>Especialidade</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody id="admin-specialties-list">
+            <!-- Carregado via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BLOQUEIOS DE AGENDA E FÉRIAS -->
+  <div id="modal-blocks" class="modal">
+    <div class="modal-content" style="max-width: 900px;">
+      <i class="fas fa-times close-modal-icon"></i>
+      <h2>Férias & Bloqueios de Agenda</h2>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        
+        <!-- Bloqueio de Horário específico -->
+        <div>
+          <form id="form-create-block" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 20px; display:flex; flex-direction:column; gap:14px; margin-bottom: 24px;">
+            <h3 style="font-family: var(--font-title); font-size:1.1rem; font-weight:600;"><i class="fas fa-ban"></i> Bloquear Horário</h3>
+            
+            <select id="block-prof-id" class="filter-input" style="background-color: var(--bg-surface);" required></select>
+            <input type="date" id="block-date" required class="filter-input" style="background-color: var(--bg-surface);">
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <input type="time" id="block-start-time" required class="filter-input" style="background-color: var(--bg-surface);">
+              <input type="time" id="block-end-time" required class="filter-input" style="background-color: var(--bg-surface);">
+            </div>
+            
+            <input type="text" id="block-reason" placeholder="Motivo do Bloqueio" required class="filter-input" style="background-color: var(--bg-surface);">
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Salvar Bloqueio</button>
+          </form>
+          
+          <table class="admin-table" style="font-size:0.8rem;">
+            <thead>
+              <tr>
+                <th>Médico</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Motivo</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="admin-blocks-list">
+              <!-- Injetado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cadastro de Férias -->
+        <div>
+          <form id="form-create-vacation" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 20px; display:flex; flex-direction:column; gap:14px; margin-bottom: 24px;">
+            <h3 style="font-family: var(--font-title); font-size:1.1rem; font-weight:600;"><i class="fas fa-umbrella-beach"></i> Lançar Férias</h3>
+            
+            <select id="vacation-prof-id" class="filter-input" style="background-color: var(--bg-surface);" required></select>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div>
+                <label style="font-size:0.75rem; font-weight:600;">Início das Férias:</label>
+                <input type="date" id="vacation-start-date" required class="filter-input" style="background-color: var(--bg-surface); width:100%;">
+              </div>
+              <div>
+                <label style="font-size:0.75rem; font-weight:600;">Fim das Férias:</label>
+                <input type="date" id="vacation-end-date" required class="filter-input" style="background-color: var(--bg-surface); width:100%;">
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-sm" style="background-color:var(--secondary);"><i class="fas fa-check"></i> Cadastrar Período</button>
+          </form>
+
+          <table class="admin-table" style="font-size:0.8rem;">
+            <thead>
+              <tr>
+                <th>Médico</th>
+                <th>Período</th>
+                <th>Motivo</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="admin-vacations-list">
+              <!-- Injetado dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REAGENDAMENTO DE CONSULTA -->
+  <div id="modal-reschedule" class="modal">
+    <div class="modal-content" style="max-width: 450px;">
+      <i class="fas fa-times close-modal-icon"></i>
+      <h2>Reagendar Consulta</h2>
+      
+      <form id="form-reschedule" style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label for="reschedule-date" style="font-size:0.85rem; font-weight:600;">Nova Data:</label>
+          <input type="date" id="reschedule-date" required class="filter-input">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label for="reschedule-time" style="font-size:0.85rem; font-weight:600;">Novo Horário:</label>
+          <input type="time" id="reschedule-time" required class="filter-input">
+        </div>
+        
+        <div style="display:flex; gap:12px; margin-top:10px;">
+          <button type="submit" class="btn btn-primary btn-sm" style="flex-grow:1;"><i class="fas fa-check"></i> Salvar</button>
+          <button type="button" class="btn btn-secondary btn-sm btn-close-modal" style="flex-grow:1;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts JS CDNs e locais -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/notifications.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/charts.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script src="../js/admin.js"></script>
+
+</body>
+</html>

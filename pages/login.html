@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Administrativo | Clínica Zoe</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/darkmode.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <script src="../js/theme.js"></script>
+
+  <style>
+    .login-container {
+      max-width: 440px;
+      margin: 100px auto;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 40px;
+      transition: background-color var(--transition-normal);
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .login-header i {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 16px;
+      filter: drop-shadow(0 2px 8px rgba(46, 139, 87, 0.2));
+    }
+    
+    .login-header h1 {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    
+    .login-header p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-control {
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-base);
+      font-size: 0.95rem;
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      background-color: var(--bg-surface);
+      outline: none;
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    .security-notice {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background-color: var(--primary-light);
+      border: 1px solid rgba(46, 139, 87, 0.15);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.775rem;
+      color: var(--primary);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .security-notice i {
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loader-overlay" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Clínica Zoe</p>
+  </div>
+
+  <header class="header-glass">
+    <div class="container nav-container">
+      <a href="../index.html" class="logo">
+        <i class="fas fa-hand-holding-heart"></i>
+        <span>Zoe</span>
+      </a>
+      <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Alternar tema">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top: 130px; background-color: var(--bg-base); transition: background-color var(--transition-normal); min-height: 100vh; display: flex; align-items: center;">
+    <div class="container">
+      
+      <div class="login-container fade-slide-in">
+        <div class="login-header">
+          <i class="fas fa-user-shield"></i>
+          <h1>Painel de Controle</h1>
+          <p>Digite suas credenciais corporativas para acessar a agenda.</p>
+        </div>
+
+        <div class="security-notice">
+          <i class="fas fa-lock"></i>
+          <span>Ambiente criptografado SSL de alta segurança. Logs de auditoria ativos para ações de administrador.</span>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="email">E-mail Corporativo</label>
+            <input type="email" id="email" class="form-control" placeholder="ex: admin@clinicazoe.com" required autocomplete="username">
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label for="password">Senha de Acesso</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-login">
+            Entrar no Painel <i class="fas fa-sign-in-alt"></i>
+          </button>
+        </form>
+
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 24px;">
+          Dúvidas sobre acessos? Contate o suporte técnico de TI da Clínica Zoe.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Scripts JS CDNs e arquivos locais -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/notifications.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/auth.js"></script>
+
+</body>
+</html>
