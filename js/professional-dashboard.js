@@ -52,6 +52,7 @@ const ProfessionalDashboard = {
     this.setupRealtime();
 
     this.applyFiltersAndRender();
+    this.setupInlineSettingsForms();
     this.updateDashboard();
     this.renderMyPatients();
     this.renderProfile();
@@ -751,6 +752,97 @@ const ProfessionalDashboard = {
     if (window.Notifications) { window.Notifications.show(title, message, type); return; }
     console.log(`[${type}] ${title}: ${message}`);
   }
+,
+  setupInlineSettingsForms() {
+    // Preencher campos inline com dados do perfil assim que carregar
+    setTimeout(() => {
+      const prof = this.state.professional;
+      if (prof) {
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+        setVal('inline-photo-url', prof.foto);
+        setVal('inline-telefone',  prof.telefone);
+        setVal('inline-whatsapp',  prof.whatsapp);
+      }
+    }, 2000);
+
+    // Alterar senha (inline)
+    document.getElementById('form-change-password')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pass    = document.getElementById('inline-new-password').value;
+      const confirm = document.getElementById('inline-confirm-password').value;
+      if (pass !== confirm) {
+        this.showToast('Senhas não coincidem', 'Digite a mesma senha nos dois campos.', 'error');
+        return;
+      }
+      if (pass.length < 6) {
+        this.showToast('Senha curta', 'Mínimo de 6 caracteres.', 'error');
+        return;
+      }
+      try {
+        if (!window.CONFIG.DEMO_MODE) {
+          const { error } = await window.supabaseClient.auth.updateUser({ password: pass });
+          if (error) throw error;
+        }
+        document.getElementById('inline-new-password').value    = '';
+        document.getElementById('inline-confirm-password').value = '';
+        this.showToast('Senha Atualizada', 'Sua nova senha foi salva com sucesso.', 'success');
+      } catch (err) {
+        this.showToast('Erro', err.message, 'error');
+      }
+    });
+
+    // Foto e contato (inline)
+    document.getElementById('form-change-photo')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const photoUrl  = document.getElementById('inline-photo-url').value;
+      const photoFile = document.getElementById('inline-photo-file').files[0];
+      const newPhone  = document.getElementById('inline-telefone').value.trim();
+      const newWa     = document.getElementById('inline-whatsapp').value.trim();
+
+      const prof = this.state.professional;
+      if (!prof) return;
+
+      let finalPhotoUrl = photoUrl || prof.foto;
+
+      try {
+        if (photoFile) {
+          if (photoFile.size > 3 * 1024 * 1024) {
+            this.showToast('Arquivo grande', 'Tamanho máximo: 3MB.', 'error');
+            return;
+          }
+          if (!window.CONFIG.DEMO_MODE) {
+            const ext = photoFile.name.split('.').pop();
+            const fileName = `prof_${prof.id}_${Date.now()}.${ext}`;
+            const { error: upErr } = await window.supabaseClient.storage
+              .from('profissionais').upload(`fotos/${fileName}`, photoFile, { cacheControl: '3600', upsert: true });
+            if (upErr) throw upErr;
+            const { data: urlData } = window.supabaseClient.storage.from('profissionais').getPublicUrl(`fotos/${fileName}`);
+            finalPhotoUrl = urlData.publicUrl;
+          } else {
+            finalPhotoUrl = await this.readAsDataURL(photoFile);
+          }
+        }
+
+        const updates = { foto: finalPhotoUrl, telefone: newPhone, whatsapp: newWa };
+        const { error } = await window.supabaseClient
+          .from('profissionais').update(updates).eq('id', prof.id);
+        if (error) throw error;
+
+        Object.assign(prof, updates);
+        this.setupUI();
+        this.renderProfile();
+        this.showToast('Salvo!', 'Foto e contato atualizados.', 'success');
+      } catch (err) {
+        this.showToast('Erro', err.message, 'error');
+      }
+    });
+
+    // Navigate to agenda click handler (replacing onclick inline)
+    document.getElementById('btn-nav-agenda')?.addEventListener('click', () => {
+      this.navigateTo('agenda');
+    });
+  },
+
 };
 
 document.addEventListener('DOMContentLoaded', () => { ProfessionalDashboard.init(); });

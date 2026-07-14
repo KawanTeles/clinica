@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Administrativo | Clínica Zoe</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
   
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/responsive.css">
@@ -14,100 +12,7 @@
   <link rel="stylesheet" href="../css/animations.css">
   <script src="../js/theme.js"></script>
 
-  <style>
-    .login-container {
-      max-width: 440px;
-      margin: 100px auto;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      padding: 40px;
-      transition: background-color var(--transition-normal);
-    }
-    
-    .login-header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    
-    .login-header i {
-      font-size: 2.2rem;
-      color: var(--primary);
-      margin-bottom: 16px;
-      filter: drop-shadow(0 2px 8px rgba(46, 139, 87, 0.2));
-    }
-    
-    .login-header h1 {
-      font-family: var(--font-title);
-      font-weight: 700;
-      font-size: 1.6rem;
-      color: var(--text-main);
-      margin-bottom: 6px;
-    }
-    
-    .login-header p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .form-control {
-      padding: 14px 18px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-base);
-      font-size: 0.95rem;
-      color: var(--text-main);
-      transition: all var(--transition-fast);
-    }
-
-    .form-control:focus {
-      border-color: var(--primary);
-      background-color: var(--bg-surface);
-      outline: none;
-      box-shadow: 0 0 0 4px var(--primary-light);
-    }
-
-    .security-notice {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      background-color: var(--primary-light);
-      border: 1px solid rgba(46, 139, 87, 0.15);
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
-      font-size: 0.775rem;
-      color: var(--primary);
-      line-height: 1.5;
-      margin-bottom: 24px;
-    }
-
-    .security-notice i {
-      font-size: 0.9rem;
-      margin-top: 2px;
-    }
-
-    .btn-login {
-      width: 100%;
-      padding: 14px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: var(--radius-sm);
-    }
-  </style>
+  
 </head>
 <body>
 
@@ -130,7 +35,7 @@
     </div>
   </header>
 
-  <section class="section" style="padding-top: 130px; background-color: var(--bg-base); transition: background-color var(--transition-normal); min-height: 100vh; display: flex; align-items: center;">
+  <section class="section login-body-section">
     <div class="container">
       
       <div class="login-container fade-slide-in">
@@ -146,13 +51,13 @@
         </div>
 
         <!-- Credenciais de demonstração -->
-        <div id="demo-hint" style="background: linear-gradient(135deg, rgba(46,139,87,0.08), rgba(46,139,87,0.03)); border: 1px solid rgba(46,139,87,0.25); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
-          <strong style="color: var(--primary); display: block; margin-bottom: 4px;"><i class="fas fa-info-circle"></i> Modo Demonstração</strong>
-          Admin: <code style="background:var(--bg-base);padding:2px 6px;border-radius:4px;">admin@clinicazoe.com</code> / <code style="background:var(--bg-base);padding:2px 6px;border-radius:4px;">admin123</code>
+        <div id="demo-hint" class="login-login-container-div">
+          <strong class="login-login-login-container-div-strong"><i class="fas fa-info-circle"></i> Modo Demonstração</strong>
+          Admin: <code class="login-login-login-container-div-code">admin@clinicazoe.com</code> / <code class="login-login-login-container-div-code">admin123</code>
         </div>
 
         <!-- Mensagem de erro inline -->
-        <div id="login-error" style="display:none; background:rgba(220,38,38,0.08); border:1px solid rgba(220,38,38,0.25); border-radius:var(--radius-sm); padding:12px 16px; margin-bottom:16px; font-size:0.85rem; color:#dc2626; display:flex; align-items:center; gap:8px;">
+        <div id="login-error" class="login-login-container-div-1">
           <i class="fas fa-exclamation-circle"></i>
           <span id="login-error-msg"></span>
         </div>
@@ -160,15 +65,15 @@
         <form id="login-form">
           <div class="form-group">
             <label for="email">E-mail Corporativo</label>
-            <input type="email" id="email" class="form-control" placeholder="ex: admin@clinicazoe.com" required autocomplete="username">
+            <input type="email" id="email" class="form-control" placeholder="ex: admin@clinicazoe.com" required="" autocomplete="username">
           </div>
           
-          <div class="form-group" style="margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label for="password" style="margin-bottom: 0;">Senha de Acesso</label>
-              <a href="#" id="btn-forgot-password" style="font-size: 0.8rem; color: var(--primary); font-weight: 500;">Esqueci minha senha</a>
+          <div class="form-group login-form-div">
+            <div class="login-form-group-div">
+              <label for="password" class="login-login-form-group-div-label">Senha de Acesso</label>
+              <a href="#" id="btn-forgot-password" class="login-login-form-group-div-a">Esqueci minha senha</a>
             </div>
-            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required="" autocomplete="current-password">
           </div>
 
           <button type="submit" class="btn btn-primary btn-login">
@@ -176,7 +81,7 @@
           </button>
         </form>
 
-        <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 24px;">
+        <p class="login-login-container-p">
           Dúvidas sobre acessos? Contate o suporte técnico de TI da Clínica Zoe.
         </p>
       </div>
@@ -193,26 +98,9 @@
   <script src="../js/notifications.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/auth.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const errorBox = document.getElementById('login-error');
-      const errorMsg = document.getElementById('login-error-msg');
-      const demoHint = document.getElementById('demo-hint');
+  
 
-      // Oculta dica de credenciais de demonstração se o Supabase estiver em produção
-      if (demoHint && window.CONFIG && !window.CONFIG.DEMO_MODE) {
-        demoHint.style.display = 'none';
-      }
 
-      // Listener global de erro do Auth para exibir o bloco de erro inline
-      window.addEventListener('auth_error', (e) => {
-        if (errorBox && errorMsg) {
-          errorMsg.textContent = e.detail.message || 'Credenciais inválidas.';
-          errorBox.style.display = 'flex';
-        }
-      });
-    });
-  </script>
 
-</body>
-</html>
+  <script src="../js/login.js"></script>
+</body></html>

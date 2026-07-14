@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profissionais de Saúde | Clínica Zoe</title>
   <meta name="description" content="Conheça nosso corpo clínico premium. Psicólogos, nutricionistas, pediatras e médicos especialistas disponíveis para agendamento imediato.">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
   
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/responsive.css">
@@ -16,174 +14,7 @@
   <script src="../js/theme.js"></script>
 
   <!-- Estilos extras específicos para o grid de médicos (Apple Style Cards) -->
-  <style>
-    .search-filters-bar {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 2fr 1.2fr;
-      gap: 20px;
-      max-width: var(--max-width);
-      margin: -50px auto 50px auto;
-      box-shadow: var(--shadow-md);
-      position: relative;
-      z-index: 10;
-      transition: background-color var(--transition-normal);
-    }
-    
-    .filter-input-wrapper {
-      position: relative;
-    }
-    
-    .filter-input-wrapper i {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-    
-    .filter-control {
-      width: 100%;
-      padding: 14px 20px 14px 46px;
-      border-radius: var(--radius-full);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-base);
-      font-size: 0.95rem;
-      transition: all var(--transition-fast);
-    }
-    
-    .filter-control:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px var(--primary-light);
-      background-color: var(--bg-surface);
-    }
-
-    .grid-professionals {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 30px;
-    }
-
-    .card-professional {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition-normal);
-    }
-
-    .card-professional:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-5px);
-    }
-
-    .prof-image-container {
-      height: 240px;
-      position: relative;
-      overflow: hidden;
-      background-color: var(--bg-base);
-    }
-
-    .prof-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-
-    .card-professional:hover .prof-img {
-      transform: scale(1.05);
-    }
-
-    .prof-info {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .prof-specialty-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      background-color: var(--primary-light);
-      color: var(--primary);
-      border-radius: var(--radius-full);
-      font-size: 0.8rem;
-      font-weight: 600;
-      align-self: flex-start;
-      margin-bottom: 14px;
-    }
-
-    .prof-name {
-      font-family: var(--font-title);
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: var(--text-main);
-    }
-
-    .prof-curriculum {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      flex-grow: 1;
-    }
-
-    .prof-details {
-      border-top: 1px solid var(--border-color);
-      padding-top: 16px;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .prof-detail-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .prof-detail-item i {
-      color: var(--primary);
-      width: 14px;
-    }
-
-    .prof-actions {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 12px;
-    }
-
-    .btn-sm {
-      padding: 10px 16px;
-      font-size: 0.85rem;
-      border-radius: var(--radius-full);
-    }
-
-    @media (max-width: 768px) {
-      .search-filters-bar {
-        grid-template-columns: 1fr;
-        margin-top: 20px;
-        margin-bottom: 30px;
-      }
-      
-      .grid-professionals {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  
 </head>
 <body>
 
@@ -226,15 +57,15 @@
   </header>
 
   <!-- Banner Hero -->
-  <section class="section" style="padding-top: 150px; background: linear-gradient(135deg, rgba(46,139,87,0.05), rgba(155,89,182,0.05)); text-align: center;">
+  <section class="section page-header">
     <div class="container">
-      <h1 class="page-title fade-slide-in delay-1" style="font-family: var(--font-title); font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px;">Profissionais de Saúde</h1>
-      <p class="page-subtitle fade-slide-in delay-2" style="color: var(--text-muted); font-size: 1.25rem; max-width: 600px; margin: 0 auto 50px auto;">Encontre o especialista ideal para cuidar de você e da sua família.</p>
+      <h1 class="page-title fade-slide-in delay-1 page-header-title-2">Profissionais de Saúde</h1>
+      <p class="page-subtitle fade-slide-in delay-2 page-header-desc-2">Encontre o especialista ideal para cuidar de você e da sua família.</p>
     </div>
   </section>
 
   <!-- Barra de Filtros e Grid -->
-  <section class="section" style="background-color: var(--bg-base); transition: background-color var(--transition-normal); padding-top: 0;">
+  <section class="section profissionais-body-section">
     <div class="container">
       
       <!-- Barra de Filtros (Pesquisa & Especialidades) -->
@@ -255,8 +86,8 @@
       <!-- Grid dos Médicos -->
       <div class="grid-professionals" id="profissionais-grid">
         <!-- Loader inicial / Conteúdo injetado via professionals.js -->
-        <div class="skeleton-container" style="grid-column: 1/-1;">
-          <div class="skeleton skeleton-image" style="height: 240px; margin-bottom: 20px;"></div>
+        <div class="skeleton-container profissionais-grid-professionals-div">
+          <div class="skeleton skeleton-image profissionais-skeleton-container-div"></div>
           <div class="skeleton skeleton-title"></div>
           <div class="skeleton skeleton-text"></div>
         </div>
@@ -299,7 +130,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Clínica Zoe. Todos os direitos reservados.</p>
+        <p>© 2026 Clínica Zoe. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
@@ -316,5 +147,6 @@
   <script src="../js/main.js"></script>
   <script src="../js/professionals.js"></script>
 
-</body>
-</html>
+
+
+</body></html>

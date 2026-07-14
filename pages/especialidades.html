@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Especialidades | Clínica Zoe</title>
   <meta name="description" content="Explore as especialidades médicas e terapêuticas oferecidas na Clínica Zoe. Psicologia, nutrição, pediatria e muito mais.">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
   
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/responsive.css">
@@ -56,76 +54,76 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="section" style="padding-top: 150px; background: linear-gradient(135deg, rgba(46,139,87,0.05), rgba(155,89,182,0.05)); text-align: center;">
+  <section class="section page-header">
     <div class="container">
-      <h1 class="page-title fade-slide-in delay-1" style="font-family: var(--font-title); font-size: 3.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px;">Nossas Especialidades</h1>
-      <p class="page-subtitle fade-slide-in delay-2" style="color: var(--text-muted); font-size: 1.25rem; max-width: 600px; margin: 0 auto 30px auto;">Cuidado completo e integrado em diversas áreas da saúde física e mental.</p>
+      <h1 class="page-title fade-slide-in delay-1 page-header-title-2">Nossas Especialidades</h1>
+      <p class="page-subtitle fade-slide-in delay-2 page-header-desc-1">Cuidado completo e integrado em diversas áreas da saúde física e mental.</p>
       
       <!-- Campo de pesquisa inteligente -->
-      <div class="fade-slide-in delay-3" style="max-width: 500px; margin: 0 auto; position: relative;">
-        <input type="text" id="search-specialty" placeholder="Buscar especialidade... (Ex: Psicologia, Pediatria)" style="width: 100%; padding: 16px 24px; padding-left: 50px; border-radius: var(--radius-full); border: 1px solid var(--border-color); background-color: var(--bg-surface); font-size: 1rem; box-shadow: var(--shadow-sm);">
-        <i class="fas fa-search" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+      <div class="fade-slide-in delay-3 especialidades-container-div">
+        <input type="text" id="search-specialty" placeholder="Buscar especialidade... (Ex: Psicologia, Pediatria)" class="especialidades-fade-slide-in-input">
+        <i class="fas fa-search especialidades-fade-slide-in-i"></i>
       </div>
     </div>
   </section>
 
   <!-- Grade de Especialidades -->
-  <section class="section" style="background-color: var(--bg-surface); transition: background-color var(--transition-normal);">
+  <section class="section section-bg-surface-2">
     <div class="container">
-      <div id="specialties-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+      <div id="specialties-grid" class="especialidades-container-div-1">
         <!-- Injetado dinamicamente via JS ou exibido via fallback HTML -->
-        <div class="card-specialty-detailed scale-hover" data-name="Psicologia" data-aos="fade-up" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="card-specialty-detailed scale-hover especialidades-especialidades-container-div-1-div" data-name="Psicologia" data-aos="fade-up">
           <div>
-            <i class="fas fa-brain" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 24px;"></i>
-            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Psicologia</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Apoio emocional e tratamento de distúrbios comportamentais e mentais. Nossos especialistas trabalham com TCC, terapia sistêmica e análise comportamental.</p>
+            <i class="fas fa-brain especialidades-div-i"></i>
+            <h3 class="especialidades-div-h3">Psicologia</h3>
+            <p class="especialidades-div-p">Apoio emocional e tratamento de distúrbios comportamentais e mentais. Nossos especialistas trabalham com TCC, terapia sistêmica e análise comportamental.</p>
           </div>
-          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+          <a href="agendamento.html" class="btn btn-outline btn-sm especialidades-card-specialty-detailed-a"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
         </div>
         
-        <div class="card-specialty-detailed scale-hover" data-name="Nutrição" data-aos="fade-up" data-aos-delay="50" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="card-specialty-detailed scale-hover especialidades-especialidades-container-div-1-div" data-name="Nutrição" data-aos="fade-up" data-aos-delay="50">
           <div>
-            <i class="fas fa-apple-alt" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 24px;"></i>
-            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Nutrição</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Planos alimentares personalizados para saúde, bem-estar e performance. Foco em nutrição funcional, esportiva e reeducação alimentar duradoura.</p>
+            <i class="fas fa-apple-alt especialidades-div-i-1"></i>
+            <h3 class="especialidades-div-h3">Nutrição</h3>
+            <p class="especialidades-div-p">Planos alimentares personalizados para saúde, bem-estar e performance. Foco em nutrição funcional, esportiva e reeducação alimentar duradoura.</p>
           </div>
-          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+          <a href="agendamento.html" class="btn btn-outline btn-sm especialidades-card-specialty-detailed-a"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
         </div>
         
-        <div class="card-specialty-detailed scale-hover" data-name="Fisioterapia" data-aos="fade-up" data-aos-delay="100" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="card-specialty-detailed scale-hover especialidades-especialidades-container-div-1-div" data-name="Fisioterapia" data-aos="fade-up" data-aos-delay="100">
           <div>
-            <i class="fas fa-running" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 24px;"></i>
-            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Fisioterapia</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Reabilitação física, alívio de dores corporais e melhora de mobilidade. Pilates clínico, quiropraxia leve e RPG corporal.</p>
+            <i class="fas fa-running especialidades-div-i"></i>
+            <h3 class="especialidades-div-h3">Fisioterapia</h3>
+            <p class="especialidades-div-p">Reabilitação física, alívio de dores corporais e melhora de mobilidade. Pilates clínico, quiropraxia leve e RPG corporal.</p>
           </div>
-          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+          <a href="agendamento.html" class="btn btn-outline btn-sm especialidades-card-specialty-detailed-a"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
         </div>
 
-        <div class="card-specialty-detailed scale-hover" data-name="Pediatria" data-aos="fade-up" data-aos-delay="150" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="card-specialty-detailed scale-hover especialidades-especialidades-container-div-1-div" data-name="Pediatria" data-aos="fade-up" data-aos-delay="150">
           <div>
-            <i class="fas fa-child" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 24px;"></i>
-            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Pediatria</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Acompanhamento do desenvolvimento e saúde de crianças e adolescentes. Suporte humanizado e acompanhamento do crescimento.</p>
+            <i class="fas fa-child especialidades-div-i-1"></i>
+            <h3 class="especialidades-div-h3">Pediatria</h3>
+            <p class="especialidades-div-p">Acompanhamento do desenvolvimento e saúde de crianças e adolescentes. Suporte humanizado e acompanhamento do crescimento.</p>
           </div>
-          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+          <a href="agendamento.html" class="btn btn-outline btn-sm especialidades-card-specialty-detailed-a"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
         </div>
 
-        <div class="card-specialty-detailed scale-hover" data-name="Clínica Geral" data-aos="fade-up" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="card-specialty-detailed scale-hover especialidades-especialidades-container-div-1-div" data-name="Clínica Geral" data-aos="fade-up">
           <div>
-            <i class="fas fa-stethoscope" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 24px;"></i>
-            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Clínica Geral</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Consultas preventivas, check-ups de rotina, diagnósticos iniciais abrangentes e encaminhamentos especializados com rapidez.</p>
+            <i class="fas fa-stethoscope especialidades-div-i"></i>
+            <h3 class="especialidades-div-h3">Clínica Geral</h3>
+            <p class="especialidades-div-p">Consultas preventivas, check-ups de rotina, diagnósticos iniciais abrangentes e encaminhamentos especializados com rapidez.</p>
           </div>
-          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+          <a href="agendamento.html" class="btn btn-outline btn-sm especialidades-card-specialty-detailed-a"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
         </div>
 
-        <div class="card-specialty-detailed scale-hover" data-name="Dermatologia" data-aos="fade-up" data-aos-delay="50" style="background-color: var(--bg-base); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="card-specialty-detailed scale-hover especialidades-especialidades-container-div-1-div" data-name="Dermatologia" data-aos="fade-up" data-aos-delay="50">
           <div>
-            <i class="fas fa-spa" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 24px;"></i>
-            <h3 style="font-family: var(--font-title); font-size: 1.5rem; margin-bottom: 12px;">Dermatologia</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">Diagnóstico, tratamento médico e estético de patologias da pele, unhas, cabelos e rejuvenescimento facial saudável.</p>
+            <i class="fas fa-spa especialidades-div-i-1"></i>
+            <h3 class="especialidades-div-h3">Dermatologia</h3>
+            <p class="especialidades-div-p">Diagnóstico, tratamento médico e estético de patologias da pele, unhas, cabelos e rejuvenescimento facial saudável.</p>
           </div>
-          <a href="agendamento.html" class="btn btn-outline btn-sm" style="width: 100%;"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
+          <a href="agendamento.html" class="btn btn-outline btn-sm especialidades-card-specialty-detailed-a"><i class="far fa-calendar-alt"></i> Agendar Especialidade</a>
         </div>
       </div>
     </div>
@@ -164,30 +162,16 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Clínica Zoe. Todos os direitos reservados.</p>
+        <p>© 2026 Clínica Zoe. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
 
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <script>
-    // Filtro em tempo real de especialidades
-    const searchInput = document.getElementById('search-specialty');
-    const cards = document.querySelectorAll('.card-specialty-detailed');
-
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase();
-      cards.forEach(card => {
-        const name = card.getAttribute('data-name').toLowerCase();
-        if (name.includes(query)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  </script>
+  
   <script src="../js/notifications.js"></script>
   <script src="../js/main.js"></script>
-</body>
-</html>
+
+
+  <script src="../js/especialidades.js"></script>
+</body></html>

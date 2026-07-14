@@ -410,4 +410,71 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Expõe globalmente função para reatualizar os dados
   window.refreshDashboard = refreshAllData;
+
+  // --- Codigo extraido do HTML (Sidebar & UI) ---
+  const hamburgerBtn  = document.getElementById('hamburger-btn');
+  const adminSidebar  = document.getElementById('admin-sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+  function openSidebar() {
+    adminSidebar?.classList.add('sidebar-open');
+    sidebarOverlay?.classList.add('active');
+    hamburgerBtn?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    adminSidebar?.classList.remove('sidebar-open');
+    sidebarOverlay?.classList.remove('active');
+    hamburgerBtn?.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn?.addEventListener('click', () => {
+    adminSidebar?.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
+  });
+
+  sidebarOverlay?.addEventListener('click', closeSidebar);
+
+  // Fechar ao clicar nos itens do nav (mobile)
+  document.querySelectorAll('.admin-nav-item a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) closeSidebar();
+    });
+  });
+
+  // Preencher info do usuário na sidebar com dados da sessão
+  const sessionUser = JSON.parse(localStorage.getItem('zoe_current_session') || '{}');
+  const nameEl = document.getElementById('sidebar-user-name');
+  const roleEl = document.getElementById('sidebar-user-role');
+  const avatarEl = document.getElementById('sidebar-avatar');
+
+  if (sessionUser?.email) {
+    const name = sessionUser.email.split('@')[0];
+    const displayName = name.charAt(0).toUpperCase() + name.slice(1);
+    if (nameEl) nameEl.textContent = displayName;
+    if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+  }
+
+  if (roleEl) {
+    roleEl.textContent = sessionUser?.role === 'professional' ? 'Profissional' : 'Administrador';
+  }
+
+  // Nav item active state
+  document.querySelectorAll('.admin-nav-item a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.querySelectorAll('.admin-nav-item').forEach(li => li.classList.remove('active'));
+      this.closest('.admin-nav-item')?.classList.add('active');
+    });
+  });
+
+  // Fechar formulario de edicao (substituindo onclick inline)
+  const closeEditFormBtn = document.getElementById('btn-close-edit-form');
+  if (closeEditFormBtn) {
+    closeEditFormBtn.addEventListener('click', () => {
+      const editForm = document.querySelector('.edit-form-container');
+      if (editForm) editForm.style.display = 'none';
+    });
+  }
+
 });
