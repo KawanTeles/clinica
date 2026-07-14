@@ -1,51 +1,171 @@
-/* Responsive Styles for Clinica Zoe */
+/* =============================================================
+   Responsive System – Clínica Zoe
+   Breakpoints: 2560 / 1920 / 1366 / 1024 / 768 / 480 / 320
+   ============================================================= */
 
+/* ---- UltraWide 2560px+ ---- */
+@media (min-width: 2560px) {
+  :root { --max-width: 1600px; }
+
+  .section-header h2 { font-size: clamp(2.5rem, 2.8vw, 3.5rem); }
+  .hero-title { font-size: clamp(4rem, 4.5vw, 6rem) !important; }
+  .hero-desc { font-size: clamp(1.2rem, 1.4vw, 1.6rem) !important; }
+
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* ---- Large Desktop 1920px ---- */
+@media (min-width: 1920px) and (max-width: 2559px) {
+  :root { --max-width: 1400px; }
+
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---- Notebook 1366px ---- */
+@media (max-width: 1366px) {
+  .hero-title { font-size: clamp(2.4rem, 3.5vw, 3.8rem) !important; }
+  .hero-desc { font-size: clamp(1rem, 1.2vw, 1.2rem) !important; }
+
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* ---- Tablet / iPad Landscape 1024px ---- */
 @media (max-width: 1024px) {
   .section-header h2 {
-    font-size: 2.2rem;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
   }
-  
+
   .footer-grid {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
   }
+
+  /* Dashboard: sidebar vira topbar */
+  .dashboard-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto 1fr;
+  }
+
+  .admin-sidebar {
+    height: auto !important;
+    position: sticky !important;
+    top: 0 !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 16px 24px !important;
+    z-index: 200;
+    overflow-x: auto;
+    gap: 16px;
+  }
+
+  .admin-logo {
+    margin-bottom: 0 !important;
+    flex-shrink: 0;
+  }
+
+  .admin-nav {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 6px !important;
+    flex: 1;
+  }
+
+  .admin-nav-item a {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .admin-sidebar > div:last-child {
+    flex-direction: row !important;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .admin-sidebar > div:last-child button {
+    width: auto !important;
+    margin-bottom: 0 !important;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .admin-main {
+    padding: 24px !important;
+  }
+
+  .dashboard-charts-grid,
+  .dashboard-charts-grid-secondary {
+    grid-template-columns: 1fr !important;
+  }
+
+  .table-filters {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Hero Section */
+  .hero-content {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .hero-image {
+    display: none;
+  }
+
+  /* Cards grid em 2 colunas no tablet */
+  .specialists-grid,
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
+/* ---- Tablet / iPad Portrait 768px ---- */
 @media (max-width: 768px) {
   :root {
     --radius-lg: 16px;
     --radius-md: 10px;
   }
-  
+
   .section {
     padding: 60px 0;
   }
-  
+
   .section-header {
     margin-bottom: 40px;
   }
-  
+
   .section-header h2 {
-    font-size: 1.8rem;
+    font-size: clamp(1.5rem, 4vw, 1.9rem);
   }
-  
+
   /* Menu Mobile */
   .menu-btn {
     display: flex;
   }
-  
+
   .menu-btn.active span:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
   }
-  
+
   .menu-btn.active span:nth-child(2) {
     opacity: 0;
   }
-  
+
   .menu-btn.active span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
-  
+
   .nav-links {
     position: fixed;
     top: 0;
@@ -63,37 +183,37 @@
     transition: right var(--transition-normal);
     z-index: 999;
   }
-  
+
   .nav-links.active {
     right: 0;
   }
-  
+
   .nav-links a {
     font-size: 1.1rem;
     width: 100%;
     display: block;
   }
-  
+
   .nav-links a.active::after {
     bottom: -4px;
   }
-  
+
   .header-actions {
     margin-right: 15px;
   }
-  
+
   /* Footer */
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 30px;
   }
-  
+
   .footer-bottom {
     flex-direction: column;
     gap: 16px;
     text-align: center;
   }
-  
+
   .footer-legal-links {
     justify-content: center;
   }
@@ -106,29 +226,250 @@
     bottom: 16px;
     padding: 16px;
   }
-  
+
   .cookie-actions {
     width: 100%;
     justify-content: center;
   }
+
+  /* Dashboard Mobile */
+  .admin-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: -280px !important;
+    width: 280px !important;
+    height: 100vh !important;
+    flex-direction: column !important;
+    padding: 30px 20px !important;
+    transition: left var(--transition-normal) !important;
+    z-index: 500 !important;
+    overflow-y: auto;
+  }
+
+  .admin-sidebar.sidebar-open {
+    left: 0 !important;
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 499;
+    backdrop-filter: blur(4px);
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  .admin-nav {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+  }
+
+  .admin-logo {
+    margin-bottom: 30px !important;
+  }
+
+  .admin-sidebar > div:last-child {
+    flex-direction: column !important;
+  }
+
+  .admin-sidebar > div:last-child button {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Mobile top bar */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 400;
+  }
+
+  .mobile-topbar-logo {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-main);
+  }
+
+  .mobile-topbar-logo i {
+    color: var(--primary);
+  }
+
+  .hamburger-btn {
+    display: flex !important;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .hamburger-btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: var(--text-main);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+  }
+
+  .hamburger-btn.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .hamburger-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-btn.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .admin-main {
+    padding: 16px !important;
+  }
+
+  /* Stats grid em 2 colunas */
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  .dashboard-stat-card {
+    padding: 16px !important;
+  }
+
+  .dashboard-stat-card .num {
+    font-size: 1.8rem !important;
+  }
+
+  /* Admin header responsivo */
+  .admin-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px;
+  }
+
+  .admin-header-actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .admin-header-actions .btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.8rem;
+    padding: 10px 12px;
+  }
+
+  /* Tabela responsiva */
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+
+  .table-filters {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+  /* Modal responsivo */
+  .modal-content {
+    margin: 20px 16px !important;
+    padding: 24px !important;
+  }
+
+  /* Cards grid em 1 coluna */
+  .specialists-grid,
+  .features-grid,
+  .team-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Formulários */
+  .form-grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Agendamento */
+  .schedule-layout {
+    grid-template-columns: 1fr !important;
+  }
 }
 
+/* ---- Mobile 480px ---- */
 @media (max-width: 480px) {
   .header-actions .btn {
-    display: none; /* Hide primary schedule button on ultra-small headers, menu can host it */
+    display: none;
   }
-  
+
   .section-header h2 {
     font-size: 1.6rem;
   }
-  
+
   .toast-container {
-    left: 20px;
-    right: 20px;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
   }
-  
+
   .toast {
     min-width: unset;
     width: 100%;
+  }
+
+  /* Stats em 1 coluna em mobile pequeno */
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-main {
+    padding: 12px !important;
+  }
+
+  .modal-content {
+    margin: 10px 8px !important;
+    padding: 20px 16px !important;
+  }
+}
+
+/* ---- Small Mobile 320px ---- */
+@media (max-width: 320px) {
+  :root {
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  .section-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .btn {
+    padding: 10px 16px !important;
+    font-size: 0.85rem !important;
   }
 }

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let professionals = [];
   let patients = [];
   let specialties = [];
-  
+
   // Inicialização principal
   await initDashboard();
 
@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Ajustar interface para Profissionais logados (ver apenas a própria agenda)
     if (session.role === 'professional') {
       document.body.classList.add('role-professional');
-      document.getElementById('admin-sidebar-nav').classList.add('hide-admin-only');
+      const sidebarNav = document.getElementById('admin-sidebar-nav');
+      if (sidebarNav) sidebarNav.classList.add('hide-admin-only');
     }
 
     // 2. Carregar dados das tabelas
@@ -30,6 +31,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupSearchFilters();
     setupActions();
     setupExports();
+
+    // Ocultar loader
+    const loader = document.getElementById('loader-overlay');
+    if (loader) loader.classList.add('fade-out');
   }
 
   // Recarrega todos os dados do banco e recalcula dashboards/tabelas
@@ -38,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
       const session = JSON.parse(localStorage.getItem('zoe_current_session'));
-      
+
       // Carregar Especialidades
       const { data: specs } = await window.supabaseClient.from('especialidades').select('*');
       specialties = specs || [];
@@ -55,12 +60,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Carregar Consultas
       let queryAppt = window.supabaseClient.from('agendamentos').select('*');
-      
+
       // Se for profissional logado, filtra apenas suas próprias consultas
       if (session && session.role === 'professional') {
         queryAppt = queryAppt.eq('profissional_id', session.professional_id);
       }
-      
+
       const { data: appts } = await queryAppt.order('data', { ascending: false });
       appointments = appts || [];
       window.dashboardAppointments = appointments;
@@ -68,38 +73,59 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Renderizar elementos na tela
       calculateCounters();
       renderAppointmentsTable();
-      
+
       // Desenhar gráficos
-      window.ChartsManager.renderDashboardCharts(appointments, professionals, specialties);
+      if (window.ChartsManager) {
+        window.ChartsManager.renderDashboardCharts(appointments, professionals, specialties);
+      }
 
     } catch (err) {
-      console.error("Falha ao atualizar dados no Dashboard:", err);
-      window.Notifications.show('Erro ao Carregar', 'Não foi possível carregar os dados.', 'error');
+      console.error('Falha ao atualizar dados no Dashboard:', err);
+      if (window.Notifications) {
+        window.Notifications.show('Erro ao Carregar', 'Não foi possível carregar os dados.', 'error');
+      }
     } finally {
       showDashboardSkeleton(false);
     }
   }
 
-  // Calcula indicadores rápidos do painel
+  // Calcula indicadores rápidos do painel (8 métricas)
   function calculateCounters() {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
 
-    const todayAppts = appointments.filter(a => a.data === todayStr);
-    const confirmed = appointments.filter(a => a.status === 'Confirmado');
-    const pending = appointments.filter(a => a.status === 'Agendado');
-    const canceled = appointments.filter(a => a.status === 'Cancelado');
+    // Semana: últimos 7 dias
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 6);
+    const weekAgoStr = weekAgo.toISOString().split('T')[0];
 
-    const cancellationRate = appointments.length > 0 
-      ? Math.round((canceled.length / appointments.length) * 100) 
-      : 0;
+    // Mês corrente
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
 
-    // Injetar valores no HTML
-    document.getElementById('stat-consultas-dia').innerText = todayAppts.length;
-    document.getElementById('stat-pacientes-total').innerText = patients.length;
-    document.getElementById('stat-consultas-confirmadas').innerText = confirmed.length;
-    document.getElementById('stat-cancellation-rate').innerText = `${cancellationRate}%`;
-    document.getElementById('stat-consultas-pendentes').innerText = pending.length;
-    document.getElementById('stat-consultas-canceladas').innerText = canceled.length;
+    const todayAppts   = appointments.filter(a => a.data === todayStr);
+    const weekAppts    = appointments.filter(a => a.data >= weekAgoStr && a.data <= todayStr);
+    const monthAppts   = appointments.filter(a => {
+      const d = new Date(a.data + 'T00:00:00');
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    });
+    const pending      = appointments.filter(a => a.status === 'Agendado');
+    const canceled     = appointments.filter(a => a.status === 'Cancelado');
+
+    // Helper to safely set text
+    const setText = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+
+    setText('stat-consultas-dia',        todayAppts.length);
+    setText('stat-consultas-semana',     weekAppts.length);
+    setText('stat-consultas-mes',        monthAppts.length);
+    setText('stat-pacientes-total',      patients.length);
+    setText('stat-profissionais-total',  professionals.length);
+    setText('stat-especialidades-total', specialties.length);
+    setText('stat-consultas-pendentes',  pending.length);
+    setText('stat-consultas-canceladas', canceled.length);
   }
 
   // Renderiza tabela de agendamentos com filtros ativos
@@ -107,9 +133,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tableBody = document.getElementById('table-appointments-body');
     if (!tableBody) return;
 
-    const filterSearch = document.getElementById('search-patient-input').value.toLowerCase();
-    const filterStatus = document.getElementById('filter-status-select').value;
-    const filterDate = document.getElementById('filter-date-input').value;
+    const searchEl  = document.getElementById('search-patient-input');
+    const statusEl  = document.getElementById('filter-status-select');
+    const dateEl    = document.getElementById('filter-date-input');
+
+    const filterSearch = searchEl  ? searchEl.value.toLowerCase()  : '';
+    const filterStatus = statusEl  ? statusEl.value                : '';
+    const filterDate   = dateEl    ? dateEl.value                  : '';
 
     let filtered = [...appointments];
 
@@ -118,8 +148,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       filtered = filtered.filter(appt => {
         const patient = patients.find(p => p.id === appt.paciente_id);
         return patient && (
-          patient.nome.toLowerCase().includes(filterSearch) || 
-          patient.cpf.includes(filterSearch)
+          patient.nome.toLowerCase().includes(filterSearch) ||
+          (patient.cpf || '').includes(filterSearch)
         );
       });
     }
@@ -137,7 +167,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (filtered.length === 0) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 40px;">
+          <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 48px 20px;">
+            <i class="fas fa-calendar-times" style="font-size:2rem;margin-bottom:12px;display:block;opacity:0.3;"></i>
             Nenhum agendamento encontrado para os filtros selecionados.
           </td>
         </tr>
@@ -146,35 +177,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     tableBody.innerHTML = filtered.map(appt => {
-      const patient = patients.find(p => p.id === appt.paciente_id) || { nome: 'Desconhecido', telefone: '', cpf: '' };
-      const prof = professionals.find(p => p.id === appt.profissional_id) || { nome: 'Geral' };
+      const patient       = patients.find(p => p.id === appt.paciente_id) || { nome: 'Desconhecido', telefone: '', cpf: '' };
+      const prof          = professionals.find(p => p.id === appt.profissional_id) || { nome: 'Geral' };
       const formattedDate = new Date(appt.data + 'T00:00:00').toLocaleDateString('pt-BR');
 
-      let badgeClass = 'badge-pending';
-      if (appt.status === 'Confirmado') badgeClass = 'badge-confirmed';
-      if (appt.status === 'Cancelado') badgeClass = 'badge-canceled';
-      if (appt.status === 'Finalizado') badgeClass = 'badge-finalized';
+      const badgeMap = {
+        Confirmado: 'badge-confirmed',
+        Cancelado:  'badge-canceled',
+        Finalizado: 'badge-finalized'
+      };
+      const badgeClass = badgeMap[appt.status] || 'badge-pending';
+
+      const canConfirm   = appt.status === 'Agendado';
+      const canReschedule = appt.status !== 'Cancelado' && appt.status !== 'Finalizado';
+      const canCancel    = appt.status !== 'Cancelado' && appt.status !== 'Finalizado';
 
       return `
         <tr data-id="${appt.id}">
           <td>
             <strong>${patient.nome}</strong><br>
-            <small>${patient.cpf}</small>
+            <small style="color:var(--text-muted)">${patient.cpf || ''}</small>
           </td>
           <td>${prof.nome}</td>
           <td>${formattedDate}</td>
-          <td>${appt.horario.substring(0, 5)}</td>
-          <td>${patient.telefone}</td>
+          <td>${appt.horario ? appt.horario.substring(0, 5) : '-'}</td>
+          <td>${patient.telefone || '-'}</td>
           <td><span class="status-badge ${badgeClass}">${appt.status}</span></td>
           <td>
             <div class="row-actions">
-              ${appt.status === 'Agendado' ? `
-                <button class="action-btn btn-confirm text-success" title="Confirmar Consulta"><i class="fas fa-check"></i></button>
-              ` : ''}
-              ${appt.status !== 'Cancelado' && appt.status !== 'Finalizado' ? `
-                <button class="action-btn btn-reschedule text-warning" title="Reagendar"><i class="far fa-clock"></i></button>
-                <button class="action-btn btn-cancel text-danger" title="Cancelar"><i class="fas fa-times"></i></button>
-              ` : ''}
+              ${canConfirm ? `<button class="action-btn btn-confirm text-success" title="Confirmar Consulta"><i class="fas fa-check"></i></button>` : ''}
+              ${canReschedule ? `<button class="action-btn btn-reschedule text-warning" title="Reagendar"><i class="far fa-clock"></i></button>` : ''}
+              ${canCancel ? `<button class="action-btn btn-cancel text-danger" title="Cancelar"><i class="fas fa-times"></i></button>` : ''}
               <button class="action-btn btn-delete text-muted" title="Excluir"><i class="far fa-trash-alt"></i></button>
             </div>
           </td>
@@ -192,7 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (searchInput) searchInput.addEventListener('input', renderAppointmentsTable);
     if (statusSelect) statusSelect.addEventListener('change', renderAppointmentsTable);
     if (dateInput) dateInput.addEventListener('change', renderAppointmentsTable);
-    
+
     // Botão Limpar Filtros
     const clearBtn = document.getElementById('btn-clear-filters');
     if (clearBtn) {
@@ -217,26 +250,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       const row = btn.closest('tr');
       const appointmentId = row.getAttribute('data-id');
 
-      // 1. Confirmar Consulta
       if (btn.classList.contains('btn-confirm')) {
         await updateAppointmentStatus(appointmentId, 'Confirmado');
       }
 
-      // 2. Cancelar Consulta
       if (btn.classList.contains('btn-cancel')) {
-        if (confirm("Deseja realmente cancelar este agendamento?")) {
+        if (confirm('Deseja realmente cancelar este agendamento?')) {
           await updateAppointmentStatus(appointmentId, 'Cancelado');
         }
       }
 
-      // 3. Excluir Consulta do histórico
       if (btn.classList.contains('btn-delete')) {
-        if (confirm("Esta ação excluirá permanentemente o agendamento do banco. Confirmar?")) {
+        if (confirm('Esta ação excluirá permanentemente o agendamento do banco. Confirmar?')) {
           await deleteAppointment(appointmentId);
         }
       }
 
-      // 4. Reagendar Consulta (Abrir Modal)
       if (btn.classList.contains('btn-reschedule')) {
         openRescheduleModal(appointmentId);
       }
@@ -277,15 +306,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Modal de Reagendamento
   let currentRescheduleId = null;
-  
+
   function openRescheduleModal(id) {
     currentRescheduleId = id;
     const modal = document.getElementById('modal-reschedule');
     const appt = appointments.find(a => a.id === id);
-    
+
     if (modal && appt) {
       document.getElementById('reschedule-date').value = appt.data;
-      document.getElementById('reschedule-time').value = appt.horario.substring(0, 5);
+      document.getElementById('reschedule-time').value = appt.horario ? appt.horario.substring(0, 5) : '';
       modal.style.display = 'block';
     }
   }
@@ -295,18 +324,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (formReschedule) {
     formReschedule.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const newDate = document.getElementById('reschedule-date').value;
       const newTime = document.getElementById('reschedule-time').value;
 
       try {
         const { error } = await window.supabaseClient
           .from('agendamentos')
-          .update({
-            data: newDate,
-            horario: newTime,
-            status: 'Agendado' // Volta a pendente ao reagendar
-          })
+          .update({ data: newDate, horario: newTime, status: 'Agendado' })
           .eq('id', currentRescheduleId);
 
         if (error) throw error;
@@ -320,14 +345,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    formReschedule.querySelector('.btn-close-modal').addEventListener('click', () => {
-      document.getElementById('modal-reschedule').style.display = 'none';
+    const closeBtns = formReschedule.querySelectorAll('.btn-close-modal');
+    closeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('modal-reschedule').style.display = 'none';
+      });
     });
   }
 
   // Configurações de exportações
   function setupExports() {
-    // Exportar CSV/Excel
+    // Exportar CSV
     const exportExcelBtn = document.getElementById('btn-export-excel');
     if (exportExcelBtn) {
       exportExcelBtn.addEventListener('click', () => {
@@ -336,21 +364,20 @@ document.addEventListener('DOMContentLoaded', async () => {
           return;
         }
 
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Paciente;CPF;Profissional;Data;Horario;Telefone;Status\n";
+        let csvContent = 'data:text/csv;charset=utf-8,';
+        csvContent += 'Paciente;CPF;Profissional;Data;Horario;Telefone;Status\n';
 
         appointments.forEach(appt => {
           const patient = patients.find(p => p.id === appt.paciente_id) || { nome: 'Desconhecido', cpf: '', telefone: '' };
           const prof = professionals.find(p => p.id === appt.profissional_id) || { nome: 'Desconhecido' };
           const formattedDate = new Date(appt.data + 'T00:00:00').toLocaleDateString('pt-BR');
-
-          csvContent += `"${patient.nome}";"${patient.cpf}";"${prof.nome}";"${formattedDate}";"${appt.horario.substring(0, 5)}";"${patient.telefone}";"${appt.status}"\n`;
+          csvContent += `"${patient.nome}";"${patient.cpf}";"${prof.nome}";"${formattedDate}";"${appt.horario ? appt.horario.substring(0, 5) : ''}";"${patient.telefone}";"${appt.status}"\n`;
         });
 
         const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `agenda_clinica_zoe_${new Date().toISOString().split('T')[0]}.csv`);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `agenda_clinica_zoe_${new Date().toISOString().split('T')[0]}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -358,35 +385,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
-    // Exportar/Imprimir PDF
+    // Imprimir
     const exportPdfBtn = document.getElementById('btn-export-pdf');
     if (exportPdfBtn) {
-      exportPdfBtn.addEventListener('click', () => {
-        window.print(); // O CSS de impressão do site formata uma visualização limpa da agenda
-      });
+      exportPdfBtn.addEventListener('click', () => window.print());
     }
   }
 
   // Mostra/Oculta skeletons de carregamento
   function showDashboardSkeleton(show) {
     const tableBody = document.getElementById('table-appointments-body');
-    const skeletons = document.querySelectorAll('.dashboard-stat-card .num, .chart-container canvas');
-    
-    if (show) {
-      if (tableBody) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="7">
-              <div class="skeleton skeleton-text" style="height: 30px; margin: 10px 0;"></div>
-              <div class="skeleton skeleton-text" style="height: 30px; margin: 10px 0;"></div>
-              <div class="skeleton skeleton-text" style="height: 30px; margin: 10px 0;"></div>
-            </td>
-          </tr>
-        `;
-      }
+    if (show && tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7">
+            <div class="skeleton skeleton-text" style="height:30px;margin:10px 0;border-radius:8px;"></div>
+            <div class="skeleton skeleton-text" style="height:30px;margin:10px 0;border-radius:8px;"></div>
+            <div class="skeleton skeleton-text" style="height:30px;margin:10px 0;border-radius:8px;"></div>
+          </td>
+        </tr>
+      `;
     }
   }
 
-  // Vincula globalmente função para reatualizar os dados via console/outros scripts
+  // Expõe globalmente função para reatualizar os dados
   window.refreshDashboard = refreshAllData;
 });

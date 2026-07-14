@@ -11,8 +11,88 @@ const Auth = {
 
       if (error) throw error;
       
+      let role = 'patient';
+      let professional_id = null;
+
+      if (window.CONFIG.DEMO_MODE) {
+        // No modo demonstração, o mock já retorna o papel e o id do profissional no objeto de sessão
+        role = data.session.role || 'patient';
+        professional_id = data.session.professional_id || null;
+        
+        if (role === 'professional' && !professional_id) {
+          try {
+            const { data: profs } = await window.supabaseClient
+              .from('profissionais')
+              .select('id')
+              .eq('email', data.user?.email || email)
+              .eq('ativo', true);
+            if (profs && profs.length > 0) {
+              professional_id = profs[0].id;
+            }
+          } catch (e) {
+            console.error("Erro ao verificar papel do profissional no mock db:", e);
+          }
+        }
+      } else {
+        // No Supabase de produção, verificamos se o e-mail pertence a um administrador ou médico
+        const userEmail = data.user?.email || email;
+        const userId    = data.user?.id;
+        const metadata  = data.user?.user_metadata || {};
+        
+        if (metadata.role === 'admin' || userEmail === 'admin@clinicazoe.com') {
+          role = 'admin';
+        } else {
+          // Verifica pelo auth_user_id primeiro (mais seguro), depois por e-mail
+          try {
+            let query = window.supabaseClient
+              .from('profissionais')
+              .select('id, auth_user_id')
+              .eq('ativo', true);
+
+            if (userId) {
+              // Busca pelo auth_user_id linkado ao cadastro
+              const { data: byId } = await window.supabaseClient
+                .from('profissionais')
+                .select('id')
+                .eq('auth_user_id', userId)
+                .eq('ativo', true)
+                .limit(1);
+              if (byId && byId.length > 0) {
+                role = 'professional';
+                professional_id = byId[0].id;
+              }
+            }
+
+            // Fallback: busca por e-mail
+            if (role !== 'professional') {
+              const { data: profs, error: profErr } = await window.supabaseClient
+                .from('profissionais')
+                .select('id')
+                .eq('email', userEmail)
+                .eq('ativo', true)
+                .limit(1);
+
+              if (!profErr && profs && profs.length > 0) {
+                role = 'professional';
+                professional_id = profs[0].id;
+              }
+            }
+          } catch (e) {
+            console.error("Erro ao verificar papel do profissional no banco:", e);
+          }
+        }
+      }
+
+      const unifiedSession = {
+        email: data.user?.email || email,
+        role: role,
+        professional_id: professional_id,
+        token: data.session.access_token || data.session.token,
+        user: data.user
+      };
+      
       // Salva sessão localmente para controle rápido
-      localStorage.setItem('zoe_current_session', JSON.stringify(data.session));
+      localStorage.setItem('zoe_current_session', JSON.stringify(unifiedSession));
       return { success: true, user: data.user };
     } catch (err) {
       console.error("[Auth Error]", err);
@@ -30,7 +110,7 @@ const Auth = {
       window.Notifications.show('Sessão Encerrada', 'Você saiu do sistema com sucesso.', 'info');
       
       setTimeout(() => {
-        window.location.href = '../index.html';
+        window.location.href = 'login.html';
       }, 1000);
       
       return { success: true };
@@ -40,31 +120,62 @@ const Auth = {
     }
   },
 
-  // Retorna a sessão ativa
+  // Retorna a sessão ativa unificada
   async checkSession() {
     try {
-      const { data, error } = await window.supabaseClient.auth.getSession();
-      if (error) throw error;
-      return data.session;
+      const local = localStorage.getItem('zoe_current_session');
+      if (!local) return null;
+
+      const session = JSON.parse(local);
+
+      if (!window.CONFIG.DEMO_MODE) {
+        // Valida se a sessão no Supabase ainda está ativa e válida
+        const { data, error } = await window.supabaseClient.auth.getSession();
+        if (error || !data.session) {
+          localStorage.removeItem('zoe_current_session');
+          return null;
+        }
+      }
+
+      return session;
     } catch (err) {
-      // Tentar ler do LocalStorage
+      console.error("[checkSession Error]", err);
       const local = localStorage.getItem('zoe_current_session');
       return local ? JSON.parse(local) : null;
     }
   },
 
-  // Garante que apenas administradores ou médicos acessem a página de dashboard
+  // Garante que apenas administradores ou médicos acessem suas respectivas páginas de dashboard
   async checkProtectedRoute() {
+    // O Permissions.js já executa o guard síncrono automaticamente.
+    // Aqui validamos a sessão no Supabase de forma assíncrona.
     const session = await this.checkSession();
     const currentPage = window.location.pathname;
 
-    if (!session && currentPage.includes('dashboard.html')) {
-      window.location.href = 'login.html';
-      return null;
-    }
+    // Páginas exclusivas de admin
+    const ADMIN_PAGES = ['dashboard.html', 'gerenciar-profissionais.html'];
+    // Páginas exclusivas de profissional
+    const PROF_PAGES  = ['dashboard-profissional.html'];
 
-    if (session && currentPage.includes('login.html')) {
-      window.location.href = 'dashboard.html';
+    const isAdminPage = ADMIN_PAGES.some(p => currentPage.includes(p));
+    const isProfPage  = PROF_PAGES.some(p => currentPage.includes(p));
+    const isLoginPage = currentPage.includes('login.html');
+
+    if (!session) {
+      if (isAdminPage || isProfPage) {
+        window.location.replace('login.html');
+        return null;
+      }
+    } else {
+      if (isLoginPage) {
+        window.location.replace(
+          session.role === 'professional' ? 'dashboard-profissional.html' : 'dashboard.html'
+        );
+      } else if (isAdminPage && session.role !== 'admin') {
+        window.location.replace('dashboard-profissional.html');
+      } else if (isProfPage && session.role !== 'professional') {
+        window.location.replace('dashboard.html');
+      }
     }
 
     return session;
@@ -111,6 +222,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const password = document.getElementById('password').value;
       const submitBtn = loginForm.querySelector('button[type="submit"]');
       const originalText = submitBtn.innerHTML;
+      const errorBox = document.getElementById('login-error');
+      const errorMsg = document.getElementById('login-error-msg');
+
+      // Ocultar erro anterior
+      if (errorBox) errorBox.style.display = 'none';
 
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
@@ -118,14 +234,79 @@ document.addEventListener('DOMContentLoaded', async () => {
       const result = await Auth.login(email, password);
 
       if (result.success) {
-        window.Notifications.show('Login Autorizado', 'Redirecionando para o painel...', 'success');
+        if (window.Notifications) {
+          window.Notifications.show('Login Autorizado', 'Redirecionando para o painel...', 'success');
+        }
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Acesso Autorizado!';
         setTimeout(() => {
-          window.location.href = 'dashboard.html';
+          const session = JSON.parse(localStorage.getItem('zoe_current_session') || '{}');
+          if (session.role === 'professional') {
+            window.location.href = 'dashboard-profissional.html';
+          } else {
+            window.location.href = 'dashboard.html';
+          }
         }, 1200);
       } else {
-        window.Notifications.show('Erro de Acesso', result.error, 'error');
+        // Mostra erro inline
+        const mensagem = result.error || 'Credenciais inválidas.';
+        if (errorBox && errorMsg) {
+          errorMsg.textContent = mensagem;
+          errorBox.style.display = 'flex';
+        }
+        // Dispara evento global de erro
+        window.dispatchEvent(new CustomEvent('auth_error', { detail: { message: mensagem } }));
+        // Toast como fallback
+        if (window.Notifications) {
+          window.Notifications.show('Erro de Acesso', mensagem, 'error');
+        }
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
+      }
+    });
+  }
+
+  // Vincular "Esqueci minha senha"
+  const forgotBtn = document.getElementById('btn-forgot-password');
+  if (forgotBtn) {
+    forgotBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        if (window.Notifications) {
+          window.Notifications.show('Informe seu e-mail', 'Digite seu e-mail corporativo no campo correspondente para solicitar a redefinição.', 'warning');
+        } else {
+          alert('Por favor, informe seu e-mail corporativo no campo correspondente.');
+        }
+        return;
+      }
+      
+      try {
+        if (window.CONFIG.DEMO_MODE) {
+          if (window.Notifications) {
+            window.Notifications.show('Demonstração', 'Simulação de redefinição de senha enviada para ' + email, 'success');
+          } else {
+            alert('Simulação de redefinição de senha enviada!');
+          }
+          return;
+        }
+
+        const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/pages/login.html'
+        });
+        if (error) throw error;
+        
+        if (window.Notifications) {
+          window.Notifications.show('E-mail Enviado', 'Verifique sua caixa de entrada para redefinir a senha.', 'success');
+        } else {
+          alert('E-mail de recuperação enviado com sucesso!');
+        }
+      } catch (err) {
+        console.error(err);
+        if (window.Notifications) {
+          window.Notifications.show('Falha ao enviar', err.message, 'error');
+        } else {
+          alert('Erro ao enviar e-mail: ' + err.message);
+        }
       }
     });
   }

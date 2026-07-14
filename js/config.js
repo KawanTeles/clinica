@@ -3,10 +3,10 @@
 
 const CONFIG = {
   // URL do seu projeto Supabase (ex: https://xxxx.supabase.co)
-  SUPABASE_URL: '',
+  SUPABASE_URL: 'https://hchmhzqygguqwcjsszmw.supabase.co',
   
   // Chave pública anônima do Supabase (Anon Key)
-  SUPABASE_KEY: '',
+  SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjaG1oenF5Z2d1cXdjanNzem13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMzMxNDYsImV4cCI6MjA5OTYwOTE0Nn0.k2FWIr3pAfENASClTUjhAyMpg-fsafU2arkRz8VICvM',
   
   // Modo de demonstração (se true, utiliza banco de dados simulado no LocalStorage)
   // Útil para testar o sistema completo localmente sem precisar configurar o Supabase imediatamente.

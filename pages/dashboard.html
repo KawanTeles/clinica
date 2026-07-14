@@ -18,26 +18,28 @@
     body {
       background-color: var(--bg-base);
     }
-    
+
+    /* ── Layout Principal ─────────────────────────────── */
     .dashboard-layout {
       display: grid;
       grid-template-columns: 260px 1fr;
       min-height: 100vh;
     }
 
-    /* Sidebar Administrativa */
+    /* ── Sidebar ──────────────────────────────────────── */
     .admin-sidebar {
       background-color: var(--bg-surface);
       border-right: 1px solid var(--border-color);
-      padding: 30px 20px;
+      padding: 28px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: sticky;
       top: 0;
       height: 100vh;
-      z-index: 100;
-      transition: background-color var(--transition-normal);
+      z-index: 300;
+      transition: background-color var(--transition-normal), left var(--transition-normal);
+      overflow-y: auto;
     }
 
     .admin-logo {
@@ -48,31 +50,84 @@
       font-weight: 700;
       font-size: 1.4rem;
       color: var(--text-main);
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
 
     .admin-logo i {
       color: var(--primary);
+      font-size: 1.6rem;
+    }
+
+    /* Admin user card dentro da sidebar */
+    .sidebar-user-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 28px;
+      border: 1px solid rgba(46,139,87,0.15);
+    }
+
+    .sidebar-user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .sidebar-user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sidebar-user-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-user-role {
+      font-size: 0.72rem;
+      color: var(--primary);
+      font-weight: 500;
     }
 
     .admin-nav {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
     }
 
     .admin-nav-item a {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 14px 18px;
+      padding: 13px 16px;
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 500;
       color: var(--text-main);
-      opacity: 0.8;
+      opacity: 0.7;
       transition: all var(--transition-fast);
+    }
+
+    .admin-nav-item a i {
+      width: 20px;
+      text-align: center;
+      font-size: 1rem;
     }
 
     .admin-nav-item a:hover,
@@ -83,58 +138,166 @@
       font-weight: 600;
     }
 
+    /* Separador na nav */
+    .nav-divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 10px 0;
+    }
+
     .hide-admin-only {
       display: none !important;
     }
 
-    /* Área Principal de Conteúdo */
+    /* Sidebar bottom actions */
+    .sidebar-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .sidebar-bottom .btn {
+      width: 100%;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      padding: 11px 16px;
+    }
+
+    /* Botão hamburguer — visível apenas em mobile */
+    .hamburger-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      padding: 9px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: var(--text-main);
+      border-radius: 2px;
+      transition: all var(--transition-fast);
+    }
+
+    .hamburger-btn.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger-btn.active span:nth-child(2) { opacity: 0; }
+    .hamburger-btn.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Overlay para o mobile sidebar */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 299;
+      backdrop-filter: blur(4px);
+    }
+
+    .sidebar-overlay.active { display: block; }
+
+    /* Mobile top bar (visível apenas em ≤768px via responsive.css) */
+    .mobile-topbar {
+      display: none;
+    }
+
+    /* ── Área Principal ───────────────────────────────── */
     .admin-main {
       padding: 40px;
       overflow-y: auto;
     }
 
+    /* ── Header da área principal ─────────────────────── */
     .admin-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .admin-header-title h1 {
       font-family: var(--font-title);
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 700;
       color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .admin-header-title p {
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-size: 0.9rem;
     }
 
     .admin-header-actions {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
+      flex-shrink: 0;
     }
 
-    /* Grid de Métricas */
+    /* ── Grid de Métricas 8 Cards ─────────────────────── */
     .dashboard-stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 36px;
     }
 
     .dashboard-stat-card {
       background-color: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 22px 24px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      transition: background-color var(--transition-normal);
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--primary));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .dashboard-stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .dashboard-stat-card .stat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      background: var(--card-icon-bg, var(--primary-light));
+      color: var(--card-accent, var(--primary));
     }
 
     .dashboard-stat-card .label {
-      font-size: 0.825rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -143,29 +306,41 @@
 
     .dashboard-stat-card .num {
       font-family: var(--font-title);
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
       color: var(--text-main);
+      line-height: 1;
     }
 
     .dashboard-stat-card .footer-info {
-      font-size: 0.775rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
+      margin-top: 2px;
     }
 
-    /* Gráficos Canvas */
+    /* Variações de cor por card */
+    .stat-card-green  { --card-accent: #2E8B57; --card-icon-bg: rgba(46,139,87,0.1); }
+    .stat-card-blue   { --card-accent: #3B82F6; --card-icon-bg: rgba(59,130,246,0.1); }
+    .stat-card-purple { --card-accent: #9B59B6; --card-icon-bg: rgba(155,89,182,0.1); }
+    .stat-card-orange { --card-accent: #F97316; --card-icon-bg: rgba(249,115,22,0.1); }
+    .stat-card-teal   { --card-accent: #14B8A6; --card-icon-bg: rgba(20,184,166,0.1); }
+    .stat-card-red    { --card-accent: #EF4444; --card-icon-bg: rgba(239,68,68,0.1); }
+    .stat-card-amber  { --card-accent: #F59E0B; --card-icon-bg: rgba(245,158,11,0.1); }
+    .stat-card-indigo { --card-accent: #6366F1; --card-icon-bg: rgba(99,102,241,0.1); }
+
+    /* ── Gráficos ─────────────────────────────────────── */
     .dashboard-charts-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 24px;
-      margin-bottom: 40px;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
     }
-    
+
     .dashboard-charts-grid-secondary {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 40px;
+      gap: 20px;
+      margin-bottom: 36px;
     }
 
     .chart-card {
@@ -179,23 +354,23 @@
 
     .chart-card h3 {
       font-family: var(--font-title);
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       color: var(--text-main);
     }
 
     .chart-container {
-      height: 250px;
+      height: 240px;
       position: relative;
     }
 
-    /* Filtros e Tabela de Consultas */
+    /* ── Seção da Tabela ──────────────────────────────── */
     .table-section {
       background-color: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 30px;
+      padding: 28px 30px;
       box-shadow: var(--shadow-sm);
       transition: background-color var(--transition-normal);
     }
@@ -204,32 +379,33 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 12px;
     }
 
     .table-section-header h2 {
       font-family: var(--font-title);
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
     }
 
     .table-filters {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr auto;
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: 12px;
+      margin-bottom: 20px;
       align-items: center;
     }
 
     .filter-input {
-      padding: 12px 16px;
+      padding: 11px 14px;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
       background-color: var(--bg-base);
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       color: var(--text-main);
+      transition: border-color var(--transition-fast);
     }
 
     .filter-input:focus {
@@ -238,7 +414,7 @@
       background-color: var(--bg-surface);
     }
 
-    /* Tabela Estilo Apple */
+    /* ── Tabela ───────────────────────────────────────── */
     .admin-table-container {
       overflow-x: auto;
     }
@@ -250,19 +426,20 @@
     }
 
     .admin-table th {
-      padding: 16px 20px;
+      padding: 14px 18px;
       border-bottom: 1.5px solid var(--border-color);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
     }
 
     .admin-table td {
-      padding: 18px 20px;
+      padding: 16px 18px;
       border-bottom: 1px solid var(--border-color);
-      font-size: 0.925rem;
+      font-size: 0.9rem;
       color: var(--text-main);
     }
 
@@ -270,36 +447,56 @@
       border-bottom: none;
     }
 
-    .admin-table tr:hover td {
+    .admin-table tbody tr:hover td {
       background-color: var(--primary-light);
     }
 
-    /* Badges de Status */
+    /* ── Badges ───────────────────────────────────────── */
     .status-badge {
       display: inline-block;
       padding: 4px 10px;
       border-radius: var(--radius-full);
-      font-size: 0.775rem;
+      font-size: 0.75rem;
       font-weight: 600;
+      white-space: nowrap;
     }
 
-    .badge-pending { background-color: rgba(52, 152, 219, 0.1); color: #3498DB; }
-    .badge-confirmed { background-color: rgba(46, 139, 87, 0.1); color: var(--primary); }
-    .badge-canceled { background-color: rgba(231, 76, 60, 0.1); color: #E74C3C; }
-    .badge-finalized { background-color: rgba(149, 165, 166, 0.1); color: #7F8C8D; }
+    .badge-pending   { background: rgba(59,130,246,0.1);  color: #3B82F6; }
+    .badge-confirmed { background: rgba(46,139,87,0.1);   color: var(--primary); }
+    .badge-canceled  { background: rgba(239,68,68,0.1);   color: #EF4444; }
+    .badge-finalized { background: rgba(107,114,128,0.1); color: #6B7280; }
 
-    /* Modais */
+    /* ── Ações de Linha ───────────────────────────────── */
+    .row-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      transition: background-color var(--transition-fast);
+    }
+
+    .action-btn:hover { background: var(--primary-light); }
+    .text-success { color: #2E8B57; }
+    .text-warning { color: #F59E0B; }
+    .text-danger  { color: #EF4444; }
+    .text-muted   { color: var(--text-muted); }
+
+    /* ── Modais ───────────────────────────────────────── */
     .modal {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      inset: 0;
+      background: rgba(0,0,0,0.55);
       z-index: 1000;
       overflow-y: auto;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(6px);
     }
 
     .modal-content {
@@ -307,7 +504,7 @@
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
       max-width: 800px;
-      margin: 60px auto;
+      margin: 50px auto;
       padding: 40px;
       position: relative;
       box-shadow: var(--shadow-lg);
@@ -315,193 +512,534 @@
 
     .close-modal-icon {
       position: absolute;
-      top: 24px;
-      right: 24px;
-      font-size: 1.5rem;
+      top: 20px;
+      right: 22px;
+      font-size: 1.4rem;
       color: var(--text-muted);
       cursor: pointer;
       transition: color var(--transition-fast);
+      padding: 6px;
     }
 
-    .close-modal-icon:hover {
-      color: var(--text-main);
-    }
+    .close-modal-icon:hover { color: var(--text-main); }
 
     .modal h2 {
       font-family: var(--font-title);
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin-bottom: 24px;
       color: var(--text-main);
     }
 
-    .row-actions {
-      display: flex;
-      gap: 12px;
+    /* ── Upload de Foto ───────────────────────────────── */
+    .photo-upload-area {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), background-color var(--transition-fast);
+      background: var(--bg-surface);
     }
 
-    .action-btn {
-      background: none;
-      border: none;
-      font-size: 0.95rem;
-      cursor: pointer;
+    .photo-upload-area:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
     }
-    
-    /* Layout Responsivo do Painel */
+
+    .photo-upload-area i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .photo-upload-area p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .photo-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary);
+      margin: 10px auto 0;
+      display: none;
+    }
+
+    /* ── Loader ───────────────────────────────────────── */
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 9999;
+      transition: opacity var(--transition-normal);
+    }
+
+    .loader-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-base) 25%, var(--border-color) 50%, var(--bg-base) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* Theme toggle btn */
+    .theme-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background: none;
+      color: var(--text-main);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      transition: all var(--transition-fast);
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* ── Responsividade do Painel (embutida) ─────────── */
+    @media (max-width: 1200px) {
+      .dashboard-stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
     @media (max-width: 1024px) {
       .dashboard-layout {
         grid-template-columns: 1fr;
       }
+
+      /* Sidebar vira topbar horizontal */
       .admin-sidebar {
+        position: sticky;
+        top: 0;
         height: auto;
-        position: relative;
         flex-direction: row;
         align-items: center;
-        padding: 20px;
+        padding: 14px 20px;
+        z-index: 400;
+        overflow-x: auto;
+        gap: 12px;
       }
-      .admin-logo {
-        margin-bottom: 0;
-      }
+
+      .sidebar-user-card { display: none; }
+
+      .admin-logo { margin-bottom: 0; flex-shrink: 0; font-size: 1.1rem; }
+
       .admin-nav {
         flex-direction: row;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 4px;
+        flex: 1;
       }
+
+      .admin-nav-item a {
+        padding: 9px 12px;
+        font-size: 0.82rem;
+        white-space: nowrap;
+        gap: 8px;
+      }
+
+      .nav-divider { display: none; }
+
+      .sidebar-bottom {
+        flex-direction: row;
+        border-top: none;
+        padding-top: 0;
+        flex-shrink: 0;
+        gap: 6px;
+      }
+
+      .sidebar-bottom .btn {
+        width: auto;
+        padding: 9px 12px;
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+
       .admin-main {
-        padding: 20px;
+        padding: 24px;
       }
+
       .dashboard-charts-grid,
       .dashboard-charts-grid-secondary {
         grid-template-columns: 1fr;
       }
-      .table-filters {
-        grid-template-columns: 1fr;
+
+      .dashboard-stats-grid {
+        grid-template-columns: repeat(4, 1fr);
       }
+
+      .table-filters {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* Sidebar vira menu lateral off-canvas */
+      .admin-sidebar {
+        position: fixed !important;
+        left: -290px;
+        top: 0;
+        width: 270px !important;
+        height: 100vh !important;
+        flex-direction: column !important;
+        padding: 28px 20px !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        gap: 0 !important;
+        z-index: 500 !important;
+        border-right: 1px solid var(--border-color);
+        transition: left 0.35s cubic-bezier(0.16,1,0.3,1) !important;
+      }
+
+      .admin-sidebar.sidebar-open { left: 0 !important; }
+
+      .sidebar-user-card { display: flex; }
+
+      .admin-logo { margin-bottom: 20px !important; font-size: 1.3rem !important; }
+
+      .admin-nav {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        overflow-x: visible !important;
+        gap: 6px !important;
+      }
+
+      .admin-nav-item a {
+        padding: 13px 16px !important;
+        font-size: 0.9rem !important;
+        gap: 14px !important;
+        white-space: normal !important;
+      }
+
+      .nav-divider { display: block; }
+
+      .sidebar-bottom {
+        flex-direction: column !important;
+        border-top: 1px solid var(--border-color) !important;
+        padding-top: 16px !important;
+        gap: 10px !important;
+      }
+
+      .sidebar-bottom .btn {
+        width: 100% !important;
+        padding: 11px 16px !important;
+        font-size: 0.875rem !important;
+      }
+
+      /* Mobile topbar */
+      .mobile-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 20px;
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 400;
+      }
+
+      .mobile-topbar-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--text-main);
+      }
+
+      .mobile-topbar-logo i { color: var(--primary); }
+
+      .hamburger-btn { display: flex; }
+
+      .admin-main { padding: 16px !important; }
+
+      .dashboard-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .admin-header-actions { width: 100%; flex-wrap: wrap; }
+      .admin-header-actions .btn { flex: 1; justify-content: center; }
+
+      .table-filters { grid-template-columns: 1fr !important; }
+
+      .modal-content {
+        margin: 16px !important;
+        padding: 24px 20px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-stats-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px;
+      }
+
+      .dashboard-stat-card .num { font-size: 1.6rem; }
+      .dashboard-stat-card { padding: 16px !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Loader Administrativo -->
+  <!-- Loader -->
   <div id="loader-overlay" class="loader-overlay">
     <div class="spinner"></div>
-    <p>Carregando Painel...</p>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Carregando Painel...</p>
   </div>
 
+  <!-- Overlay para o menu mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Mobile Top Bar (visível em ≤768px) -->
+  <nav class="mobile-topbar">
+    <div class="mobile-topbar-logo">
+      <i class="fas fa-hand-holding-heart"></i>
+      Zoe Admin
+    </div>
+    <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
   <div class="dashboard-layout" id="dashboard-app">
-    
-    <!-- Sidebar -->
-    aside class="admin-sidebar">
-      <div>
+
+    <!-- ══ SIDEBAR ══════════════════════════════════════ -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+        <!-- Logo -->
         <div class="admin-logo">
           <i class="fas fa-hand-holding-heart"></i>
           <span>Zoe Admin</span>
         </div>
-        
+
+        <!-- Card do usuário logado -->
+        <div class="sidebar-user-card">
+          <div class="sidebar-user-avatar" id="sidebar-avatar">A</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebar-user-name">Administrador</div>
+            <div class="sidebar-user-role" id="sidebar-user-role">Admin</div>
+          </div>
+        </div>
+
+        <!-- Navegação Principal -->
         <ul class="admin-nav" id="admin-sidebar-nav">
-          <li class="admin-nav-item active"><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-          <li class="admin-nav-item"><a href="#" id="btn-manage-professionals"><i class="fas fa-user-md"></i> Médicos</a></li>
-          <li class="admin-nav-item"><a href="#" id="btn-manage-specialties"><i class="fas fa-stethoscope"></i> Especialidades</a></li>
-          <li class="admin-nav-item"><a href="#" id="btn-manage-blocks"><i class="far fa-calendar-times"></i> Férias & Bloqueios</a></li>
+          <li class="admin-nav-item active">
+            <a href="#section-dashboard">
+              <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+          </li>
+          <li class="admin-nav-item">
+            <a href="gerenciar-profissionais.html">
+              <i class="fas fa-user-md"></i> Médicos
+            </a>
+          </li>
+          <li class="admin-nav-item">
+            <a href="#" id="btn-manage-specialties">
+              <i class="fas fa-stethoscope"></i> Especialidades
+            </a>
+          </li>
+          <li class="admin-nav-item">
+            <a href="#" id="btn-manage-blocks">
+              <i class="far fa-calendar-times"></i> Férias & Bloqueios
+            </a>
+          </li>
+          <div class="nav-divider"></div>
+          <li class="admin-nav-item">
+            <a href="../index.html" target="_blank">
+              <i class="fas fa-globe"></i> Ver Site
+            </a>
+          </li>
         </ul>
       </div>
 
-      <div>
-        <!-- Ações Inferiores da Sidebar -->
-        <button id="theme-toggle" class="theme-toggle-btn" style="margin-bottom: 16px; width: 100%;">
+      <!-- Ações Inferiores -->
+      <div class="sidebar-bottom">
+        <button id="theme-toggle" class="theme-toggle-btn">
           <i class="fas fa-moon"></i> Tema
         </button>
-        <button id="logout-btn" class="btn btn-secondary" style="width: 100%; border-radius: var(--radius-md);">
+        <button id="logout-btn" class="btn btn-secondary">
           <i class="fas fa-sign-out-alt"></i> Sair
         </button>
       </div>
     </aside>
 
-    <!-- Área Principal de Conteúdo -->
-    <main class="admin-main">
-      
+    <!-- ══ CONTEÚDO PRINCIPAL ════════════════════════════ -->
+    <main class="admin-main" id="section-dashboard">
+
       <!-- Cabeçalho -->
       <header class="admin-header">
         <div class="admin-header-title">
           <h1>Resumo da Clínica</h1>
-          <p style="color: var(--text-muted);">Acompanhamento da agenda e status operacional em tempo real.</p>
+          <p>Acompanhamento da agenda e status operacional em tempo real.</p>
         </div>
         <div class="admin-header-actions">
-          <button id="btn-export-excel" class="btn btn-secondary"><i class="far fa-file-excel"></i> Exportar CSV</button>
-          <button id="btn-export-pdf" class="btn btn-primary"><i class="far fa-file-pdf"></i> Imprimir Agenda</button>
+          <button id="btn-export-excel" class="btn btn-secondary">
+            <i class="far fa-file-excel"></i> Exportar CSV
+          </button>
+          <button id="btn-export-pdf" class="btn btn-primary">
+            <i class="far fa-file-pdf"></i> Imprimir Agenda
+          </button>
         </div>
       </header>
 
-      <!-- Grid de Métricas Rápida -->
+      <!-- ── 8 Cards de Métricas ── -->
       <section class="dashboard-stats-grid">
-        <div class="dashboard-stat-card">
-          <span class="label">Consultas do Dia</span>
+        <!-- Consultas do Dia -->
+        <div class="dashboard-stat-card stat-card-green">
+          <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+          <span class="label">Consultas Hoje</span>
           <span class="num" id="stat-consultas-dia">-</span>
           <span class="footer-info">Agendamentos para hoje</span>
         </div>
-        <div class="dashboard-stat-card">
-          <span class="label">Total de Pacientes</span>
+
+        <!-- Consultas da Semana -->
+        <div class="dashboard-stat-card stat-card-blue">
+          <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+          <span class="label">Esta Semana</span>
+          <span class="num" id="stat-consultas-semana">-</span>
+          <span class="footer-info">Últimos 7 dias</span>
+        </div>
+
+        <!-- Consultas do Mês -->
+        <div class="dashboard-stat-card stat-card-teal">
+          <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+          <span class="label">Este Mês</span>
+          <span class="num" id="stat-consultas-mes">-</span>
+          <span class="footer-info">Mês corrente</span>
+        </div>
+
+        <!-- Pacientes Cadastrados -->
+        <div class="dashboard-stat-card stat-card-purple">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <span class="label">Pacientes</span>
           <span class="num" id="stat-pacientes-total">-</span>
           <span class="footer-info">Cadastros no sistema</span>
         </div>
-        <div class="dashboard-stat-card">
-          <span class="label">Consultas Confirmadas</span>
-          <span class="num" id="stat-consultas-confirmadas">-</span>
-          <span class="footer-info">Aguardando atendimento</span>
+
+        <!-- Profissionais -->
+        <div class="dashboard-stat-card stat-card-indigo">
+          <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+          <span class="label">Profissionais</span>
+          <span class="num" id="stat-profissionais-total">-</span>
+          <span class="footer-info">Médicos cadastrados</span>
         </div>
-        <div class="dashboard-stat-card">
-          <span class="label">Taxa de Cancelamento</span>
-          <span class="num" id="stat-cancellation-rate">-</span>
-          <span class="footer-info">Média de faltas/desistências</span>
+
+        <!-- Especialidades -->
+        <div class="dashboard-stat-card stat-card-amber">
+          <div class="stat-icon"><i class="fas fa-stethoscope"></i></div>
+          <span class="label">Especialidades</span>
+          <span class="num" id="stat-especialidades-total">-</span>
+          <span class="footer-info">Áreas de atendimento</span>
+        </div>
+
+        <!-- Pendentes -->
+        <div class="dashboard-stat-card stat-card-orange">
+          <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+          <span class="label">Pendentes</span>
+          <span class="num" id="stat-consultas-pendentes">-</span>
+          <span class="footer-info">Aguardando confirmação</span>
+        </div>
+
+        <!-- Cancelamentos -->
+        <div class="dashboard-stat-card stat-card-red">
+          <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+          <span class="label">Cancelamentos</span>
+          <span class="num" id="stat-consultas-canceladas">-</span>
+          <span class="footer-info">Total de cancelados</span>
         </div>
       </section>
 
-      <!-- Métricas Ocultas Adicionais para o Dashboard detalhado -->
-      <div style="display: none;">
-        <span id="stat-consultas-pendentes">0</span>
-        <span id="stat-consultas-canceladas">0</span>
-      </div>
-
-      <!-- Gráficos Row 1 (Linha e Barras Horizontais) -->
+      <!-- ── Gráficos Row 1 ── -->
       <section class="dashboard-charts-grid">
         <div class="chart-card">
-          <h3>Evolução de Agendamentos (Últimos 7 dias)</h3>
+          <h3><i class="fas fa-chart-line" style="color:var(--primary);margin-right:8px;"></i>Evolução de Agendamentos (Últimos 7 dias)</h3>
           <div class="chart-container">
             <canvas id="chart-evolucao"></canvas>
           </div>
         </div>
-        
+
         <div class="chart-card">
-          <h3>Especialidades Mais Procuradas</h3>
+          <h3><i class="fas fa-chart-bar" style="color:#3B82F6;margin-right:8px;"></i>Especialidades Mais Procuradas</h3>
           <div class="chart-container">
             <canvas id="chart-especialidades"></canvas>
           </div>
         </div>
       </section>
 
-      <!-- Gráficos Row 2 (Doughnut e Pie) -->
+      <!-- ── Gráficos Row 2 ── -->
       <section class="dashboard-charts-grid-secondary">
         <div class="chart-card">
-          <h3>Procura por Profissional</h3>
+          <h3><i class="fas fa-chart-pie" style="color:#9B59B6;margin-right:8px;"></i>Procura por Profissional</h3>
           <div class="chart-container">
             <canvas id="chart-profissionais"></canvas>
           </div>
         </div>
-        
+
         <div class="chart-card">
-          <h3>Status Geral das Consultas</h3>
+          <h3><i class="fas fa-circle-notch" style="color:#F59E0B;margin-right:8px;"></i>Status Geral das Consultas</h3>
           <div class="chart-container">
             <canvas id="chart-status"></canvas>
           </div>
         </div>
       </section>
 
-      <!-- Seção da Tabela de Agendamentos -->
+      <!-- ── Tabela de Agendamentos ── -->
       <section class="table-section">
         <div class="table-section-header">
-          <h2>Fila de Agendamentos</h2>
-          <button id="btn-clear-filters" class="btn btn-secondary btn-sm"><i class="fas fa-undo"></i> Limpar Filtros</button>
+          <h2><i class="fas fa-list-alt" style="color:var(--primary);margin-right:10px;"></i>Fila de Agendamentos</h2>
+          <button id="btn-clear-filters" class="btn btn-secondary btn-sm">
+            <i class="fas fa-undo"></i> Limpar Filtros
+          </button>
         </div>
 
-        <!-- Filtros Rápidos -->
+        <!-- Filtros -->
         <div class="table-filters">
           <input type="text" id="search-patient-input" class="filter-input" placeholder="Buscar paciente por nome ou CPF...">
           <select id="filter-status-select" class="filter-input">
@@ -512,6 +1050,9 @@
             <option value="Finalizado">Finalizado</option>
           </select>
           <input type="date" id="filter-date-input" class="filter-input">
+          <button id="btn-apply-filters" class="btn btn-primary btn-sm">
+            <i class="fas fa-search"></i>
+          </button>
         </div>
 
         <!-- Tabela -->
@@ -538,94 +1079,156 @@
     </main>
   </div>
 
-  <!-- =====================================================================
-       MODAIS ADMINISTRATIVOS (CRUD & CONFIGURAÇÕES)
-       ===================================================================== -->
-  
+  <!-- ══════════════════════════════════════════════════════
+       MODAIS ADMINISTRATIVOS
+       ══════════════════════════════════════════════════════ -->
+
   <!-- MODAL: GERENCIAMENTO DE PROFISSIONAIS -->
   <div id="modal-professionals" class="modal">
-    <div class="modal-content" style="max-width: 900px;">
+    <div class="modal-content" style="max-width: 920px;">
       <i class="fas fa-times close-modal-icon"></i>
-      <h2>Gerenciamento de Médicos & Equipe</h2>
-      
-      <!-- Formulário de cadastro de Profissional -->
-      <form id="form-create-professional" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 24px; margin-bottom: 30px; transition: background-color var(--transition-normal);">
-        <h3 style="margin-bottom: 16px; font-family: var(--font-title); font-size: 1.1rem; font-weight:600;"><i class="fas fa-user-plus"></i> Adicionar Profissional</h3>
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;">
-          <input type="text" id="prof-nome" placeholder="Nome Completo" required class="filter-input" style="background-color: var(--bg-surface);">
-          <select id="prof-especialidade" class="filter-input" style="background-color: var(--bg-surface);" required>
+      <h2><i class="fas fa-user-md" style="color:var(--primary);margin-right:10px;"></i>Gerenciamento de Médicos & Equipe</h2>
+
+      <!-- Formulário de CADASTRO -->
+      <form id="form-create-professional" style="background:var(--bg-base);border-radius:var(--radius-md);padding:24px;margin-bottom:28px;border:1px solid var(--border-color);">
+        <h3 style="margin-bottom:18px;font-family:var(--font-title);font-size:1.05rem;font-weight:700;">
+          <i class="fas fa-user-plus" style="color:var(--primary);margin-right:8px;"></i>Adicionar Profissional
+        </h3>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;">
+          <input type="text" id="prof-nome" placeholder="Nome Completo *" required class="filter-input" style="background:var(--bg-surface);">
+          <select id="prof-especialidade" class="filter-input" style="background:var(--bg-surface);" required>
             <!-- Carregado via JS -->
           </select>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-          <input type="email" id="prof-email" placeholder="E-mail Institucional" required class="filter-input" style="background-color: var(--bg-surface);">
-          <input type="text" id="prof-whatsapp" placeholder="WhatsApp (DDD+nº)" required class="filter-input" style="background-color: var(--bg-surface);">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <input type="email" id="prof-email" placeholder="E-mail Institucional *" required class="filter-input" style="background:var(--bg-surface);">
+          <input type="text" id="prof-whatsapp" placeholder="WhatsApp (ex: 11912345678) *" required class="filter-input" style="background:var(--bg-surface);">
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-          <input type="time" id="prof-inicio" placeholder="Horário de Entrada (Ex: 08:00)" required class="filter-input" style="background-color: var(--bg-surface);">
-          <input type="time" id="prof-fim" placeholder="Horário de Saída (Ex: 18:00)" required class="filter-input" style="background-color: var(--bg-surface);">
-        </div>
-        <div style="margin-bottom: 16px;">
-          <input type="text" id="prof-foto" placeholder="URL da foto de perfil" class="filter-input" style="background-color: var(--bg-surface);">
-        </div>
-        <div style="margin-bottom: 16px;">
-          <textarea id="prof-mini-curriculo" placeholder="Mini Currículo do Médico..." required class="filter-input" style="background-color: var(--bg-surface); width:100%; resize:none;" rows="3"></textarea>
-        </div>
-        <div style="margin-bottom: 20px;">
-          <label style="font-size:0.85rem; font-weight:600; margin-bottom:8px; display:block;">Dias de Atendimento:</label>
-          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <label><input type="checkbox" class="prof-days-checkbox" value="seg" checked> Seg</label>
-            <label><input type="checkbox" class="prof-days-checkbox" value="ter" checked> Ter</label>
-            <label><input type="checkbox" class="prof-days-checkbox" value="qua" checked> Qua</label>
-            <label><input type="checkbox" class="prof-days-checkbox" value="qui" checked> Qui</label>
-            <label><input type="checkbox" class="prof-days-checkbox" value="sex" checked> Sex</label>
-            <label><input type="checkbox" class="prof-days-checkbox" value="sab"> Sáb</label>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div>
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">HORÁRIO ENTRADA</label>
+            <input type="time" id="prof-inicio" required class="filter-input" style="background:var(--bg-surface);width:100%;">
+          </div>
+          <div>
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">HORÁRIO SAÍDA</label>
+            <input type="time" id="prof-fim" required class="filter-input" style="background:var(--bg-surface);width:100%;">
           </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Cadastrar Médico</button>
+
+        <!-- Upload de Foto -->
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:8px;">FOTO DO PROFISSIONAL</label>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;">
+            <div>
+              <label class="photo-upload-area" for="prof-foto-file" id="upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Clique para selecionar uma foto ou arraste aqui<br><small>PNG, JPG ou WEBP até 2MB</small></p>
+              </label>
+              <input type="file" id="prof-foto-file" accept="image/*" style="display:none;">
+              <input type="hidden" id="prof-foto">
+              <div id="upload-progress" style="display:none;margin-top:8px;">
+                <div style="height:4px;background:var(--border-color);border-radius:4px;overflow:hidden;">
+                  <div id="upload-bar" style="height:100%;background:var(--primary);width:0%;transition:width 0.3s;"></div>
+                </div>
+                <p style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;" id="upload-status-text">Enviando...</p>
+              </div>
+            </div>
+            <img id="prof-foto-preview" class="photo-preview" src="" alt="Preview">
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <textarea id="prof-mini-curriculo" placeholder="Mini Currículo do Médico (formação, experiência, etc.)... *" required class="filter-input" style="background:var(--bg-surface);width:100%;resize:vertical;" rows="3"></textarea>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:10px;">DIAS DE ATENDIMENTO</label>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="prof-days-checkbox" value="seg" checked> Seg</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="prof-days-checkbox" value="ter" checked> Ter</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="prof-days-checkbox" value="qua" checked> Qua</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="prof-days-checkbox" value="qui" checked> Qui</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="prof-days-checkbox" value="sex" checked> Sex</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="prof-days-checkbox" value="sab"> Sáb</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm" id="btn-create-prof-submit">
+          <i class="fas fa-check"></i> Cadastrar Médico
+        </button>
       </form>
 
-      <!-- Formulário de EDIÇÃO de Profissional (Oculto por padrão) -->
-      <div class="edit-form-container" style="display: none; background-color: rgba(155, 89, 182, 0.05); border: 1px solid rgba(155, 89, 182, 0.2); border-radius: var(--radius-md); padding: 24px; margin-bottom: 30px;">
+      <!-- Formulário de EDIÇÃO -->
+      <div class="edit-form-container" style="display:none;background:rgba(155,89,182,0.05);border:1px solid rgba(155,89,182,0.2);border-radius:var(--radius-md);padding:24px;margin-bottom:28px;">
         <form id="form-edit-professional">
           <input type="hidden" id="edit-prof-id">
-          <h3 style="margin-bottom: 16px; font-family: var(--font-title); font-size: 1.1rem; font-weight:600; color: var(--secondary);"><i class="fas fa-edit"></i> Editar Profissional</h3>
-          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;">
-            <input type="text" id="edit-prof-nome" required class="filter-input" style="background-color: var(--bg-surface);">
-            <select id="edit-prof-especialidade" class="filter-input" style="background-color: var(--bg-surface);" required>
-              <!-- Carregado via JS -->
-            </select>
+          <h3 style="margin-bottom:18px;font-family:var(--font-title);font-size:1.05rem;font-weight:700;color:var(--secondary);">
+            <i class="fas fa-edit" style="margin-right:8px;"></i>Editar Profissional
+          </h3>
+
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;">
+            <input type="text" id="edit-prof-nome" placeholder="Nome Completo *" required class="filter-input" style="background:var(--bg-surface);">
+            <select id="edit-prof-especialidade" class="filter-input" style="background:var(--bg-surface);" required></select>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-            <input type="email" id="edit-prof-email" required class="filter-input" style="background-color: var(--bg-surface);">
-            <input type="text" id="edit-prof-whatsapp" required class="filter-input" style="background-color: var(--bg-surface);">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+            <input type="email" id="edit-prof-email" placeholder="E-mail *" required class="filter-input" style="background:var(--bg-surface);">
+            <input type="text" id="edit-prof-whatsapp" placeholder="WhatsApp *" required class="filter-input" style="background:var(--bg-surface);">
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-            <input type="time" id="edit-prof-inicio" required class="filter-input" style="background-color: var(--bg-surface);">
-            <input type="time" id="edit-prof-fim" required class="filter-input" style="background-color: var(--bg-surface);">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+            <input type="time" id="edit-prof-inicio" required class="filter-input" style="background:var(--bg-surface);">
+            <input type="time" id="edit-prof-fim" required class="filter-input" style="background:var(--bg-surface);">
           </div>
-          <div style="margin-bottom: 16px;">
-            <input type="text" id="edit-prof-foto" class="filter-input" style="background-color: var(--bg-surface);">
+
+          <!-- Upload de Foto (Edição) -->
+          <div style="margin-bottom:14px;">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:8px;">FOTO ATUAL / NOVA FOTO</label>
+            <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;">
+              <input type="text" id="edit-prof-foto" placeholder="URL da foto (ou faça upload acima)" class="filter-input" style="background:var(--bg-surface);">
+              <div>
+                <label for="edit-prof-foto-file" class="btn btn-secondary btn-sm" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+                  <i class="fas fa-upload"></i> Upload
+                </label>
+                <input type="file" id="edit-prof-foto-file" accept="image/*" style="display:none;">
+              </div>
+            </div>
+            <img id="edit-prof-foto-preview" class="photo-preview" src="" alt="Preview" style="margin-top:10px;">
           </div>
-          <div style="margin-bottom: 16px;">
-            <textarea id="edit-prof-mini-curriculo" required class="filter-input" style="background-color: var(--bg-surface); width:100%; resize:none;" rows="3"></textarea>
+
+          <div style="margin-bottom:14px;">
+            <textarea id="edit-prof-mini-curriculo" placeholder="Mini Currículo *" required class="filter-input" style="background:var(--bg-surface);width:100%;resize:vertical;" rows="3"></textarea>
           </div>
-          <div style="margin-bottom: 20px;">
-            <label style="font-size:0.85rem; font-weight:600; margin-bottom:8px; display:block;">Dias de Atendimento:</label>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-              <label><input type="checkbox" class="edit-prof-days-checkbox" value="seg"> Seg</label>
-              <label><input type="checkbox" class="edit-prof-days-checkbox" value="ter"> Ter</label>
-              <label><input type="checkbox" class="edit-prof-days-checkbox" value="qua"> Qua</label>
-              <label><input type="checkbox" class="edit-prof-days-checkbox" value="qui"> Qui</label>
-              <label><input type="checkbox" class="edit-prof-days-checkbox" value="sex"> Sex</label>
-              <label><input type="checkbox" class="edit-prof-days-checkbox" value="sab"> Sáb</label>
+
+          <div style="margin-bottom:16px;">
+            <label style="font-size:0.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:10px;">DIAS DE ATENDIMENTO</label>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="edit-prof-days-checkbox" value="seg"> Seg</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="edit-prof-days-checkbox" value="ter"> Ter</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="edit-prof-days-checkbox" value="qua"> Qua</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="edit-prof-days-checkbox" value="qui"> Qui</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="edit-prof-days-checkbox" value="sex"> Sex</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" class="edit-prof-days-checkbox" value="sab"> Sáb</label>
             </div>
           </div>
-          <div style="margin-bottom: 20px;">
-            <label><input type="checkbox" id="edit-prof-ativo"> Médico Ativo para Consultas</label>
+
+          <div style="margin-bottom:20px;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer;">
+              <input type="checkbox" id="edit-prof-ativo"> Médico Ativo para Consultas
+            </label>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm" style="background-color: var(--secondary);"><i class="fas fa-check"></i> Salvar Alterações</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="document.querySelector('.edit-form-container').style.display = 'none'">Cancelar</button>
+
+          <div style="display:flex;gap:12px;">
+            <button type="submit" class="btn btn-primary btn-sm" style="background:var(--secondary);">
+              <i class="fas fa-check"></i> Salvar Alterações
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.querySelector('.edit-form-container').style.display='none'">
+              Cancelar
+            </button>
+          </div>
         </form>
       </div>
 
@@ -634,6 +1237,7 @@
         <table class="admin-table">
           <thead>
             <tr>
+              <th>Foto</th>
               <th>Nome</th>
               <th>Especialidade</th>
               <th>E-mail</th>
@@ -646,7 +1250,7 @@
           </tbody>
         </table>
       </div>
-      
+
     </div>
   </div>
 
@@ -654,16 +1258,20 @@
   <div id="modal-specialties" class="modal">
     <div class="modal-content">
       <i class="fas fa-times close-modal-icon"></i>
-      <h2>Especialidades Clínicas</h2>
-      
-      <form id="form-create-specialty" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 24px; margin-bottom: 30px; display:flex; flex-direction:column; gap:16px;">
-        <h3 style="font-family: var(--font-title); font-size:1.1rem; font-weight:600;"><i class="fas fa-plus"></i> Adicionar Especialidade</h3>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-          <input type="text" id="spec-nome" placeholder="Nome (Ex: Dermatologia)" required class="filter-input" style="background-color: var(--bg-surface);">
-          <input type="text" id="spec-icone" placeholder="Ícone FontAwesome (Ex: fa-spa)" required class="filter-input" style="background-color: var(--bg-surface);">
+      <h2><i class="fas fa-stethoscope" style="color:var(--primary);margin-right:10px;"></i>Especialidades Clínicas</h2>
+
+      <form id="form-create-specialty" style="background:var(--bg-base);border-radius:var(--radius-md);padding:24px;margin-bottom:28px;display:flex;flex-direction:column;gap:14px;border:1px solid var(--border-color);">
+        <h3 style="font-family:var(--font-title);font-size:1.05rem;font-weight:700;">
+          <i class="fas fa-plus" style="color:var(--primary);margin-right:8px;"></i>Adicionar Especialidade
+        </h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <input type="text" id="spec-nome" placeholder="Nome (ex: Dermatologia) *" required class="filter-input" style="background:var(--bg-surface);">
+          <input type="text" id="spec-icone" placeholder="Ícone FontAwesome (ex: fa-spa) *" required class="filter-input" style="background:var(--bg-surface);">
         </div>
-        <textarea id="spec-descricao" placeholder="Breve descrição da especialidade..." required class="filter-input" style="background-color: var(--bg-surface); resize:none;" rows="3"></textarea>
-        <button type="submit" class="btn btn-primary btn-sm" style="align-self:flex-start;"><i class="fas fa-check"></i> Salvar Especialidade</button>
+        <textarea id="spec-descricao" placeholder="Breve descrição da especialidade... *" required class="filter-input" style="background:var(--bg-surface);resize:none;" rows="3"></textarea>
+        <button type="submit" class="btn btn-primary btn-sm" style="align-self:flex-start;">
+          <i class="fas fa-check"></i> Salvar Especialidade
+        </button>
       </form>
 
       <div class="admin-table-container">
@@ -675,131 +1283,186 @@
               <th>Descrição</th>
             </tr>
           </thead>
-          <tbody id="admin-specialties-list">
-            <!-- Carregado via JS -->
-          </tbody>
+          <tbody id="admin-specialties-list"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: BLOQUEIOS DE AGENDA E FÉRIAS -->
+  <!-- MODAL: BLOQUEIOS E FÉRIAS -->
   <div id="modal-blocks" class="modal">
     <div class="modal-content" style="max-width: 900px;">
       <i class="fas fa-times close-modal-icon"></i>
-      <h2>Férias & Bloqueios de Agenda</h2>
-      
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-        
-        <!-- Bloqueio de Horário específico -->
-        <div>
-          <form id="form-create-block" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 20px; display:flex; flex-direction:column; gap:14px; margin-bottom: 24px;">
-            <h3 style="font-family: var(--font-title); font-size:1.1rem; font-weight:600;"><i class="fas fa-ban"></i> Bloquear Horário</h3>
-            
-            <select id="block-prof-id" class="filter-input" style="background-color: var(--bg-surface);" required></select>
-            <input type="date" id="block-date" required class="filter-input" style="background-color: var(--bg-surface);">
-            
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <input type="time" id="block-start-time" required class="filter-input" style="background-color: var(--bg-surface);">
-              <input type="time" id="block-end-time" required class="filter-input" style="background-color: var(--bg-surface);">
-            </div>
-            
-            <input type="text" id="block-reason" placeholder="Motivo do Bloqueio" required class="filter-input" style="background-color: var(--bg-surface);">
-            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Salvar Bloqueio</button>
-          </form>
-          
-          <table class="admin-table" style="font-size:0.8rem;">
-            <thead>
-              <tr>
-                <th>Médico</th>
-                <th>Data</th>
-                <th>Horário</th>
-                <th>Motivo</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="admin-blocks-list">
-              <!-- Injetado dinamicamente -->
-            </tbody>
-          </table>
-        </div>
+      <h2><i class="far fa-calendar-times" style="color:var(--primary);margin-right:10px;"></i>Férias & Bloqueios de Agenda</h2>
 
-        <!-- Cadastro de Férias -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+
+        <!-- Bloqueio de Horário -->
         <div>
-          <form id="form-create-vacation" style="background-color: var(--bg-base); border-radius: var(--radius-md); padding: 20px; display:flex; flex-direction:column; gap:14px; margin-bottom: 24px;">
-            <h3 style="font-family: var(--font-title); font-size:1.1rem; font-weight:600;"><i class="fas fa-umbrella-beach"></i> Lançar Férias</h3>
-            
-            <select id="vacation-prof-id" class="filter-input" style="background-color: var(--bg-surface);" required></select>
-            
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <div>
-                <label style="font-size:0.75rem; font-weight:600;">Início das Férias:</label>
-                <input type="date" id="vacation-start-date" required class="filter-input" style="background-color: var(--bg-surface); width:100%;">
-              </div>
-              <div>
-                <label style="font-size:0.75rem; font-weight:600;">Fim das Férias:</label>
-                <input type="date" id="vacation-end-date" required class="filter-input" style="background-color: var(--bg-surface); width:100%;">
-              </div>
+          <form id="form-create-block" style="background:var(--bg-base);border-radius:var(--radius-md);padding:20px;display:flex;flex-direction:column;gap:12px;margin-bottom:22px;border:1px solid var(--border-color);">
+            <h3 style="font-family:var(--font-title);font-size:1rem;font-weight:700;">
+              <i class="fas fa-ban" style="color:#EF4444;margin-right:8px;"></i>Bloquear Horário
+            </h3>
+            <select id="block-prof-id" class="filter-input" style="background:var(--bg-surface);" required></select>
+            <input type="date" id="block-date" required class="filter-input" style="background:var(--bg-surface);">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <input type="time" id="block-start-time" required class="filter-input" style="background:var(--bg-surface);">
+              <input type="time" id="block-end-time" required class="filter-input" style="background:var(--bg-surface);">
             </div>
-            
-            <button type="submit" class="btn btn-primary btn-sm" style="background-color:var(--secondary);"><i class="fas fa-check"></i> Cadastrar Período</button>
+            <input type="text" id="block-reason" placeholder="Motivo do Bloqueio *" required class="filter-input" style="background:var(--bg-surface);">
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="fas fa-check"></i> Salvar Bloqueio
+            </button>
           </form>
 
-          <table class="admin-table" style="font-size:0.8rem;">
-            <thead>
-              <tr>
-                <th>Médico</th>
-                <th>Período</th>
-                <th>Motivo</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="admin-vacations-list">
-              <!-- Injetado dinamicamente -->
-            </tbody>
-          </table>
+          <div class="admin-table-container">
+            <table class="admin-table" style="font-size:0.82rem;">
+              <thead>
+                <tr>
+                  <th>Médico</th><th>Data</th><th>Horário</th><th>Motivo</th><th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="admin-blocks-list"></tbody>
+            </table>
+          </div>
         </div>
 
+        <!-- Férias -->
+        <div>
+          <form id="form-create-vacation" style="background:var(--bg-base);border-radius:var(--radius-md);padding:20px;display:flex;flex-direction:column;gap:12px;margin-bottom:22px;border:1px solid var(--border-color);">
+            <h3 style="font-family:var(--font-title);font-size:1rem;font-weight:700;">
+              <i class="fas fa-umbrella-beach" style="color:#3B82F6;margin-right:8px;"></i>Lançar Férias
+            </h3>
+            <select id="vacation-prof-id" class="filter-input" style="background:var(--bg-surface);" required></select>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div>
+                <label style="font-size:0.75rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:5px;">INÍCIO</label>
+                <input type="date" id="vacation-start-date" required class="filter-input" style="background:var(--bg-surface);width:100%;">
+              </div>
+              <div>
+                <label style="font-size:0.75rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:5px;">FIM</label>
+                <input type="date" id="vacation-end-date" required class="filter-input" style="background:var(--bg-surface);width:100%;">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" style="background:var(--secondary);">
+              <i class="fas fa-check"></i> Cadastrar Período
+            </button>
+          </form>
+
+          <div class="admin-table-container">
+            <table class="admin-table" style="font-size:0.82rem;">
+              <thead>
+                <tr>
+                  <th>Médico</th><th>Período</th><th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="admin-vacations-list"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: REAGENDAMENTO DE CONSULTA -->
+  <!-- MODAL: REAGENDAMENTO -->
   <div id="modal-reschedule" class="modal">
-    <div class="modal-content" style="max-width: 450px;">
+    <div class="modal-content" style="max-width: 440px;">
       <i class="fas fa-times close-modal-icon"></i>
       <h2>Reagendar Consulta</h2>
-      
-      <form id="form-reschedule" style="display:flex; flex-direction:column; gap:16px;">
-        <div style="display:flex; flex-direction:column; gap:6px;">
-          <label for="reschedule-date" style="font-size:0.85rem; font-weight:600;">Nova Data:</label>
+
+      <form id="form-reschedule" style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label for="reschedule-date" style="font-size:0.85rem;font-weight:600;">Nova Data:</label>
           <input type="date" id="reschedule-date" required class="filter-input">
         </div>
-        <div style="display:flex; flex-direction:column; gap:6px;">
-          <label for="reschedule-time" style="font-size:0.85rem; font-weight:600;">Novo Horário:</label>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label for="reschedule-time" style="font-size:0.85rem;font-weight:600;">Novo Horário:</label>
           <input type="time" id="reschedule-time" required class="filter-input">
         </div>
-        
-        <div style="display:flex; gap:12px; margin-top:10px;">
-          <button type="submit" class="btn btn-primary btn-sm" style="flex-grow:1;"><i class="fas fa-check"></i> Salvar</button>
-          <button type="button" class="btn btn-secondary btn-sm btn-close-modal" style="flex-grow:1;">Cancelar</button>
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="btn btn-primary btn-sm" style="flex:1;">
+            <i class="fas fa-check"></i> Salvar
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm btn-close-modal" style="flex:1;">Cancelar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Scripts JS CDNs e locais -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
+
   <script src="../js/config.js"></script>
   <script src="../js/supabase.js"></script>
+  <script src="../js/permissions.js"></script>
   <script src="../js/notifications.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/charts.js"></script>
   <script src="../js/dashboard.js"></script>
   <script src="../js/admin.js"></script>
+
+  <!-- Script do Hamburguer Menu e Sidebar User Info -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburgerBtn  = document.getElementById('hamburger-btn');
+      const adminSidebar  = document.getElementById('admin-sidebar');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+      function openSidebar() {
+        adminSidebar?.classList.add('sidebar-open');
+        sidebarOverlay?.classList.add('active');
+        hamburgerBtn?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        adminSidebar?.classList.remove('sidebar-open');
+        sidebarOverlay?.classList.remove('active');
+        hamburgerBtn?.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      hamburgerBtn?.addEventListener('click', () => {
+        adminSidebar?.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
+      });
+
+      sidebarOverlay?.addEventListener('click', closeSidebar);
+
+      // Fechar ao clicar nos itens do nav (mobile)
+      document.querySelectorAll('.admin-nav-item a').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 768) closeSidebar();
+        });
+      });
+
+      // Preencher info do usuário na sidebar com dados da sessão
+      const session = JSON.parse(localStorage.getItem('zoe_current_session') || '{}');
+      const nameEl = document.getElementById('sidebar-user-name');
+      const roleEl = document.getElementById('sidebar-user-role');
+      const avatarEl = document.getElementById('sidebar-avatar');
+
+      if (session?.email) {
+        const name = session.email.split('@')[0];
+        const displayName = name.charAt(0).toUpperCase() + name.slice(1);
+        if (nameEl) nameEl.textContent = displayName;
+        if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+      }
+
+      if (roleEl) {
+        roleEl.textContent = session?.role === 'professional' ? 'Profissional' : 'Administrador';
+      }
+
+      // Nav item active state
+      document.querySelectorAll('.admin-nav-item a').forEach(link => {
+        link.addEventListener('click', function() {
+          document.querySelectorAll('.admin-nav-item').forEach(li => li.classList.remove('active'));
+          this.closest('.admin-nav-item')?.classList.add('active');
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>

@@ -1,35 +1,36 @@
-/* Dark Mode Styling & Overrides for Clinica Zoe */
+/* ══════════════════════════════════════════════════════
+   Dark Mode Styling & Overrides — Clínica Zoe
+   ══════════════════════════════════════════════════════ */
 
 body.dark-theme {
-  --bg-base: #121212;
-  --bg-surface: #1C1C1E;
-  --bg-glass: rgba(28, 28, 30, 0.75);
-  --bg-glass-hover: rgba(28, 28, 30, 0.88);
-  
-  --text-main: #F5F5F7;
+  /* Fundos */
+  --bg-base:    #0F0F11;
+  --bg-surface: #1C1C1F;
+  --bg-glass:   rgba(28, 28, 31, 0.80);
+  --bg-glass-hover: rgba(28, 28, 31, 0.92);
+
+  /* Texto */
+  --text-main:  #F2F2F7;
   --text-muted: #8E8E93;
-  
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-hover: rgba(255, 255, 255, 0.18);
-  
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
-  
+
+  /* Bordas */
+  --border-color:       rgba(255, 255, 255, 0.08);
+  --border-color-hover: rgba(255, 255, 255, 0.16);
+
+  /* Sombras mais pronunciadas no dark */
+  --shadow-sm: 0 2px 8px  rgba(0, 0, 0, 0.40);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.65);
+
   color-scheme: dark;
 }
 
-/* Custom Overrides for elements with fixed light colors in HTML or charts */
-body.dark-theme iframe {
-  filter: grayscale(1) invert(0.9) contrast(1.2); /* Invert Google Maps for Dark Mode */
-}
-
-/* Modal and inputs specific styling for Dark Mode */
+/* ── Inputs, Selects & Textareas ─────────────────────── */
 body.dark-theme input,
 body.dark-theme select,
 body.dark-theme textarea {
   background-color: #2C2C2E;
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.10);
   color: var(--text-main);
 }
 
@@ -40,20 +41,178 @@ body.dark-theme textarea:focus {
   background-color: #3A3A3C;
 }
 
+/* ── Dashboard / Admin Panel ─────────────────────────── */
+body.dark-theme .admin-sidebar {
+  background-color: #17171A;
+  border-right-color: rgba(255, 255, 255, 0.07);
+}
+
+body.dark-theme .mobile-topbar {
+  background-color: #17171A;
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+
+body.dark-theme .admin-nav-item a:hover,
+body.dark-theme .admin-nav-item.active a {
+  background-color: rgba(46, 139, 87, 0.15);
+}
+
+body.dark-theme .sidebar-user-card {
+  background: rgba(46, 139, 87, 0.12);
+  border-color: rgba(46, 139, 87, 0.2);
+}
+
+body.dark-theme .theme-toggle-btn {
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+body.dark-theme .theme-toggle-btn:hover {
+  background: rgba(46, 139, 87, 0.15);
+}
+
+/* ── Stat Cards ──────────────────────────────────────── */
+body.dark-theme .dashboard-stat-card {
+  background-color: #1C1C1F;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+body.dark-theme .dashboard-stat-card:hover {
+  background-color: #242427;
+}
+
+/* ── Chart Cards ─────────────────────────────────────── */
+body.dark-theme .chart-card {
+  background-color: #1C1C1F;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Table Section ───────────────────────────────────── */
+body.dark-theme .table-section {
+  background-color: #1C1C1F;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+body.dark-theme .admin-table th {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme .admin-table td {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .admin-table tbody tr:hover td {
+  background-color: rgba(46, 139, 87, 0.08);
+}
+
+/* ── Filter Inputs (dashboard) ───────────────────────── */
+body.dark-theme .filter-input {
+  background-color: #2C2C2E;
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+body.dark-theme .filter-input:focus {
+  background-color: #3A3A3C;
+}
+
+/* ── Modais ──────────────────────────────────────────── */
+body.dark-theme .modal-content {
+  background-color: #1C1C1F;
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+body.dark-theme .modal {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* ── Upload Area ─────────────────────────────────────── */
+body.dark-theme .photo-upload-area {
+  background-color: #2C2C2E;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-theme .photo-upload-area:hover {
+  background-color: rgba(46, 139, 87, 0.15);
+}
+
+/* ── Calendário ──────────────────────────────────────── */
 body.dark-theme .calendar-day.empty {
   background-color: transparent;
 }
 
 body.dark-theme .calendar-day.inactive {
-  opacity: 0.25;
+  opacity: 0.20;
 }
 
-/* Loader, skeleton and details overrides */
-body.dark-theme .skeleton {
-  background: linear-gradient(90deg, #2C2C2E 25%, #3A3A3C 50%, #2C2C2E 75%);
-  background-size: 200% 100%;
+/* ── Google Maps (Contato) ───────────────────────────── */
+body.dark-theme iframe {
+  filter: grayscale(1) invert(0.9) contrast(1.2);
 }
+
+/* ── Loader & Skeleton ───────────────────────────────── */
+body.dark-theme .loader-overlay {
+  background-color: #0F0F11;
+}
+
+body.dark-theme .skeleton {
+  background: linear-gradient(
+    90deg,
+    #2C2C2E 25%,
+    #3A3A3C 50%,
+    #2C2C2E 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
 body.dark-theme .spinner {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.10);
   border-top-color: var(--primary);
+}
+
+/* ── Cookie Banner ───────────────────────────────────── */
+body.dark-theme .cookie-banner {
+  background-color: #17171A;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Botões no dark ──────────────────────────────────── */
+body.dark-theme .btn-secondary {
+  background-color: #2C2C2E;
+  border-color: rgba(255, 255, 255, 0.10);
+  color: var(--text-main);
+}
+
+body.dark-theme .btn-secondary:hover {
+  background-color: #3A3A3C;
+}
+
+/* ── Sidebar overlay (mobile dark) ──────────────────── */
+body.dark-theme .sidebar-overlay {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* ── Badges no dark ──────────────────────────────────── */
+body.dark-theme .badge-pending   { background: rgba(59,130,246,0.15); }
+body.dark-theme .badge-confirmed { background: rgba(46,139,87,0.15); }
+body.dark-theme .badge-canceled  { background: rgba(239,68,68,0.15); }
+body.dark-theme .badge-finalized { background: rgba(107,114,128,0.15); }
+
+/* ── Nav (site principal) no dark ────────────────────── */
+body.dark-theme .nav-glass {
+  background-color: rgba(15, 15, 17, 0.85);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-theme .nav-links {
+  background-color: #17171A;
+  border-left-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Cards de conteúdo ───────────────────────────────── */
+body.dark-theme .card,
+body.dark-theme .feature-card,
+body.dark-theme .specialist-card,
+body.dark-theme .service-card {
+  background-color: #1C1C1F;
+  border-color: rgba(255, 255, 255, 0.07);
 }
