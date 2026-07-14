@@ -71,11 +71,13 @@ const Professionals = {
       const spec = specialties.find(s => s.id === prof.especialidade_id);
       const specName = spec ? spec.nome : 'Geral';
       
-      // Traduz os dias de atendimento
-      const translatedDays = prof.dias_atendimento.map(d => {
-        const mapping = { seg: 'Seg', ter: 'Ter', qua: 'Qua', qui: 'Qui', sex: 'Sex', sab: 'Sáb', dom: 'Dom' };
-        return mapping[d.toLowerCase()] || d;
-      }).join(', ');
+      // Traduz os dias de atendimento com proteção contra arrays nulos/indefinidos
+      const translatedDays = Array.isArray(prof.dias_atendimento)
+        ? prof.dias_atendimento.map(d => {
+            const mapping = { seg: 'Seg', ter: 'Ter', qua: 'Qua', qui: 'Qui', sex: 'Sex', sab: 'Sáb', dom: 'Dom' };
+            return mapping[d.toLowerCase()] || d;
+          }).join(', ')
+        : 'Seg, Ter, Qua, Qui, Sex'; // Fallback padrão
 
       return `
         <div class="card-professional fade-slide-in scale-hover" data-id="${prof.id}" data-aos="fade-up">

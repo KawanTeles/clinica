@@ -1,33 +1,38 @@
 // Lógica Global do Front-End da Clínica Zoe
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Inicializar Tema e configurar Listener do botão
+  // 1. Inicializar Tema e configurar Listener dos botões
   if (window.ThemeManager) {
-    window.ThemeManager.initOnLoad();
+    const themeButtons = document.querySelectorAll('#theme-toggle');
     
-    const themeBtn = document.getElementById('theme-toggle');
-    if (themeBtn) {
-      // Atualizar ícone baseado no tema inicial
-      updateThemeIcon(themeBtn, window.ThemeManager.getCurrentTheme());
-      
-      themeBtn.addEventListener('click', () => {
-        const newTheme = window.ThemeManager.toggleTheme();
-        updateThemeIcon(themeBtn, newTheme);
-        window.Notifications.show('Tema Atualizado', `Modo ${newTheme === 'dark' ? 'Escuro' : 'Claro'} ativado.`, 'info', 2000);
+    const syncAllThemeIcons = (theme) => {
+      themeButtons.forEach(btn => {
+        const icon = btn.querySelector('i');
+        if (icon) {
+          icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
       });
-    }
+    };
+
+    // Sincroniza o estado inicial de todos os botões
+    syncAllThemeIcons(window.ThemeManager.getCurrentTheme());
+
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const newTheme = window.ThemeManager.toggleTheme();
+        syncAllThemeIcons(newTheme);
+        if (window.Notifications) {
+          window.Notifications.show('Tema Atualizado', `Modo ${newTheme === 'dark' ? 'Escuro' : 'Claro'} ativado.`, 'info', 2000);
+        }
+      });
+    });
+
+    // Sincronização global para alterações automáticas do SO ou outros módulos
+    window.addEventListener('themeChanged', (e) => {
+      syncAllThemeIcons(e.detail.theme);
+    });
   }
 
-  function updateThemeIcon(btn, theme) {
-    const icon = btn.querySelector('i');
-    if (icon) {
-      if (theme === 'dark') {
-        icon.className = 'fas fa-sun';
-      } else {
-        icon.className = 'fas fa-moon';
-      }
-    }
-  }
 
   // 2. Menu Mobile (Hamburguer)
   const menuBtn = document.getElementById('menu-btn');

@@ -32,6 +32,16 @@
   const initialTheme = getPreferredTheme();
   applyTheme(initialTheme);
 
+  // Sincroniza a classe do body automaticamente no carregamento do DOM
+  document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(window.ThemeManager.getCurrentTheme());
+    // Auto inicializa os listeners de mudança de esquema do SO
+    if (window.ThemeManager && typeof window.ThemeManager.initOnLoad === 'function') {
+      window.ThemeManager.initOnLoad();
+    }
+  });
+
+
   // Expõe funções úteis globalmente para uso no switch
   window.ThemeManager = {
     getCurrentTheme() {

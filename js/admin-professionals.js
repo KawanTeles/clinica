@@ -693,16 +693,39 @@ const ProfessionalsAdmin = {
     try {
       // 1. Criar usuário no Supabase Auth (se senha fornecida)
       let authUserId = null;
+      let emailConfirmationSent = false;
       if (senha && senha.length >= 6) {
-        const { data: authData, error: authError } = await window.supabaseClient.auth.signUp({
+        let signUpClient = window.supabaseClient;
+        
+        // Se não estiver em modo de demonstração, criamos um cliente Supabase temporário
+        // com persistSession: false para não deslogar o administrador atual.
+        if (!window.CONFIG.DEMO_MODE && typeof supabase !== 'undefined') {
+          signUpClient = supabase.createClient(window.CONFIG.SUPABASE_URL, window.CONFIG.SUPABASE_KEY, {
+            auth: {
+              persistSession: false,
+              autoRefreshToken: false,
+              detectSessionInUrl: false
+            }
+          });
+        }
+
+        const { data: authData, error: authError } = await signUpClient.auth.signUp({
           email,
           password: senha,
-          options: { data: { role: 'professional', nome } }
+          options: { 
+            data: { role: 'professional', nome },
+            emailRedirectTo: window.location.origin + '/pages/login.html'
+          }
         });
+
         if (authError) {
           console.warn('Auth SignUp warning:', authError.message);
+          throw authError;
         } else {
           authUserId = authData?.user?.id;
+          if (authData && !authData.session) {
+            emailConfirmationSent = true;
+          }
         }
       }
 
@@ -729,7 +752,11 @@ const ProfessionalsAdmin = {
         throw error;
       }
 
-      this.showToast('Profissional Cadastrado!', `${nome} foi adicionado com sucesso.`, 'success');
+      if (emailConfirmationSent) {
+        this.showToast('Profissional Cadastrado!', `${nome} foi cadastrado. Um e-mail de confirmação foi enviado para ${email}.`, 'success', 6000);
+      } else {
+        this.showToast('Profissional Cadastrado!', `${nome} foi adicionado com sucesso.`, 'success');
+      }
       this.closeModal('modal-create-prof');
 
       // Recarregar lista

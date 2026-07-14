@@ -96,7 +96,11 @@ const Auth = {
       return { success: true, user: data.user };
     } catch (err) {
       console.error("[Auth Error]", err);
-      return { success: false, error: err.message };
+      let msg = err.message;
+      if (msg === 'Email not confirmed' || msg === 'Email confirmation required' || (msg && msg.toLowerCase().includes('confirm'))) {
+        msg = 'EmailNotConfirmed';
+      }
+      return { success: false, error: msg };
     }
   },
 
@@ -201,6 +205,30 @@ const Auth = {
       console.error("[Auth Register Error]", err);
       return { success: false, error: err.message };
     }
+  },
+
+  // Reenvia e-mail de confirmação
+  async resendConfirmation(email) {
+    try {
+      if (window.CONFIG.DEMO_MODE) {
+        console.log(`[Demo Mode] Simulando reenvio de confirmação para ${email}`);
+        return true;
+      }
+      
+      const { error } = await window.supabaseClient.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: window.location.origin + '/pages/login.html'
+        }
+      });
+      
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error("[Auth Resend Error]", err);
+      return false;
+    }
   }
 };
 
@@ -248,16 +276,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 1200);
       } else {
         // Mostra erro inline
-        const mensagem = result.error || 'Credenciais inválidas.';
+        let mensagem = result.error || 'Credenciais inválidas.';
+        let isHTML = false;
+        
+        if (mensagem === 'EmailNotConfirmed') {
+          mensagem = 'Seu e-mail ainda não foi confirmado. Verifique sua caixa de entrada ou spam. <a href="#" id="resend-conf-link" style="color: var(--primary); text-decoration: underline; font-weight: 600; margin-left: 5px;">Reenviar link</a>';
+          isHTML = true;
+        } else if (mensagem === 'Invalid login credentials') {
+          mensagem = 'E-mail ou senha incorretos.';
+        } else if (mensagem.includes('rate limit') || mensagem.includes('Too many requests')) {
+          mensagem = 'Muitas tentativas. Por favor, aguarde alguns minutos antes de tentar novamente.';
+        }
+
         if (errorBox && errorMsg) {
-          errorMsg.textContent = mensagem;
+          if (isHTML) {
+            errorMsg.innerHTML = mensagem;
+            
+            // Adicionar evento para reenviar
+            const resendLink = document.getElementById('resend-conf-link');
+            if (resendLink) {
+              resendLink.addEventListener('click', async (e) => {
+                e.preventDefault();
+                resendLink.style.pointerEvents = 'none';
+                resendLink.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Reenviando...';
+                
+                const emailVal = document.getElementById('email').value.trim();
+                const success = await Auth.resendConfirmation(emailVal);
+                
+                if (success) {
+                  errorMsg.innerHTML = '<span style="color: var(--primary);"><i class="fas fa-check"></i> E-mail de confirmação reenviado! Verifique sua caixa de entrada e spam.</span>';
+                } else {
+                  errorMsg.innerHTML = '<span style="color: #dc2626;"><i class="fas fa-times"></i> Não foi possível reenviar. Tente novamente mais tarde.</span>';
+                }
+              });
+            }
+          } else {
+            errorMsg.textContent = mensagem;
+          }
           errorBox.style.display = 'flex';
         }
+        
         // Dispara evento global de erro
-        window.dispatchEvent(new CustomEvent('auth_error', { detail: { message: mensagem } }));
+        window.dispatchEvent(new CustomEvent('auth_error', { detail: { message: isHTML ? 'Seu e-mail ainda não foi confirmado.' : mensagem } }));
         // Toast como fallback
         if (window.Notifications) {
-          window.Notifications.show('Erro de Acesso', mensagem, 'error');
+          window.Notifications.show('Erro de Acesso', isHTML ? 'Seu e-mail ainda não foi confirmado.' : mensagem, 'error');
         }
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;

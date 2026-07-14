@@ -275,6 +275,69 @@ button {
   border-color: var(--border-color-hover);
 }
 
+
+/* Hero Section Grid & Image Optimization */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero-image-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image-container img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+  transform: rotate(1deg);
+  transition: transform 0.5s;
+}
+
+.hero-image-container img:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.hero-blob {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  filter: blur(40px);
+  z-index: -1;
+}
+
+/* Responsividade das Tabelas do Painel */
+.admin-table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px; /* Garante scroll em telas pequenas */
+}
+
 /* Hamburguer Menu (Mobile) */
 .menu-btn {
   display: none;
