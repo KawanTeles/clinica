@@ -1175,3 +1175,830 @@ img, video, iframe, embed, object {
     padding-bottom: calc(40px + env(safe-area-inset-bottom));
   }
 }
+
+/* ================================================================
+   15. MOBILE QUALITY PASS
+   Strictly responsive overrides for public pages and dashboards.
+   ================================================================ */
+@media (max-width: 1024px) {
+  body,
+  .dashboard-layout,
+  .admin-main,
+  .modal,
+  .modal-pro {
+    max-width: 100%;
+  }
+
+  .nav-container {
+    min-height: 44px;
+    gap: 12px;
+  }
+
+  .menu-btn {
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    flex-shrink: 0;
+  }
+
+  .menu-btn span {
+    width: 20px;
+  }
+
+  .nav-links {
+    right: 0;
+    width: min(86vw, 340px);
+    padding: 88px 24px 28px;
+    gap: 8px;
+    overflow-y: auto;
+    transform: translateX(105%);
+    transition: transform var(--transition-slow);
+    will-change: transform;
+  }
+
+  .nav-links.active {
+    transform: translateX(0);
+  }
+
+  .nav-links a {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+  }
+
+  .nav-links a.active,
+  .nav-links a:hover {
+    background-color: var(--primary-light);
+  }
+
+  .nav-links a.active::after {
+    display: none;
+  }
+
+  .close-menu-btn {
+    top: 18px;
+    right: 18px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-base);
+  }
+
+  .close-menu-btn i {
+    color: var(--text-main) !important;
+    font-size: 1.25rem;
+  }
+
+  .hero-section {
+    padding-bottom: 56px !important;
+  }
+
+  .hero-image-container img {
+    max-height: 420px;
+    object-fit: cover;
+  }
+
+  .contato-container-div,
+  .sobre-container-div,
+  .index-container-div-5,
+  .dashboard-modal-content-div {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  .admin-main {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .header-glass {
+    padding: 12px 0;
+  }
+
+  .header-glass.scrolled {
+    padding: 10px 0;
+  }
+
+  .logo {
+    min-width: 0;
+    max-width: calc(100vw - 128px);
+    font-size: 1.35rem;
+    white-space: nowrap;
+  }
+
+  .logo i {
+    flex-shrink: 0;
+  }
+
+  .header-actions {
+    gap: 10px;
+    margin-left: auto;
+    margin-right: 0;
+    flex-shrink: 0;
+  }
+
+  .section {
+    padding: 56px 0;
+  }
+
+  .section-header {
+    margin-bottom: 32px;
+    padding: 0 2px;
+  }
+
+  .section-header p,
+  .page-subtitle,
+  .page-header-desc,
+  .page-header-desc-1,
+  .page-header-desc-2 {
+    font-size: 1rem !important;
+    line-height: 1.55;
+  }
+
+  .page-header {
+    padding-top: 108px !important;
+    padding-bottom: 48px;
+  }
+
+  .page-header-title,
+  .page-header-title-1,
+  .page-header-title-2,
+  .legal-title {
+    font-size: clamp(2rem, 9vw, 2.6rem) !important;
+    line-height: 1.08;
+  }
+
+  .hero-grid {
+    gap: 28px !important;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-title {
+    max-width: 100%;
+    line-height: 1.08;
+    letter-spacing: 0 !important;
+  }
+
+  .hero-desc {
+    line-height: 1.55;
+  }
+
+  .hero-buttons,
+  .location-actions,
+  .success-actions,
+  .funnel-actions,
+  .dashboard-dashboard-modal-content-form-2-div-1,
+  .modal-pro-footer,
+  .modal-view-footer {
+    width: 100%;
+  }
+
+  .btn,
+  .hero-buttons .btn,
+  .location-actions .btn {
+    min-height: 44px;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .index-container-div,
+  .index-container-div-1,
+  .index-container-div-2,
+  .especialidades-container-div-1,
+  .prof-cards-grid,
+  .grid-professionals,
+  .sobre-container-div-1,
+  .grid-specialties,
+  .grid-doctors,
+  .stats-summary-grid,
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .highlight-card,
+  .specialty-card,
+  .review-card,
+  .especialidades-especialidades-container-div-1-div,
+  .form-card,
+  .booking-wrapper,
+  .workspace-card,
+  .table-section,
+  .chart-card,
+  .dashboard-stat-card,
+  .stat-mini-card,
+  .prof-card {
+    padding: 22px !important;
+    border-radius: var(--radius-md);
+  }
+
+  .card-professional {
+    border-radius: var(--radius-md);
+  }
+
+  .prof-info {
+    padding: 20px !important;
+  }
+
+  .prof-image-container,
+  .profissionais-skeleton-container-div {
+    height: 220px !important;
+  }
+
+  .card-doctor {
+    gap: 14px;
+    padding: 16px !important;
+    align-items: flex-start;
+  }
+
+  .doctor-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .form-card,
+  .dashboard-modal-content-form,
+  .dashboard-modal-content-form-1,
+  .dashboard-modal-content-form-2,
+  .dashboard-div-form,
+  .modal-pro-body {
+    gap: 16px;
+  }
+
+  .form-input,
+  .form-textarea,
+  .filter-input,
+  .form-input-pro,
+  .search-input-pro,
+  .select-pro,
+  .newsletter-input,
+  input,
+  select,
+  textarea {
+    max-width: 100%;
+    min-height: 44px;
+  }
+
+  .form-submit-btn,
+  .dashboard-dashboard-modal-content-form-1-button,
+  .modal-pro-footer .btn {
+    width: 100%;
+    justify-content: center;
+    align-self: stretch;
+  }
+
+  .contato-form-card-div,
+  .trabalhe-conosco-form-card-div,
+  .form-grid-pro,
+  .view-prof-grid,
+  .dashboard-dashboard-modal-content-form-div,
+  .dashboard-dashboard-modal-content-form-div-1,
+  .dashboard-dashboard-modal-content-form-div-2-div,
+  .dashboard-dashboard-modal-content-form-div-2-div-1,
+  .dashboard-dashboard-modal-content-form-1-div,
+  .dashboard-dashboard-div-form-div {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer {
+    padding: 48px 0 28px;
+  }
+
+  .footer-grid {
+    gap: 26px;
+    margin-bottom: 32px;
+  }
+
+  .footer-brand .logo {
+    margin-bottom: 14px;
+  }
+
+  .footer-brand p,
+  .index-div-p-2 {
+    margin-bottom: 16px;
+  }
+
+  .footer-heading {
+    margin-bottom: 12px;
+  }
+
+  .footer-links li,
+  .footer-contact li {
+    margin-bottom: 9px;
+  }
+
+  .social-links {
+    gap: 10px;
+  }
+
+  .footer-bottom {
+    padding-top: 22px;
+  }
+
+  .search-filters-bar {
+    padding: 18px !important;
+    margin: 0 0 28px !important;
+    border-radius: var(--radius-md);
+  }
+
+  .filter-control {
+    min-height: 46px;
+    border-radius: var(--radius-full);
+  }
+
+  .newsletter-form,
+  #newsletter-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    background-color: var(--bg-base);
+    flex-wrap: nowrap !important;
+  }
+
+  .newsletter-input,
+  #newsletter-form input[type="email"] {
+    border: 0;
+    background: transparent;
+    min-height: 40px;
+    height: 40px;
+    padding: 0 12px;
+    min-width: 0 !important;
+    width: auto !important;
+    flex: 1 1 auto !important;
+    box-shadow: none;
+  }
+
+  .newsletter-submit-btn,
+  #newsletter-form button {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px;
+    padding: 0 !important;
+    flex: 0 0 40px;
+    border-radius: var(--radius-full) !important;
+  }
+
+  .cookie-banner {
+    width: calc(100% - 24px);
+    max-width: 520px;
+    padding: 12px 14px;
+    gap: 10px;
+    border-radius: 18px;
+    align-items: stretch;
+  }
+
+  .cookie-content p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .cookie-actions {
+    gap: 8px;
+  }
+
+  .cookie-actions .btn {
+    min-height: 40px;
+    padding: 9px 14px !important;
+    font-size: 0.84rem !important;
+    flex: 1;
+  }
+
+  .admin-header-title h1 {
+    font-size: clamp(1.45rem, 7vw, 1.85rem);
+    line-height: 1.1;
+  }
+
+  .admin-header-title p {
+    font-size: 0.88rem;
+  }
+
+  .admin-header-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-topbar {
+    min-height: 58px;
+  }
+
+  .doctor-profile-card,
+  .dashboard-profissional-workspace-card-div,
+  .toolbar-pro,
+  .table-section-header,
+  .pagination-bar,
+  .view-prof-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .doctor-profile-left {
+    align-items: flex-start;
+  }
+
+  .doctor-profile-right,
+  .filters-left,
+  .search-input-wrapper,
+  .select-pro {
+    width: 100%;
+  }
+
+  .admin-table-container {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: var(--radius-md);
+  }
+
+  .admin-table {
+    min-width: 620px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 14px;
+  }
+
+  .modal,
+  .modal-pro {
+    padding: 12px;
+  }
+
+  .modal-content,
+  .modal-pro-content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto !important;
+    max-height: calc(100dvh - 24px);
+    border-radius: var(--radius-md);
+  }
+
+  .modal-content {
+    padding: 22px 16px !important;
+  }
+
+  .modal h2,
+  .modal-pro-header h2 {
+    font-size: 1.25rem;
+    line-height: 1.25;
+    padding-right: 28px;
+  }
+
+  .modal-pro-header,
+  .modal-pro-body,
+  .modal-pro-footer {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .modal-pro-footer,
+  .modal-view-footer {
+    flex-direction: column-reverse;
+  }
+
+  .modal-pro-footer .btn,
+  .modal-view-footer .btn {
+    width: 100%;
+  }
+
+  .calendar-container {
+    padding: 14px;
+  }
+
+  .calendar-weekdays {
+    font-size: 0.72rem;
+  }
+
+  .calendar-days-grid {
+    gap: 4px;
+  }
+
+  .time-slots-grid {
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  }
+
+  .days-grid-pro {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .prof-card-footer,
+  .prof-actions,
+  .gerenciar-profissionais-modal-pro-body-div-3 {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .legal-page,
+  .login-body-section,
+  .agendamento-body-section {
+    padding-top: 104px !important;
+  }
+
+  .legal-container {
+    line-height: 1.7;
+  }
+
+  .legal-subtitle {
+    font-size: 1.25rem;
+  }
+
+  .login-container {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .login-form-group-div {
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-section {
+    padding-top: 96px !important;
+    padding-bottom: 44px !important;
+  }
+
+  .hero-badge {
+    font-size: 0.78rem;
+    padding: 7px 12px;
+  }
+
+  .hero-desc {
+    margin-bottom: 24px !important;
+  }
+
+  .hero-image-container {
+    max-width: 100%;
+    margin-top: 6px;
+  }
+
+  .hero-image-container img {
+    border-radius: var(--radius-md);
+    transform: none;
+  }
+
+  .map-iframe-container {
+    border-radius: var(--radius-md);
+  }
+
+  .sobre-sobre-container-div-1-div {
+    height: 180px;
+  }
+
+  .location-contact-item,
+  .location-contact-item-1,
+  .contato-contato-div-div-div {
+    align-items: flex-start;
+  }
+
+  .footer-legal-links {
+    flex-wrap: wrap;
+    gap: 10px 18px;
+  }
+
+  .booking-wrapper {
+    margin: 20px auto !important;
+  }
+
+  .funnel-progress {
+    margin-bottom: 28px;
+  }
+
+  .calendar-header {
+    gap: 8px;
+  }
+
+  .calendar-month-title {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .stat-mini-card {
+    align-items: flex-start;
+  }
+
+  .stat-mini-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.05rem;
+    flex: 0 0 42px;
+  }
+
+  .chart-container {
+    height: 210px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .logo {
+    font-size: 1.22rem;
+    gap: 8px;
+    max-width: calc(100vw - 92px);
+  }
+
+  .logo i {
+    font-size: 1.28rem;
+  }
+
+  .header-actions .theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .section {
+    padding: 46px 0;
+  }
+
+  .section-header h2 {
+    line-height: 1.15;
+  }
+
+  .section-header p {
+    font-size: 0.95rem !important;
+  }
+
+  .hero-buttons .btn,
+  .location-actions .btn,
+  .success-actions .btn,
+  .funnel-actions .btn {
+    max-width: 100% !important;
+  }
+
+  .highlight-card,
+  .specialty-card,
+  .review-card,
+  .especialidades-especialidades-container-div-1-div,
+  .form-card,
+  .booking-wrapper,
+  .workspace-card,
+  .table-section,
+  .chart-card,
+  .dashboard-stat-card,
+  .stat-mini-card,
+  .prof-card {
+    padding: 18px !important;
+  }
+
+  .card-doctor {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .footer {
+    padding-top: 40px;
+  }
+
+  .newsletter-form,
+  #newsletter-form {
+    border-radius: 18px;
+    padding: 6px;
+  }
+
+  .cookie-banner {
+    bottom: 10px;
+    width: calc(100% - 20px);
+  }
+
+  .cookie-actions {
+    flex-direction: column;
+  }
+
+  .admin-main {
+    padding: 12px !important;
+  }
+
+  .mobile-topbar {
+    padding: 10px 12px;
+  }
+
+  .mobile-topbar-logo {
+    font-size: 1.05rem;
+  }
+
+  .admin-sidebar {
+    width: min(86vw, 280px) !important;
+    left: -90vw !important;
+  }
+
+  .doctor-profile-left {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .doctor-large-avatar,
+  .view-prof-avatar {
+    width: 64px;
+    height: 64px;
+  }
+
+  .doctor-large-meta h2,
+  .view-prof-name {
+    font-size: 1.25rem;
+  }
+
+  .days-grid-pro {
+    grid-template-columns: 1fr !important;
+  }
+
+  .upload-preview-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-pro-header,
+  .modal-pro-body,
+  .modal-pro-footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .pagination-btns {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .nav-links {
+    width: 90vw;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .menu-btn,
+  .header-actions .theme-toggle-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .highlight-card,
+  .specialty-card,
+  .review-card,
+  .especialidades-especialidades-container-div-1-div,
+  .form-card,
+  .booking-wrapper,
+  .workspace-card,
+  .table-section,
+  .chart-card,
+  .dashboard-stat-card,
+  .stat-mini-card,
+  .prof-card {
+    padding: 16px !important;
+  }
+
+  .newsletter-input,
+  #newsletter-form input[type="email"] {
+    font-size: 0.85rem;
+    padding: 0 8px;
+  }
+
+  .calendar-container {
+    padding: 10px;
+  }
+
+  .calendar-days-grid {
+    gap: 2px;
+  }
+
+  .calendar-day {
+    border-radius: 6px;
+  }
+}
