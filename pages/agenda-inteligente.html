@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Inteligente | Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/darkmode.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+  <div id="loader-overlay" class="loader-overlay"><div class="spinner"></div><p class="contato-div-p-1">Carregando Agenda...</p></div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <nav class="mobile-topbar"><div class="mobile-topbar-logo"><i class="fas fa-hand-holding-heart"></i> Zoe Admin</div><button class="hamburger-btn" id="hamburger-btn"><span></span><span></span><span></span></button></nav>
+  <div class="dashboard-layout" id="dashboard-app">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="dash-content-container">
+        <div class="admin-logo"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></div>
+        <div class="sidebar-user-card"><div class="sidebar-user-avatar" id="sidebar-avatar">A</div><div class="sidebar-user-info"><div class="sidebar-user-name" id="sidebar-user-name">Administrador</div><div class="sidebar-user-role" id="sidebar-user-role">Admin</div></div></div>
+        <ul class="admin-nav" id="admin-sidebar-nav">
+          <li class="admin-nav-item"><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+          <li class="admin-nav-item"><a href="pacientes.html"><i class="fas fa-users"></i> Pacientes</a></li>
+          <li class="admin-nav-item"><a href="gerenciar-profissionais.html"><i class="fas fa-user-md"></i> Médicos</a></li>
+          <li class="admin-nav-item active"><a href="agenda-inteligente.html"><i class="fas fa-calendar-alt"></i> Agenda Inteligente</a></li>
+          <li class="admin-nav-item"><a href="financeiro.html"><i class="fas fa-wallet"></i> Financeiro</a></li>
+          <li class="admin-nav-item"><a href="crm.html"><i class="fas fa-bullseye"></i> CRM / Leads</a></li>
+          <li class="admin-nav-item"><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+          <li class="admin-nav-item"><a href="mensagens.html"><i class="fas fa-comments"></i> Mensagens</a></li>
+          <li class="admin-nav-item"><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
+          <li class="admin-nav-item"><a href="auditoria.html"><i class="fas fa-clipboard-list"></i> Auditoria</a></li>
+          <li class="admin-nav-item"><a href="backup.html"><i class="fas fa-database"></i> Backup</a></li>
+          <div class="nav-divider"></div>
+          <li class="admin-nav-item"><a href="dashboard.html#modal-specialties"><i class="fas fa-stethoscope"></i> Especialidades</a></li>
+          <li class="admin-nav-item"><a href="dashboard.html#modal-blocks"><i class="far fa-calendar-times"></i> Férias &amp; Bloqueios</a></li>
+          <li class="admin-nav-item"><a href="../index.html" target="_blank"><i class="fas fa-globe"></i> Ver Site</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-bottom"><button id="theme-toggle" class="theme-toggle-btn"><i class="fas fa-moon"></i> Tema</button><button id="logout-btn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Sair</button></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="admin-header-title"><h1>Agenda Inteligente</h1><p>Visualize hoje, a semana, o mês e o calendário completo.</p></div>
+        <div class="admin-header-actions">
+          <select id="filtro-prof" class="filter-input"><option value="">Todos os profissionais</option></select>
+        </div>
+      </header>
+
+      <section class="admin-section-grid">
+        <div class="mini-stat-card"><div class="ms-icon" style="background:var(--primary-light);color:var(--primary);"><i class="fas fa-calendar-day"></i></div><div><div class="ms-value" id="ag-hoje">-</div><div class="ms-label">Hoje</div></div></div>
+        <div class="mini-stat-card"><div class="ms-icon" style="background:rgba(52,152,219,.12);color:#3498DB;"><i class="fas fa-calendar-week"></i></div><div><div class="ms-value" id="ag-semana">-</div><div class="ms-label">Esta Semana</div></div></div>
+        <div class="mini-stat-card"><div class="ms-icon" style="background:rgba(155,89,182,.12);color:#9B59B6;"><i class="fas fa-calendar-alt"></i></div><div><div class="ms-value" id="ag-mes">-</div><div class="ms-label">Este Mês</div></div></div>
+        <div class="mini-stat-card"><div class="ms-icon" style="background:rgba(46,204,113,.12);color:#2ECC71;"><i class="fas fa-clock"></i></div><div><div class="ms-value" id="ag-livres">-</div><div class="ms-label">Horários Livres (hoje)</div></div></div>
+      </section>
+
+      <section class="table-filters" style="margin-bottom:16px;">
+        <button class="btn btn-secondary btn-sm ag-view active" data-view="hoje"><i class="far fa-calendar-day"></i> Hoje</button>
+        <button class="btn btn-secondary btn-sm ag-view" data-view="semana"><i class="far fa-calendar-week"></i> Semana</button>
+        <button class="btn btn-secondary btn-sm ag-view" data-view="mes"><i class="far fa-calendar-alt"></i> Mês</button>
+        <button class="btn btn-secondary btn-sm ag-view" data-view="calendario"><i class="fas fa-calendar"></i> Calendário</button>
+        <input type="text" id="ag-search" class="filter-input" placeholder="Pesquisar paciente...">
+      </section>
+
+      <section id="view-hoje" class="panel-card"><h3><i class="far fa-calendar-day"></i> Consultas de Hoje</h3><div class="admin-table-container"><table class="admin-table"><thead><tr><th>Horário</th><th>Paciente</th><th>Profissional</th><th>Status</th></tr></thead><tbody id="ag-body-hoje"></tbody></table></div></section>
+      <section id="view-semana" class="panel-card" style="display:none;"><h3><i class="far fa-calendar-week"></i> Próximos 7 Dias</h3><div class="admin-table-container"><table class="admin-table"><thead><tr><th>Data</th><th>Horário</th><th>Paciente</th><th>Profissional</th><th>Status</th></tr></thead><tbody id="ag-body-semana"></tbody></table></div></section>
+      <section id="view-mes" class="panel-card" style="display:none;"><h3><i class="far fa-calendar-alt"></i> Este Mês</h3><div class="admin-table-container"><table class="admin-table"><thead><tr><th>Data</th><th>Horário</th><th>Paciente</th><th>Profissional</th><th>Status</th></tr></thead><tbody id="ag-body-mes"></tbody></table></div></section>
+      <section id="view-calendario" class="panel-card" style="display:none;"><h3><i class="fas fa-calendar"></i> Calendário</h3><div id="ag-calendario"></div></section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/permissions.js"></script>
+  <script src="../js/notifications.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/agenda-inteligente.js"></script>
+</body></html>

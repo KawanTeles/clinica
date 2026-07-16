@@ -1,22 +1,30 @@
 // Configurações do Supabase e do Sistema
-// Altere estas credenciais quando criar o seu projeto no Supabase
+//
+// SEGURANÇA: as credenciais do Supabase NÃO são hardcoded.
+// Em produção, forneça url + anon key via variável global injetada no deploy
+// (ex.: Netlify Snippet Injection ou arquivo config.prod.js carregado antes deste).
+// Exemplo de injeção (head do site, no Netlify):
+//   <script>window.ZOE_SUPABASE = { url: "https://xxxxx.supabase.co", key: "eyJ...anon..." };</script>
+// Se ausentes, o sistema roda automaticamente em MODO DEMO.
+
+const ZOE_ENV = window.ZOE_SUPABASE || {};
 
 const CONFIG = {
-  // URL do seu projeto Supabase (ex: https://xxxx.supabase.co)
-  SUPABASE_URL: 'https://hchmhzqygguqwcjsszmw.supabase.co',
-  
-  // Chave pública anônima do Supabase (Anon Key)
-  SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjaG1oenF5Z2d1cXdjanNzem13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMzMxNDYsImV4cCI6MjA5OTYwOTE0Nn0.k2FWIr3pAfENASClTUjhAyMpg-fsafU2arkRz8VICvM',
-  
+  // URL do projeto Supabase — vinda de variável de ambiente/deploy (não hardcoded)
+  SUPABASE_URL: ZOE_ENV.url || null,
+
+  // Chave pública anônima do Supabase (Anon Key) — vinda de variável de ambiente/deploy
+  SUPABASE_KEY: ZOE_ENV.key || null,
+
   // Modo de demonstração (se true, utiliza banco de dados simulado no LocalStorage)
   // Útil para testar o sistema completo localmente sem precisar configurar o Supabase imediatamente.
   // Será automaticamente ativado caso as chaves acima estejam vazias.
   DEMO_MODE: true,
 
   // Configurações de Integração de WhatsApp (Exemplos de endpoint)
-  WHATSAPP_PROVIDER: 'evolution', // 'evolution' | 'twilio' | 'zapi' | 'cloud_api'
-  WHATSAPP_API_URL: 'https://api.clinicazoe.com/whatsapp',
-  WHATSAPP_TOKEN: 'zoe-token-dev-2026',
+  WHATSAPP_PROVIDER: ZOE_ENV.whatsapp_provider || 'evolution', // 'evolution' | 'twilio' | 'zapi' | 'cloud_api'
+  WHATSAPP_API_URL: ZOE_ENV.whatsapp_api_url || 'https://api.clinicazoe.com/whatsapp',
+  WHATSAPP_TOKEN: ZOE_ENV.whatsapp_token || 'zoe-token-dev-2026',
 
   // Configuração Geral da Clínica
   CLINICA_NAME: 'Clínica Zoe',
@@ -30,9 +38,12 @@ const CONFIG = {
 // Detecção automática de DEMO_MODE caso as chaves estejam em branco
 if (!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_KEY) {
   CONFIG.DEMO_MODE = true;
-  console.log("%c[Clinica Zoe] Rodando em MODO DEMO. Conecte ao Supabase no arquivo js/config.js", "color: #ff9800; font-weight: bold; font-size: 12px;");
+}
+
+// Log reflete o modo efetivo (não informa "Conectado" se estiver em DEMO)
+if (CONFIG.DEMO_MODE) {
+  console.log("%c[Clinica Zoe] Rodando em MODO DEMO.", "color: #ff9800; font-weight: bold; font-size: 12px;");
 } else {
-  CONFIG.DEMO_MODE = false;
   console.log("%c[Clinica Zoe] Conectado ao banco de dados Supabase.", "color: #2e7d32; font-weight: bold; font-size: 12px;");
 }
 

@@ -1,0 +1,55 @@
+# Netlify configuration — Clínica Zoe (static site)
+# Publish directory is the project root (index.html, pages/, js/, css/).
+# No build step required (vanilla HTML/CSS/JS).
+
+[build]
+  publish = "."
+  # command = ""  (deixe vazio: não há etapa de build)
+
+# ── Cabeçalhos de segurança aplicados a TODAS as rotas ──
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    X-XSS-Protection = "1; mode=block"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+
+# ── Cache de arquivos estáticos versionáveis (longo prazo) ──
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+# HTML não deve ser cacheado agressivamente (pode conter mudanças de conteúdo)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+# ── Regra de SPA / fallback ──
+# O sistema é multi-página (arquivos .html diretos em /pages/).
+# Esta regra envia rotas não resolvidas para a 404 customizada,
+# sem mascarar arquivos existentes.
+[[redirects]]
+  from = "/*"
+  to = "/pages/404.html"
+  status = 404
+  force = false

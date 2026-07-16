@@ -149,24 +149,19 @@ const Auth = {
     }
   },
 
-  // Garante que apenas administradores ou médicos acessem suas respectivas páginas de dashboard
+  // Garante que apenas administradores ou médicos acessem suas respectivas páginas.
+  // Reutiliza as constantes de Permissions (fonte única de verdade para rotas).
   async checkProtectedRoute() {
-    // O Permissions.js já executa o guard síncrono automaticamente.
-    // Aqui validamos a sessão no Supabase de forma assíncrona.
     const session = await this.checkSession();
     const currentPage = window.location.pathname;
-
-    // Páginas exclusivas de admin
-    const ADMIN_PAGES = ['dashboard.html', 'gerenciar-profissionais.html'];
-    // Páginas exclusivas de profissional
-    const PROF_PAGES  = ['dashboard-profissional.html'];
-
-    const isAdminPage = ADMIN_PAGES.some(p => currentPage.includes(p));
-    const isProfPage  = PROF_PAGES.some(p => currentPage.includes(p));
     const isLoginPage = currentPage.includes('login.html');
+    const group = (window.Permissions && window.Permissions.detectPageGroup)
+      ? window.Permissions.detectPageGroup()
+      : null;
 
     if (!session) {
-      if (isAdminPage || isProfPage) {
+      // Permissions.enforce() já redireciona páginas protegidas; reforço aqui para login.
+      if (group === 'admin' || group === 'professional' || group === 'shared') {
         window.location.replace('login.html');
         return null;
       }
@@ -175,9 +170,12 @@ const Auth = {
         window.location.replace(
           session.role === 'professional' ? 'dashboard-profissional.html' : 'dashboard.html'
         );
-      } else if (isAdminPage && session.role !== 'admin') {
+      }
+      // Redirecionamentos entre grupos são de responsabilidade de Permissions.enforce();
+      // aqui apenas garantimos coerência caso o guard ainda não tenha rodado.
+      else if (group === 'admin' && session.role === 'professional') {
         window.location.replace('dashboard-profissional.html');
-      } else if (isProfPage && session.role !== 'professional') {
+      } else if (group === 'professional' && session.role === 'admin') {
         window.location.replace('dashboard.html');
       }
     }

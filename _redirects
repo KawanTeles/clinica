@@ -1,0 +1,3 @@
+# Clínica Zoe — Netlify redirects (fallback para 404 customizada)
+# O app é multi-página estática; rotas não encontradas vão para a 404.
+/*    /pages/404.html   404

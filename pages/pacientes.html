@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pacientes | Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <link rel="stylesheet" href="../css/darkmode.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+
+  <div id="loader-overlay" class="loader-overlay">
+    <div class="spinner"></div>
+    <p class="contato-div-p-1">Carregando Pacientes...</p>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <nav class="mobile-topbar">
+    <div class="mobile-topbar-logo"><i class="fas fa-hand-holding-heart"></i> Zoe Admin</div>
+    <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="dashboard-layout" id="dashboard-app">
+
+    <!-- ══ SIDEBAR ══════════════════════════════════════ -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="dash-content-container">
+        <div class="admin-logo"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></div>
+        <div class="sidebar-user-card">
+          <div class="sidebar-user-avatar" id="sidebar-avatar">A</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebar-user-name">Administrador</div>
+            <div class="sidebar-user-role" id="sidebar-user-role">Admin</div>
+          </div>
+        </div>
+        <ul class="admin-nav" id="admin-sidebar-nav">
+          <li class="admin-nav-item"><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+          <li class="admin-nav-item"><a href="pacientes.html" class="active-link"><i class="fas fa-users"></i> Pacientes</a></li>
+          <li class="admin-nav-item"><a href="gerenciar-profissionais.html"><i class="fas fa-user-md"></i> Médicos</a></li>
+          <li class="admin-nav-item"><a href="agenda-inteligente.html"><i class="fas fa-calendar-alt"></i> Agenda Inteligente</a></li>
+          <li class="admin-nav-item"><a href="financeiro.html"><i class="fas fa-wallet"></i> Financeiro</a></li>
+          <li class="admin-nav-item"><a href="crm.html"><i class="fas fa-bullseye"></i> CRM / Leads</a></li>
+          <li class="admin-nav-item"><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+          <li class="admin-nav-item"><a href="mensagens.html"><i class="fas fa-comments"></i> Mensagens</a></li>
+          <li class="admin-nav-item"><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
+          <li class="admin-nav-item"><a href="auditoria.html"><i class="fas fa-clipboard-list"></i> Auditoria</a></li>
+          <li class="admin-nav-item"><a href="backup.html"><i class="fas fa-database"></i> Backup</a></li>
+          <div class="nav-divider"></div>
+          <li class="admin-nav-item"><a href="dashboard.html#modal-specialties"><i class="fas fa-stethoscope"></i> Especialidades</a></li>
+          <li class="admin-nav-item"><a href="dashboard.html#modal-blocks"><i class="far fa-calendar-times"></i> Férias &amp; Bloqueios</a></li>
+          <li class="admin-nav-item"><a href="../index.html" target="_blank"><i class="fas fa-globe"></i> Ver Site</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-bottom">
+        <button id="theme-toggle" class="theme-toggle-btn"><i class="fas fa-moon"></i> Tema</button>
+        <button id="logout-btn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Sair</button>
+      </div>
+    </aside>
+
+    <main class="admin-main" id="section-pacientes">
+
+      <header class="admin-header">
+        <div class="admin-header-title">
+          <h1>Gestão de Pacientes</h1>
+          <p>Cadastro completo, prontuário clínico e histórico de cada paciente.</p>
+        </div>
+        <div class="admin-header-actions">
+          <button id="btn-add-paciente" class="btn btn-primary"><i class="fas fa-user-plus"></i> Novo Paciente</button>
+        </div>
+      </header>
+
+      <!-- 8 Cards de Métricas (reaproveitando dashboard-stat-card) -->
+      <section class="dashboard-stats-grid">
+        <div class="dashboard-stat-card stat-card-green"><div class="stat-icon"><i class="fas fa-users"></i></div><span class="label">Pacientes</span><span class="num" id="stat-total">-</span><span class="footer-info">Cadastros no sistema</span></div>
+        <div class="dashboard-stat-card stat-card-blue"><div class="stat-icon"><i class="fas fa-user-plus"></i></div><span class="label">Novos (30d)</span><span class="num" id="stat-novos">-</span><span class="footer-info">Cadastros recentes</span></div>
+        <div class="dashboard-stat-card stat-card-teal"><div class="stat-icon"><i class="fas fa-user-check"></i></div><span class="label">Ativos</span><span class="num" id="stat-ativos">-</span><span class="footer-info">Com consulta</span></div>
+        <div class="dashboard-stat-card stat-card-purple"><div class="stat-icon"><i class="fas fa-calendar-check"></i></div><span class="label">Próx. Consultas</span><span class="num" id="stat-prox">-</span><span class="footer-info">Agendadas</span></div>
+        <div class="dashboard-stat-card stat-card-indigo"><div class="stat-icon"><i class="fas fa-notes-medical"></i></div><span class="label">Prontuários</span><span class="num" id="stat-pront">-</span><span class="footer-info">Registros clínicos</span></div>
+        <div class="dashboard-stat-card stat-card-amber"><div class="stat-icon"><i class="fas fa-paperclip"></i></div><span class="label">Anexos</span><span class="num" id="stat-anexos">-</span><span class="footer-info">Arquivos</span></div>
+        <div class="dashboard-stat-card stat-card-orange"><div class="stat-icon"><i class="fas fa-hourglass-half"></i></div><span class="label">Inativos</span><span class="num" id="stat-inativos">-</span><span class="footer-info">Sem consulta >60d</span></div>
+        <div class="dashboard-stat-card stat-card-red"><div class="stat-icon"><i class="fas fa-allergies"></i></div><span class="label">Alergias</span><span class="num" id="stat-alergias">-</span><span class="footer-info">Registradas</span></div>
+      </section>
+
+      <!-- Tabela de Pacientes -->
+      <section class="table-section">
+        <div class="table-section-header">
+          <h2><i class="fas fa-list-alt dashboard-h2-i"></i>Lista de Pacientes</h2>
+          <button id="btn-clear-pac-filters" class="btn btn-secondary btn-sm"><i class="fas fa-undo"></i> Limpar Filtros</button>
+        </div>
+        <div class="table-filters">
+          <input type="text" id="search-pac-input" class="filter-input" placeholder="Buscar por nome, CPF ou e-mail...">
+          <select id="filter-pac-status" class="filter-input">
+            <option value="">Todos os Status</option>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+          </select>
+          <button id="btn-apply-pac-filters" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead><tr><th>Nome</th><th>CPF</th><th>Telefone</th><th>E-mail</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody id="pacientes-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ══ MODAL: CADASTRO/Edição de Paciente ══ -->
+  <div id="modal-paciente" class="modal">
+    <div class="modal-content dashboard-modal-div">
+      <i class="fas fa-times close-modal-icon"></i>
+      <h2><i class="fas fa-user dashboard-h2-i"></i>Cadastro de Paciente</h2>
+      <form id="form-paciente" class="dashboard-modal-content-form">
+        <input type="hidden" id="pac-id">
+        <div class="dashboard-dashboard-modal-content-form-div">
+          <input type="text" id="pac-nome" placeholder="Nome Completo *" required class="filter-input dashboard-dashboard-dashboard-modal-content-form-div-input">
+          <input type="text" id="pac-cpf" placeholder="CPF *" required class="filter-input dashboard-dashboard-dashboard-modal-content-form-div-input">
+        </div>
+        <div class="dashboard-dashboard-modal-content-form-div-1">
+          <input type="tel" id="pac-telefone" placeholder="Telefone *" required class="filter-input dashboard-dashboard-dashboard-modal-content-form-div-input">
+          <input type="email" id="pac-email" placeholder="E-mail *" required class="filter-input dashboard-dashboard-dashboard-modal-content-form-div-input">
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check"></i> Salvar Paciente</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: PRONTUÁRIO DO PACIENTE ══ -->
+  <div id="modal-prontuario" class="modal">
+    <div class="modal-content" style="max-width:920px;">
+      <i class="fas fa-times close-modal-icon"></i>
+      <h2><i class="fas fa-notes-medical dashboard-h2-i"></i>Prontuário — <span id="pront-nome">Paciente</span></h2>
+
+      <ul class="admin-nav" id="pront-tabs" style="flex-direction:row;gap:8px;flex-wrap:wrap;margin:12px 0;">
+        <li class="admin-nav-item active"><a href="#" data-tab="tab-resumo"><i class="fas fa-home"></i> Resumo</a></li>
+        <li class="admin-nav-item"><a href="#" data-tab="tab-historico"><i class="fas fa-stream"></i> Histórico</a></li>
+        <li class="admin-nav-item"><a href="#" data-tab="tab-anexos"><i class="fas fa-paperclip"></i> Anexos</a></li>
+      </ul>
+
+      <div id="tab-resumo">
+        <form id="form-prontuario" class="dashboard-modal-content-form-1">
+          <input type="hidden" id="pront-paciente-id">
+          <input type="hidden" id="pront-profissional-id">
+          <input type="hidden" id="pront-id">
+          <label class="dashboard-dashboard-modal-content-form-1-h3"><i class="fas fa-file-medical"></i> Histórico Clínico</label>
+          <textarea id="pront-historico" rows="2" class="filter-input dashboard-dashboard-modal-content-form-1-textarea" placeholder="Histórico clínico..."></textarea>
+          <div class="dashboard-dashboard-modal-content-form-div">
+            <textarea id="pront-observacoes" rows="2" class="filter-input" placeholder="Observações..."></textarea>
+            <textarea id="pront-anotacoes" rows="2" class="filter-input" placeholder="Anotações..."></textarea>
+          </div>
+          <div class="dashboard-dashboard-modal-content-form-div">
+            <textarea id="pront-medicamentos" rows="2" class="filter-input" placeholder="Medicamentos..."></textarea>
+            <textarea id="pront-alergias" rows="2" class="filter-input" placeholder="Alergias..."></textarea>
+          </div>
+          <textarea id="pront-exames" rows="2" class="filter-input dashboard-dashboard-modal-content-form-1-textarea" placeholder="Exames..."></textarea>
+          <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Salvar Prontuário</button>
+        </form>
+      </div>
+
+      <div id="tab-historico" style="display:none;">
+        <div id="historico-timeline" class="timeline-container"></div>
+      </div>
+
+      <div id="tab-anexos" style="display:none;">
+        <form id="form-anexo" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+          <input type="file" id="anexo-file" class="filter-input" accept="*/*">
+          <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-upload"></i> Anexar</button>
+        </form>
+        <div class="admin-table-container">
+          <table class="admin-table"><thead><tr><th>Arquivo</th><th>Tipo</th><th>Data</th><th>Ações</th></tr></thead><tbody id="anexos-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/permissions.js"></script>
+  <script src="../js/notifications.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/pacientes.js"></script>
+
+</body></html>

@@ -9,11 +9,24 @@ const Permissions = {
   ADMIN_PAGES: [
     'dashboard.html',
     'gerenciar-profissionais.html',
+    'financeiro.html',
+    'auditoria.html',
+    'backup.html',
+    'configuracoes.html',
   ],
 
   // Páginas exclusivas do PROFISSIONAL
   PROFESSIONAL_PAGES: [
     'dashboard-profissional.html',
+  ],
+
+  // Páginas compartilhadas (ADMIN e PROFISSIONAL)
+  SHARED_PAGES: [
+    'pacientes.html',
+    'agenda-inteligente.html',
+    'crm.html',
+    'relatorios.html',
+    'mensagens.html',
   ],
 
   // Obtém a sessão do localStorage
@@ -51,6 +64,9 @@ const Permissions = {
     for (const page of this.PROFESSIONAL_PAGES) {
       if (path.includes(page)) return 'professional';
     }
+    for (const page of this.SHARED_PAGES) {
+      if (path.includes(page)) return 'shared';
+    }
     if (path.includes('login.html')) return 'login';
     return 'public';
   },
@@ -62,7 +78,7 @@ const Permissions = {
     const role = session ? session.role : null;
 
     // Sem sessão em página protegida → login
-    if (!session && (group === 'admin' || group === 'professional')) {
+    if (!session && (group === 'admin' || group === 'professional' || group === 'shared')) {
       window.location.replace('login.html');
       return false;
     }

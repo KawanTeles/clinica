@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatórios | Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/responsive.css"><link rel="stylesheet" href="../css/darkmode.css"><link rel="stylesheet" href="../css/animations.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body>
+  <div id="loader-overlay" class="loader-overlay"><div class="spinner"></div><p class="contato-div-p-1">Carregando Relatórios...</p></div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <nav class="mobile-topbar"><div class="mobile-topbar-logo"><i class="fas fa-hand-holding-heart"></i> Zoe Admin</div><button class="hamburger-btn" id="hamburger-btn"><span></span><span></span><span></span></button></nav>
+  <div class="dashboard-layout" id="dashboard-app">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="dash-content-container">
+        <div class="admin-logo"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></div>
+        <div class="sidebar-user-card"><div class="sidebar-user-avatar" id="sidebar-avatar">A</div><div class="sidebar-user-info"><div class="sidebar-user-name" id="sidebar-user-name">Administrador</div><div class="sidebar-user-role" id="sidebar-user-role">Admin</div></div></div>
+        <ul class="admin-nav" id="admin-sidebar-nav">
+          <li class="admin-nav-item"><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+          <li class="admin-nav-item"><a href="pacientes.html"><i class="fas fa-users"></i> Pacientes</a></li>
+          <li class="admin-nav-item"><a href="gerenciar-profissionais.html"><i class="fas fa-user-md"></i> Médicos</a></li>
+          <li class="admin-nav-item"><a href="agenda-inteligente.html"><i class="fas fa-calendar-alt"></i> Agenda Inteligente</a></li>
+          <li class="admin-nav-item"><a href="financeiro.html"><i class="fas fa-wallet"></i> Financeiro</a></li>
+          <li class="admin-nav-item"><a href="crm.html"><i class="fas fa-bullseye"></i> CRM / Leads</a></li>
+          <li class="admin-nav-item active"><a href="relatorios.html"><i class="fas fa-chart-pie"></i> Relatórios</a></li>
+          <li class="admin-nav-item"><a href="mensagens.html"><i class="fas fa-comments"></i> Mensagens</a></li>
+          <li class="admin-nav-item"><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
+          <li class="admin-nav-item"><a href="auditoria.html"><i class="fas fa-clipboard-list"></i> Auditoria</a></li>
+          <li class="admin-nav-item"><a href="backup.html"><i class="fas fa-database"></i> Backup</a></li>
+          <div class="nav-divider"></div>
+          <li class="admin-nav-item"><a href="dashboard.html#modal-specialties"><i class="fas fa-stethoscope"></i> Especialidades</a></li>
+          <li class="admin-nav-item"><a href="dashboard.html#modal-blocks"><i class="far fa-calendar-times"></i> Férias &amp; Bloqueios</a></li>
+          <li class="admin-nav-item"><a href="../index.html" target="_blank"><i class="fas fa-globe"></i> Ver Site</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-bottom"><button id="theme-toggle" class="theme-toggle-btn"><i class="fas fa-moon"></i> Tema</button><button id="logout-btn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Sair</button></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-header"><div class="admin-header-title"><h1>Relatórios</h1><p>Exporte em PDF, Excel e CSV com filtros por profissional, especialidade, paciente e período.</p></div></header>
+
+      <section class="panel-card">
+        <h3><i class="fas fa-filter"></i> Filtros</h3>
+        <div class="dashboard-dashboard-modal-content-form-div" style="flex-wrap:wrap;">
+          <select id="rel-prof" class="filter-input"><option value="">Profissional</option></select>
+          <select id="rel-spec" class="filter-input"><option value="">Especialidade</option></select>
+          <select id="rel-pac" class="filter-input"><option value="">Paciente</option></select>
+          <input type="date" id="rel-ini" class="filter-input">
+          <input type="date" id="rel-fim" class="filter-input">
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn btn-primary btn-sm" id="rel-pdf"><i class="far fa-file-pdf"></i> PDF</button>
+          <button class="btn btn-secondary btn-sm" id="rel-excel"><i class="far fa-file-excel"></i> Excel</button>
+          <button class="btn btn-secondary btn-sm" id="rel-csv"><i class="fas fa-file-csv"></i> CSV</button>
+          <button class="btn btn-secondary btn-sm" id="rel-print"><i class="fas fa-print"></i> Imprimir</button>
+        </div>
+      </section>
+
+      <section class="panel-card"><h3><i class="fas fa-list"></i> Pré-visualização</h3><div class="admin-table-container"><table class="admin-table"><thead><tr><th>Data</th><th>Paciente</th><th>Profissional</th><th>Status</th><th>Valor</th></tr></thead><tbody id="rel-body"></tbody></table></div></section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script><script src="../js/supabase.js"></script><script src="../js/permissions.js"></script><script src="../js/notifications.js"></script><script src="../js/main.js"></script><script src="../js/auth.js"></script>
+  <script src="../js/relatorios.js"></script>
+</body></html>

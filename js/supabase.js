@@ -104,6 +104,46 @@
       { id: "av2", paciente: "Thiago Mendes", nota: 5, comentario: "O plano alimentar do Dr. Lucas realmente fez a diferença na minha rotina de treinos. Resultados rápidos e consistentes!" },
       { id: "av3", paciente: "Fernanda Costa", nota: 4, comentario: "Excelente atendimento e profissionais capacitados. O agendamento online é muito prático e rápido." },
       { id: "av4", paciente: "Jonas Santos", nota: 5, comentario: "Dr. Roberto foi muito minucioso no meu check-up. Uma clínica de altíssimo padrão, recomendo fortemente!" }
+    ],
+    prontuarios: [
+      { id: "pr1", paciente_id: "pa1", profissional_id: "p1", historico_clinico: "Histórico de ansiedade generalizada. Acompanhamento desde 2026.", observacoes: "Paciente colaborativa.", anotacoes: "Manter frequência semanal.", medicamentos: "Sertralina 50mg", alergias: "Penicilina", exames: "Hemograma completo (03/2026) - normal.", created_at: "2026-07-02T10:00:00Z", updated_at: "2026-07-10T10:00:00Z" },
+      { id: "pr2", paciente_id: "pa2", profissional_id: "p2", historico_clinico: "Sobrepeso. Objetivo de emagrecimento.", observacoes: "Boa aderência ao plano.", anotacoes: "Reavaliar em 30 dias.", medicamentos: "", alergias: "", exames: "Bioimpedância (07/2026).", created_at: "2026-07-03T10:00:00Z", updated_at: "2026-07-11T10:00:00Z" }
+    ],
+    anexos: [
+      { id: "an1", paciente_id: "pa1", profissional_id: "p1", nome_arquivo: "exame-sangue.pdf", url: "https://via.placeholder.com/120", tipo: "pdf", tamanho: 240000, created_at: "2026-07-03T10:00:00Z" }
+    ],
+    historico_paciente: [
+      { id: "h1", paciente_id: "pa1", tipo: "agendou", descricao: "Agendou consulta com Dra. Helena", profissional_id: "p1", referencia_id: "a1", created_at: "2026-07-10T09:00:00Z" },
+      { id: "h2", paciente_id: "pa1", tipo: "confirmou", descricao: "Consulta confirmada", profissional_id: "p1", referencia_id: "a1", created_at: "2026-07-11T09:00:00Z" },
+      { id: "h3", paciente_id: "pa2", tipo: "agendou", descricao: "Retorno nutricional agendado", profissional_id: "p2", referencia_id: "a2", created_at: "2026-07-10T10:00:00Z" }
+    ],
+    financeiro: [
+      { id: "fz1", paciente_id: "pa1", agendamento_id: "a1", profissional_id: "p1", descricao: "Consulta Psicologia", valor: 250.00, status: "pago", forma: "pix", data_vencimento: "2026-07-15", data_pagamento: "2026-07-15", created_at: "2026-07-15T09:00:00Z" },
+      { id: "fz2", paciente_id: "pa2", agendamento_id: "a2", profissional_id: "p2", descricao: "Retorno Nutrição", valor: 180.00, status: "pendente", forma: "pendente", data_vencimento: "2026-07-20", data_pagamento: null, created_at: "2026-07-15T10:00:00Z" }
+    ],
+    leads: [
+      { id: "ld1", paciente_id: null, nome: "Beatriz Lima", telefone: "11955554444", email: "beatriz@email.com", origem: "whatsapp", status: "novo", followup: "2026-07-18", observacoes: "Interessada em psicologia.", profissional_id: "p1", created_at: "2026-07-12T10:00:00Z" },
+      { id: "ld2", paciente_id: "pa1", nome: "Camila Guimarães", telefone: "11977778888", email: "camila@email.com", origem: "site", status: "recorrente", followup: "2026-07-22", observacoes: "Paciente assídua.", profissional_id: "p1", created_at: "2026-07-01T10:00:00Z" },
+      { id: "ld3", paciente_id: null, nome: "Pedro Alves", telefone: "11944443333", email: "pedro@email.com", origem: "indicacao", status: "inativo", followup: null, observacoes: "Sem retorno há 60 dias.", profissional_id: null, created_at: "2026-04-10T10:00:00Z" }
+    ],
+    mensagens: [
+      { id: "mz1", canal: "whatsapp", paciente_id: "pa1", assunto: "Lembrete de consulta", conteudo: "Olá Camila, lembrete da sua consulta amanhã às 09:00.", direcao: "enviada", lida: true, created_at: "2026-07-14T10:00:00Z" },
+      { id: "mz2", canal: "email", paciente_id: "pa2", assunto: "Resultado de exames", conteudo: "Seu exame está disponível na área do paciente.", direcao: "enviada", lida: false, created_at: "2026-07-13T10:00:00Z" }
+    ],
+    clinic_config: [
+      { id: "cc1", nome: "Clínica Zoe", logo_url: "", telefone: "(11) 99999-9999", whatsapp: "5511999999999", email: "contato@clinicazoe.com", endereco: "Av. Paulista, 1000 - Bela Vista, São Paulo - SP", horario_funcionamento: "Seg a Sex: 08:00 - 18:00", redes_sociais: JSON.stringify({ instagram: "@clinicazoe", facebook: "clinicazoe" }), updated_at: "2026-07-01T10:00:00Z" }
+    ],
+    auditoria: [
+      { id: "au1", usuario_email: "admin@clinicazoe.com", acao: "login", entidade: "sessao", entidade_id: null, detalhes: "Acesso administrativo", ip: "127.0.0.1", created_at: "2026-07-15T08:00:00Z" },
+      { id: "au2", usuario_email: "admin@clinicazoe.com", acao: "confirmou", entidade: "agendamento", entidade_id: "a1", detalhes: "Consulta confirmada", ip: "127.0.0.1", created_at: "2026-07-15T09:00:00Z" }
+    ],
+    backup_log: [
+      { id: "bk1", tipo: "incremental", status: "concluido", tamanho_mb: 12.4, observacoes: "Backup inicial do banco de dados.", created_at: "2026-07-15T03:00:00Z" }
+    ],
+    historico: [
+      { id: "hi1", paciente_id: "pa1", tipo_evento: "cadastro", descricao: "Paciente Camila Guimarães cadastrada no sistema.", created_at: "2026-07-01T10:00:00Z" },
+      { id: "hi2", paciente_id: "pa2", tipo_evento: "cadastro", descricao: "Paciente Thiago Mendes cadastrado no sistema.", created_at: "2026-07-02T14:30:00Z" },
+      { id: "hi3", paciente_id: "pa1", tipo_evento: "consulta", descricao: "Realizou consulta de Psicologia com Dra. Helena.", created_at: "2026-07-15T09:00:00Z" }
     ]
   };
 
@@ -177,6 +217,11 @@
       return this;
     }
 
+    limit(count) {
+      this.limitCount = count;
+      return this;
+    }
+
     // Executa filtros na memória
     _applyFilters(items) {
       let filtered = [...items];
@@ -211,52 +256,100 @@
       return filtered;
     }
 
+    // Registra automaticamente a mutação na tabela de auditoria (mock).
+    // Captura: usuário, ação, tabela, registro afetado, dados anteriores,
+    // dados novos e timestamp — espelhando o schema phase1_migration.sql.
+    _audit(acao, registroId, dadosAntigos, dadosNovos) {
+      try {
+        if (this.tableName === 'auditoria') return; // evita recursão
+        const session = JSON.parse(localStorage.getItem('zoe_current_session') || '{}');
+        const log = {
+          id: Math.random().toString(36).substr(2, 9),
+          usuario_email: session.email || 'sistema',
+          usuario: session.email || 'sistema',
+          acao,
+          entidade: this.tableName,
+          tabela: this.tableName,
+          entidade_id: registroId || null,
+          registro_id: registroId || null,
+          detalhes: '',
+          dados_antigos: dadosAntigos ? JSON.parse(JSON.stringify(dadosAntigos)) : null,
+          dados_novos: dadosNovos ? JSON.parse(JSON.stringify(dadosNovos)) : null,
+          ip: '127.0.0.1',
+          created_at: new Date().toISOString()
+        };
+        const store = JSON.parse(localStorage.getItem('zoe_auditoria') || '[]');
+        store.push(log);
+        localStorage.setItem('zoe_auditoria', JSON.stringify(store));
+        window.dispatchEvent(new CustomEvent('supabase_realtime_change', {
+          detail: { table: 'auditoria', eventType: 'INSERT', new: log }
+        }));
+      } catch (e) {
+        console.warn('[Auditoria Mock] Falha ao registrar:', e);
+      }
+    }
+
     async then(resolve, reject) {
       try {
+        // Se há uma operação pendente (insert/update/delete encadeada com .eq),
+        // executa-a considerando os filtros aplicados.
+        if (this.pendingOp) {
+          const result = await this._runPending();
+          this.pendingOp = null;
+          this.filters = [];
+          this.limitCount = null;
+          resolve(result);
+          return;
+        }
         const result = this._applyFilters(this.dataStore);
-        resolve({ data: result, error: null });
+        resolve({ data: this.limitCount != null ? result.slice(0, this.limitCount) : result, error: null });
       } catch (err) {
         resolve({ data: null, error: err });
       }
     }
 
-    async insert(newData) {
+    // Executa a operação pendente (insert/update/delete) respeitando filtros
+    async _runPending() {
+      const op = this.pendingOp;
+      if (op.type === 'insert') {
+        return await this._doInsert(op.data);
+      } else if (op.type === 'update') {
+        return await this._doUpdate(op.data);
+      } else if (op.type === 'delete') {
+        return await this._doDelete();
+      }
+      return { data: null, error: null };
+    }
+
+    async _doInsert(newData) {
       try {
         const rows = Array.isArray(newData) ? newData : [newData];
         const inserted = [];
-
         for (const row of rows) {
-          const item = { 
-            id: row.id || Math.random().toString(36).substr(2, 9), 
+          const item = {
+            id: row.id || Math.random().toString(36).substr(2, 9),
             ...row,
             created_at: new Date().toISOString()
           };
           this.dataStore.push(item);
           inserted.push(item);
         }
-
         localStorage.setItem(`zoe_${this.tableName}`, JSON.stringify(this.dataStore));
-        
-        // Trigger de Realtime simulado
         window.dispatchEvent(new CustomEvent('supabase_realtime_change', {
           detail: { table: this.tableName, eventType: 'INSERT', new: inserted }
         }));
-
+        inserted.forEach(item => this._audit('criou', item.id, null, item));
         return { data: inserted, error: null };
-      } catch (err) {
-        return { data: null, error: err };
-      }
+      } catch (err) { return { data: null, error: err }; }
     }
 
-    async update(updateData) {
+    async _doUpdate(updateData) {
       try {
         const filteredToUpdate = this._applyFilters(this.dataStore);
         const idsToUpdate = filteredToUpdate.map(item => item.id);
-
         this.dataStore = this.dataStore.map(item => {
           if (idsToUpdate.includes(item.id)) {
             const updated = { ...item, ...updateData };
-            // Realtime event trigger
             window.dispatchEvent(new CustomEvent('supabase_realtime_change', {
               detail: { table: this.tableName, eventType: 'UPDATE', new: updated, old: item }
             }));
@@ -264,19 +357,16 @@
           }
           return item;
         });
-
         localStorage.setItem(`zoe_${this.tableName}`, JSON.stringify(this.dataStore));
+        this.dataStore.filter(item => idsToUpdate.includes(item.id)).forEach(item => this._audit('editou', item.id, filteredToUpdate.find(o => o.id === item.id) || null, item));
         return { data: this.dataStore.filter(item => idsToUpdate.includes(item.id)), error: null };
-      } catch (err) {
-        return { data: null, error: err };
-      }
+      } catch (err) { return { data: null, error: err }; }
     }
 
-    async delete() {
+    async _doDelete() {
       try {
         const filteredToDelete = this._applyFilters(this.dataStore);
         const idsToDelete = filteredToDelete.map(item => item.id);
-
         this.dataStore = this.dataStore.filter(item => {
           if (idsToDelete.includes(item.id)) {
             window.dispatchEvent(new CustomEvent('supabase_realtime_change', {
@@ -286,12 +376,25 @@
           }
           return true;
         });
-
         localStorage.setItem(`zoe_${this.tableName}`, JSON.stringify(this.dataStore));
+        filteredToDelete.forEach(item => this._audit('excluiu', item.id, item, null));
         return { data: filteredToDelete, error: null };
-      } catch (err) {
-        return { data: null, error: err };
-      }
+      } catch (err) { return { data: null, error: err }; }
+    }
+
+    insert(newData) {
+      this.pendingOp = { type: 'insert', data: newData };
+      return this;
+    }
+
+    update(updateData) {
+      this.pendingOp = { type: 'update', data: updateData };
+      return this;
+    }
+
+    delete() {
+      this.pendingOp = { type: 'delete' };
+      return this;
     }
   }
 
@@ -434,4 +537,30 @@
 
   // Definir na janela global o cliente correto
   window.supabaseClient = window.CONFIG.DEMO_MODE ? mockSupabase : supabaseClient;
+
+  // ─── HELPER DE AUDITORIA (reutilizado por todos os módulos) ─────
+  window.ZoeAudit = {
+    async log(acao, entidade, entidadeId, detalhes) {
+      try {
+        const session = JSON.parse(localStorage.getItem('zoe_current_session') || '{}');
+        const payload = {
+          usuario_email: session.email || 'sistema',
+          acao,
+          entidade,
+          entidade_id: entidadeId || null,
+          detalhes: detalhes || '',
+          ip: '127.0.0.1'
+        };
+        if (window.CONFIG.DEMO_MODE) {
+          const stored = JSON.parse(localStorage.getItem('zoe_auditoria') || '[]');
+          stored.push({ id: Math.random().toString(36).substr(2, 9), ...payload, created_at: new Date().toISOString() });
+          localStorage.setItem('zoe_auditoria', JSON.stringify(stored));
+        } else {
+          await window.supabaseClient.from('auditoria').insert(payload);
+        }
+      } catch (e) {
+        console.warn('[Auditoria] Falha ao registrar log:', e);
+      }
+    }
+  };
 })();
