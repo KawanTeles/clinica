@@ -35,55 +35,39 @@
     </div>
   </header>
 
-  <section class="section login-body-section">
-    <div class="container">
+  <section class="section login-body-section" style="padding-top: 0; justify-content: center; min-height: 100vh; display: flex; align-items: center;">
+    <div class="container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100vh;">
       
-      <div class="login-container fade-slide-in">
+      <div class="login-container fade-slide-in" style="width: 100%; max-width: 440px; margin: auto; box-sizing: border-box;">
         <div class="login-header">
-          <i class="fas fa-user-shield"></i>
-          <h1>Painel de Controle</h1>
-          <p>Digite suas credenciais corporativas para acessar a agenda.</p>
-        </div>
-
-        <div class="security-notice">
-          <i class="fas fa-lock"></i>
-          <span>Ambiente criptografado SSL de alta segurança. Logs de auditoria ativos para ações de administrador.</span>
-        </div>
-
-        <!-- Credenciais de demonstração -->
-        <div id="demo-hint" class="login-login-container-div">
-          <strong class="login-login-login-container-div-strong"><i class="fas fa-info-circle"></i> Modo Demonstração</strong>
-          Admin: <code class="login-login-login-container-div-code">admin@clinicazoe.com</code> / <code class="login-login-login-container-div-code">admin123</code>
+          <i class="fas fa-hand-holding-heart" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+          <h1>Entrar no Painel</h1>
         </div>
 
         <!-- Mensagem de erro inline -->
-        <div id="login-error" class="login-login-container-div-1">
+        <div id="login-error" class="login-login-container-div-1" style="display: none;">
           <i class="fas fa-exclamation-circle"></i>
           <span id="login-error-msg"></span>
         </div>
 
         <form id="login-form">
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom: 1.5rem;">
             <label for="email">E-mail Corporativo</label>
             <input type="email" id="email" class="form-control" placeholder="ex: admin@clinicazoe.com" required="" autocomplete="username">
           </div>
           
-          <div class="form-group login-form-div">
-            <div class="login-form-group-div">
-              <label for="password" class="login-login-form-group-div-label">Senha de Acesso</label>
+          <div class="form-group login-form-div" style="margin-bottom: 2rem;">
+            <div class="login-form-group-div" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <label for="password" class="login-login-form-group-div-label" style="margin-bottom: 0;">Senha de Acesso</label>
               <a href="#" id="btn-forgot-password" class="login-login-form-group-div-a">Esqueci minha senha</a>
             </div>
             <input type="password" id="password" class="form-control" placeholder="••••••••" required="" autocomplete="current-password">
           </div>
 
-          <button type="submit" class="btn btn-primary btn-login">
+          <button type="submit" class="btn btn-primary btn-login" style="width: 100%; padding: 12px; font-weight: 600; font-size: 1rem;">
             Entrar no Painel <i class="fas fa-sign-in-alt"></i>
           </button>
         </form>
-
-        <p class="login-login-container-p">
-          Dúvidas sobre acessos? Contate o suporte técnico de TI da Clínica Zoe.
-        </p>
       </div>
 
     </div>
