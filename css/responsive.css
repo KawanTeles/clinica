@@ -252,32 +252,10 @@ img, video, iframe, embed, object {
     gap: 30px !important;
   }
 
-  /* ── Dashboard Admin: layout vira 1 coluna ── */
+  
   .dashboard-layout {
     grid-template-columns: 1fr !important;
     grid-template-rows: auto 1fr;
-  }
-
-  /* ── Sidebar vira gaveta (drawer) ── */
-  .admin-sidebar {
-    position: fixed !important;
-    top: 0;
-    left: -290px !important;
-    width: 280px !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    flex-direction: column !important;
-    padding: 28px 20px !important;
-    z-index: 500 !important;
-    overflow-y: auto;
-    background-color: var(--bg-surface);
-    border-right: 1px solid var(--border-color);
-    transition: left var(--transition-normal) !important;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .admin-sidebar.sidebar-open {
-    left: 0 !important;
   }
 
   .sidebar-overlay {
@@ -296,34 +274,13 @@ img, video, iframe, embed, object {
     display: block;
   }
 
-  .admin-nav {
-    flex-direction: column !important;
-    flex-wrap: nowrap !important;
-    gap: 8px !important;
-  }
-
-  .admin-logo {
-    margin-bottom: 28px !important;
-  }
-
-  .admin-sidebar > div:last-child {
-    flex-direction: column !important;
-    gap: 10px;
-  }
-
-  .admin-sidebar > div:last-child button {
-    width: 100% !important;
-    margin-bottom: 0 !important;
-    padding: 11px 16px;
-  }
-
   .sidebar-bottom {
     border-top: 1px solid var(--border-color);
     padding-top: 16px;
     margin-top: 16px;
   }
 
-  /* ── Mobile Top Bar (admin) ── */
+  
   .mobile-topbar {
     display: flex !important;
     align-items: center;
@@ -380,10 +337,6 @@ img, video, iframe, embed, object {
 
   .hamburger-btn.active span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
-  }
-
-  .admin-main {
-    padding: 24px !important;
   }
 
   .dashboard-charts-grid,
@@ -538,11 +491,6 @@ img, video, iframe, embed, object {
     flex: 1 1 200px !important;
   }
 
-  /* ── Dashboard mobile ── */
-  .admin-main {
-    padding: 16px !important;
-  }
-
   .dashboard-stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px;
@@ -554,26 +502,6 @@ img, video, iframe, embed, object {
 
   .dashboard-stat-card .num {
     font-size: 1.8rem !important;
-  }
-
-  /* ── Admin Header ── */
-  .admin-header {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 16px;
-  }
-
-  .admin-header-actions {
-    flex-wrap: wrap;
-    width: 100%;
-    gap: 8px;
-  }
-
-  .admin-header-actions .btn {
-    flex: 1;
-    justify-content: center;
-    font-size: 0.8rem;
-    padding: 10px 12px;
   }
 
   /* ── Modal Responsividade ── */
@@ -798,10 +726,6 @@ img, video, iframe, embed, object {
 
   .dashboard-stats-grid {
     grid-template-columns: 1fr !important;
-  }
-
-  .admin-main {
-    padding: 12px !important;
   }
 
   /* ── Specialty index cards: 1 col ── */
@@ -1181,13 +1105,6 @@ img, video, iframe, embed, object {
    Strictly responsive overrides for public pages and dashboards.
    ================================================================ */
 @media (max-width: 1024px) {
-  body,
-  .dashboard-layout,
-  .admin-main,
-  .modal,
-  .modal-pro {
-    max-width: 100%;
-  }
 
   .nav-container {
     min-height: 44px;
@@ -1271,10 +1188,6 @@ img, video, iframe, embed, object {
   .dashboard-modal-content-div {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
-  }
-
-  .admin-main {
-    min-width: 0;
   }
 }
 
@@ -1585,20 +1498,6 @@ img, video, iframe, embed, object {
     flex: 1;
   }
 
-  .admin-header-title h1 {
-    font-size: clamp(1.45rem, 7vw, 1.85rem);
-    line-height: 1.1;
-  }
-
-  .admin-header-title p {
-    font-size: 0.88rem;
-  }
-
-  .admin-header-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
   .mobile-topbar {
     min-height: 58px;
   }
@@ -1622,22 +1521,6 @@ img, video, iframe, embed, object {
   .search-input-wrapper,
   .select-pro {
     width: 100%;
-  }
-
-  .admin-table-container {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    border-radius: var(--radius-md);
-  }
-
-  .admin-table {
-    min-width: 620px;
-  }
-
-  .admin-table th,
-  .admin-table td {
-    padding: 12px 14px;
   }
 
   .modal,
@@ -1895,21 +1778,12 @@ img, video, iframe, embed, object {
     flex-direction: column;
   }
 
-  .admin-main {
-    padding: 12px !important;
-  }
-
   .mobile-topbar {
     padding: 10px 12px;
   }
 
   .mobile-topbar-logo {
     font-size: 1.05rem;
-  }
-
-  .admin-sidebar {
-    width: min(86vw, 280px) !important;
-    left: -90vw !important;
   }
 
   .doctor-profile-left {

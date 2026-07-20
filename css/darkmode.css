@@ -41,20 +41,9 @@ body.dark-theme textarea:focus {
   background-color: #3A3A3C;
 }
 
-/* ── Dashboard / Admin Panel ─────────────────────────── */
-body.dark-theme .admin-sidebar {
-  background-color: #17171A;
-  border-right-color: rgba(255, 255, 255, 0.07);
-}
-
 body.dark-theme .mobile-topbar {
   background-color: #17171A;
   border-bottom-color: rgba(255, 255, 255, 0.07);
-}
-
-body.dark-theme .admin-nav-item a:hover,
-body.dark-theme .admin-nav-item.active a {
-  background-color: rgba(46, 139, 87, 0.15);
 }
 
 body.dark-theme .sidebar-user-card {
@@ -92,19 +81,7 @@ body.dark-theme .table-section {
   border-color: rgba(255, 255, 255, 0.07);
 }
 
-body.dark-theme .admin-table th {
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-}
 
-body.dark-theme .admin-table td {
-  border-bottom-color: rgba(255, 255, 255, 0.05);
-}
-
-body.dark-theme .admin-table tbody tr:hover td {
-  background-color: rgba(46, 139, 87, 0.08);
-}
-
-/* ── Filter Inputs (dashboard) ───────────────────────── */
 body.dark-theme .filter-input {
   background-color: #2C2C2E;
   border-color: rgba(255, 255, 255, 0.10);

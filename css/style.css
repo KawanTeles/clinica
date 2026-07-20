@@ -322,22 +322,6 @@ button {
   z-index: -1;
 }
 
-/* Responsividade das Tabelas do Painel */
-.admin-table-container {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin-bottom: 20px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
-}
-
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 650px; /* Garante scroll em telas pequenas */
-}
-
 /* Hamburguer Menu (Mobile) */
 .menu-btn {
   display: none;
@@ -1163,29 +1147,6 @@ body { background-color: var(--bg-base); }
       min-height: 100vh;
     }
 
-    /* ── Sidebar ─────────────────────────────── */
-    .admin-sidebar {
-      background-color: var(--bg-surface);
-      border-right: 1px solid var(--border-color);
-      padding: 28px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      z-index: 300;
-      transition: background-color var(--transition-normal), left var(--transition-normal);
-      overflow-y: auto;
-    }
-
-    .admin-logo {
-      display: flex; align-items: center; gap: 12px;
-      font-family: var(--font-title); font-weight: 700; font-size: 1.4rem;
-      color: var(--text-main); margin-bottom: 36px;
-    }
-    .admin-logo i { color: var(--primary); font-size: 1.6rem; }
-
     .sidebar-user-card {
       display: flex; align-items: center; gap: 12px;
       padding: 14px; background: var(--primary-light);
@@ -1207,18 +1168,6 @@ body { background-color: var(--bg-base); }
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .sidebar-user-role { font-size: 0.72rem; color: var(--primary); font-weight: 500; }
-
-    .admin-nav { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-    .admin-nav-item a {
-      display: flex; align-items: center; gap: 14px;
-      padding: 11px 14px; border-radius: var(--radius-md);
-      font-size: 0.875rem; font-weight: 500; color: var(--text-main);
-      opacity: 0.7; transition: all var(--transition-fast); cursor: pointer;
-    }
-    .admin-nav-item a i { width: 20px; text-align: center; font-size: 1rem; }
-    .admin-nav-item a:hover, .admin-nav-item.active a {
-      opacity: 1; background-color: var(--primary-light); color: var(--primary); font-weight: 600;
-    }
     .nav-divider { height: 1px; background: var(--border-color); margin: 8px 0; }
 
     .sidebar-bottom {
@@ -1253,19 +1202,6 @@ body { background-color: var(--bg-base); }
       background: rgba(0,0,0,0.5); z-index: 299; backdrop-filter: blur(4px);
     }
     .sidebar-overlay.active { display: block; }
-
-    /* ── Main ────────────────────────────────── */
-    .admin-main { padding: 40px; overflow-y: auto; }
-
-    .admin-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 36px; gap: 16px; flex-wrap: wrap;
-    }
-    .admin-header-title h1 {
-      font-family: var(--font-title); font-size: 2rem; font-weight: 800;
-      color: var(--text-main); line-height: 1.2; letter-spacing: -0.02em;
-    }
-    .admin-header-title p { color: var(--text-muted); margin-top: 4px; font-size: 0.95rem; }
 
     /* ── Perfil Card (Header) ────────────────── */
     .doctor-profile-card {
@@ -1497,34 +1433,16 @@ body { background-color: var(--bg-base); }
 
     @media (max-width: 1024px) {
       .dashboard-layout { grid-template-columns: 1fr; }
-      .admin-sidebar {
-        position: sticky; top: 0; height: auto; flex-direction: row;
-        align-items: center; padding: 14px 20px; z-index: 400; overflow-x: auto; gap: 12px;
-      }
       .sidebar-user-card { display: none; }
-      .admin-logo { margin-bottom: 0; flex-shrink: 0; font-size: 1.1rem; }
-      .admin-nav { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: 4px; flex: 1; }
-      .admin-nav-item a { padding: 9px 12px; font-size: 0.82rem; white-space: nowrap; gap: 8px; }
       .nav-divider { display: none; }
       .sidebar-bottom { flex-direction: row; border-top: none; padding-top: 0; flex-shrink: 0; gap: 6px; }
       .sidebar-bottom .btn { width: auto; padding: 9px 12px; font-size: 0.82rem; white-space: nowrap; }
-      .admin-main { padding: 24px; }
       .profile-info-grid { grid-template-columns: 1fr; }
       .profile-info-row:nth-child(odd), .profile-info-row:nth-child(even) { padding: 12px 0; border-left: none; padding-left: 0; }
     }
 
     @media (max-width: 768px) {
-      .admin-sidebar {
-        position: fixed !important; left: -290px; top: 0;
-        width: 270px !important; height: 100vh !important; flex-direction: column !important;
-        padding: 28px 20px !important; overflow-y: auto; overflow-x: hidden;
-        gap: 0 !important; z-index: 500 !important; transition: left 0.35s cubic-bezier(0.16,1,0.3,1) !important;
-      }
-      .admin-sidebar.sidebar-open { left: 0 !important; }
       .sidebar-user-card { display: flex; }
-      .admin-logo { margin-bottom: 20px !important; font-size: 1.3rem !important; }
-      .admin-nav { flex-direction: column !important; flex-wrap: nowrap !important; overflow-x: visible !important; gap: 6px !important; }
-      .admin-nav-item a { padding: 13px 16px !important; font-size: 0.9rem !important; gap: 14px !important; }
       .nav-divider { display: block !important; }
       .sidebar-bottom { flex-direction: column !important; border-top: 1px solid var(--border-color) !important; padding-top: 16px !important; gap: 10px !important; }
       .sidebar-bottom .btn { width: 100% !important; }
@@ -1536,8 +1454,6 @@ body { background-color: var(--bg-base); }
       .mobile-topbar-logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-title); font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
       .mobile-topbar-logo i { color: var(--primary); }
       .hamburger-btn { display: flex; }
-      .admin-main { padding: 16px !important; }
-      .admin-header { flex-direction: column; align-items: flex-start; }
       .stats-summary-grid { grid-template-columns: 1fr 1fr !important; gap: 12px; }
       .doctor-profile-card { flex-direction: column; align-items: flex-start; padding: 20px; }
       .toolbar-pro { flex-direction: column; align-items: stretch; }
@@ -1559,39 +1475,7 @@ body {
       min-height: 100vh;
     }
 
-    /* ── Sidebar ──────────────────────────────────────── */
-    .admin-sidebar {
-      background-color: var(--bg-surface);
-      border-right: 1px solid var(--border-color);
-      padding: 28px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      z-index: 300;
-      transition: background-color var(--transition-normal), left var(--transition-normal);
-      overflow-y: auto;
-    }
-
-    .admin-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: var(--font-title);
-      font-weight: 700;
-      font-size: 1.4rem;
-      color: var(--text-main);
-      margin-bottom: 36px;
-    }
-
-    .admin-logo i {
-      color: var(--primary);
-      font-size: 1.6rem;
-    }
-
-    /* Admin user card dentro da sidebar */
+    
     .sidebar-user-card {
       display: flex;
       align-items: center;
@@ -1637,49 +1521,11 @@ body {
       font-weight: 500;
     }
 
-    .admin-nav {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .admin-nav-item a {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 13px 16px;
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-main);
-      opacity: 0.7;
-      transition: all var(--transition-fast);
-    }
-
-    .admin-nav-item a i {
-      width: 20px;
-      text-align: center;
-      font-size: 1rem;
-    }
-
-    .admin-nav-item a:hover,
-    .admin-nav-item.active a {
-      opacity: 1;
-      background-color: var(--primary-light);
-      color: var(--primary);
-      font-weight: 600;
-    }
-
     /* Separador na nav */
     .nav-divider {
       height: 1px;
       background: var(--border-color);
       margin: 10px 0;
-    }
-
-    .hide-admin-only {
-      display: none !important;
     }
 
     /* Sidebar bottom actions */
@@ -1739,43 +1585,6 @@ body {
     /* Mobile top bar (visível apenas em ≤768px via responsive.css) */
     .mobile-topbar {
       display: none;
-    }
-
-    /* ── Área Principal ───────────────────────────────── */
-    .admin-main {
-      padding: 40px;
-      overflow-y: auto;
-    }
-
-    /* ── Header da área principal ─────────────────────── */
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 36px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .admin-header-title h1 {
-      font-family: var(--font-title);
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--text-main);
-      line-height: 1.2;
-    }
-
-    .admin-header-title p {
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-size: 0.9rem;
-    }
-
-    .admin-header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
     }
 
     /* ── Grid de Métricas 8 Cards ─────────────────────── */
@@ -1945,43 +1754,6 @@ body {
       border-color: var(--primary);
       outline: none;
       background-color: var(--bg-surface);
-    }
-
-    /* ── Tabela ───────────────────────────────────────── */
-    .admin-table-container {
-      overflow-x: auto;
-    }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    .admin-table th {
-      padding: 14px 18px;
-      border-bottom: 1.5px solid var(--border-color);
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      white-space: nowrap;
-    }
-
-    .admin-table td {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.9rem;
-      color: var(--text-main);
-    }
-
-    .admin-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .admin-table tbody tr:hover td {
-      background-color: var(--primary-light);
     }
 
     /* ── Badges ───────────────────────────────────────── */
@@ -2176,37 +1948,7 @@ body {
         grid-template-columns: 1fr;
       }
 
-      /* Sidebar vira topbar horizontal */
-      .admin-sidebar {
-        position: sticky;
-        top: 0;
-        height: auto;
-        flex-direction: row;
-        align-items: center;
-        padding: 14px 20px;
-        z-index: 400;
-        overflow-x: auto;
-        gap: 12px;
-      }
-
       .sidebar-user-card { display: none; }
-
-      .admin-logo { margin-bottom: 0; flex-shrink: 0; font-size: 1.1rem; }
-
-      .admin-nav {
-        flex-direction: row;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 4px;
-        flex: 1;
-      }
-
-      .admin-nav-item a {
-        padding: 9px 12px;
-        font-size: 0.82rem;
-        white-space: nowrap;
-        gap: 8px;
-      }
 
       .nav-divider { display: none; }
 
@@ -2225,10 +1967,6 @@ body {
         white-space: nowrap;
       }
 
-      .admin-main {
-        padding: 24px;
-      }
-
       .dashboard-charts-grid,
       .dashboard-charts-grid-secondary {
         grid-template-columns: 1fr;
@@ -2244,42 +1982,8 @@ body {
     }
 
     @media (max-width: 768px) {
-      /* Sidebar vira menu lateral off-canvas */
-      .admin-sidebar {
-        position: fixed !important;
-        left: -290px;
-        top: 0;
-        width: 270px !important;
-        height: 100vh !important;
-        flex-direction: column !important;
-        padding: 28px 20px !important;
-        overflow-y: auto;
-        overflow-x: hidden;
-        gap: 0 !important;
-        z-index: 500 !important;
-        border-right: 1px solid var(--border-color);
-        transition: left 0.35s cubic-bezier(0.16,1,0.3,1) !important;
-      }
-
-      .admin-sidebar.sidebar-open { left: 0 !important; }
 
       .sidebar-user-card { display: flex; }
-
-      .admin-logo { margin-bottom: 20px !important; font-size: 1.3rem !important; }
-
-      .admin-nav {
-        flex-direction: column !important;
-        flex-wrap: nowrap !important;
-        overflow-x: visible !important;
-        gap: 6px !important;
-      }
-
-      .admin-nav-item a {
-        padding: 13px 16px !important;
-        font-size: 0.9rem !important;
-        gap: 14px !important;
-        white-space: normal !important;
-      }
 
       .nav-divider { display: block; }
 
@@ -2323,20 +2027,10 @@ body {
 
       .hamburger-btn { display: flex; }
 
-      .admin-main { padding: 16px !important; }
-
       .dashboard-stats-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
       }
-
-      .admin-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .admin-header-actions { width: 100%; flex-wrap: wrap; }
-      .admin-header-actions .btn { flex: 1; justify-content: center; }
 
       .table-filters { grid-template-columns: 1fr !important; }
 
@@ -2368,38 +2062,6 @@ body {
       display: grid;
       grid-template-columns: 260px 1fr;
       min-height: 100vh;
-    }
-
-    /* ── Sidebar (Matching Dashboard) ────────────────── */
-    .admin-sidebar {
-      background-color: var(--bg-surface);
-      border-right: 1px solid var(--border-color);
-      padding: 28px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      z-index: 300;
-      transition: background-color var(--transition-normal), left var(--transition-normal);
-      overflow-y: auto;
-    }
-
-    .admin-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: var(--font-title);
-      font-weight: 700;
-      font-size: 1.4rem;
-      color: var(--text-main);
-      margin-bottom: 36px;
-    }
-
-    .admin-logo i {
-      color: var(--primary);
-      font-size: 1.6rem;
     }
 
     .sidebar-user-card {
@@ -2445,40 +2107,6 @@ body {
       font-size: 0.72rem;
       color: var(--primary);
       font-weight: 500;
-    }
-
-    .admin-nav {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .admin-nav-item a {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 13px 16px;
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text-main);
-      opacity: 0.7;
-      transition: all var(--transition-fast);
-    }
-
-    .admin-nav-item a i {
-      width: 20px;
-      text-align: center;
-      font-size: 1rem;
-    }
-
-    .admin-nav-item a:hover,
-    .admin-nav-item.active a {
-      opacity: 1;
-      background-color: var(--primary-light);
-      color: var(--primary);
-      font-weight: 600;
     }
 
     .nav-divider {
@@ -2564,36 +2192,6 @@ body {
     }
 
     .sidebar-overlay.active { display: block; }
-
-    /* ── Main Workspace ──────────────────────────────── */
-    .admin-main {
-      padding: 40px;
-      overflow-y: auto;
-    }
-
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 36px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .admin-header-title h1 {
-      font-family: var(--font-title);
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--text-main);
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
-
-    .admin-header-title p {
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-size: 0.95rem;
-    }
 
     /* ── Mini Cards de Métricas ─────────────────────── */
     .stats-summary-grid {
@@ -2765,43 +2363,6 @@ body {
       color: var(--primary);
       font-weight: 600;
       box-shadow: var(--shadow-sm);
-    }
-
-    /* ── Tabela Customizada ─────────────────────────── */
-    .admin-table-container {
-      overflow-x: auto;
-      margin-bottom: 20px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-color);
-    }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    .admin-table th {
-      padding: 14px 18px;
-      border-bottom: 2px solid var(--border-color);
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background: var(--bg-base);
-    }
-
-    .admin-table td {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.875rem;
-      color: var(--text-main);
-      vertical-align: middle;
-    }
-
-    .admin-table tbody tr:last-child td {
-      border-bottom: none;
     }
 
     .prof-table-row:hover td {
@@ -3568,51 +3129,15 @@ body {
         grid-template-columns: 1fr;
       }
 
-      .admin-sidebar {
-        position: sticky;
-        top: 0;
-        height: auto;
-        flex-direction: row;
-        align-items: center;
-        padding: 14px 20px;
-        z-index: 400;
-        overflow-x: auto;
-        gap: 12px;
-      }
-
       .sidebar-user-card { display: none; }
-      .admin-logo { margin-bottom: 0; flex-shrink: 0; font-size: 1.1rem; }
-      .admin-nav { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: 4px; flex: 1; }
-      .admin-nav-item a { padding: 9px 12px; font-size: 0.82rem; white-space: nowrap; gap: 8px; }
       .nav-divider { display: none; }
       .sidebar-bottom { flex-direction: row; border-top: none; padding-top: 0; flex-shrink: 0; gap: 6px; }
       .sidebar-bottom .btn { width: auto; padding: 9px 12px; font-size: 0.82rem; white-space: nowrap; }
-
-      .admin-main { padding: 24px; }
       .stats-summary-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-      .admin-sidebar {
-        position: fixed !important;
-        left: -290px;
-        top: 0;
-        width: 270px !important;
-        height: 100vh !important;
-        flex-direction: column !important;
-        padding: 28px 20px !important;
-        overflow-y: auto;
-        overflow-x: hidden;
-        gap: 0 !important;
-        z-index: 500 !important;
-        transition: left 0.35s cubic-bezier(0.16,1,0.3,1) !important;
-      }
-
-      .admin-sidebar.sidebar-open { left: 0 !important; }
       .sidebar-user-card { display: flex; }
-      .admin-logo { margin-bottom: 20px !important; font-size: 1.3rem !important; }
-      .admin-nav { flex-direction: column !important; flex-wrap: nowrap !important; overflow-x: visible !important; gap: 6px !important; }
-      .admin-nav-item a { padding: 13px 16px !important; font-size: 0.9rem !important; gap: 14px !important; white-space: normal !important; }
       .nav-divider { display: block; }
       .sidebar-bottom { flex-direction: column !important; border-top: 1px solid var(--border-color) !important; padding-top: 16px !important; gap: 10px !important; }
       .sidebar-bottom .btn { width: 100% !important; padding: 11px 16px !important; font-size: 0.875rem !important; }
@@ -3641,8 +3166,6 @@ body {
 
       .mobile-topbar-logo i { color: var(--primary); }
       .hamburger-btn { display: flex; }
-      .admin-main { padding: 16px !important; }
-      .admin-header { flex-direction: column; align-items: flex-start; }
       .toolbar-pro { flex-direction: column; align-items: stretch; }
       .filters-left { flex-direction: column; align-items: stretch; }
       .search-input-wrapper { min-width: 100%; }
@@ -4930,10 +4453,6 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-}
-
-.admin-table {
-  font-size: 0.82rem;
 }
 
 .dashboard-div-label-2 {
