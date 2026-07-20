@@ -1,0 +1,31 @@
+<div class="module-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <div>
+    <h2 style="margin: 0; font-size: 1.5rem;">Motor de Automações</h2>
+    <p style="color: var(--text-muted); margin: 0.5rem 0 0 0; font-size: 0.95rem;">Gatilhos proativos baseados em eventos do CRM (Event-Driven).</p>
+  </div>
+  
+  <div>
+    <button class="btn btn-primary" id="btn-nova-regra" style="padding: 0.75rem 1.5rem; border-radius: 10px; background: var(--primary-color); color: white; border: none; font-weight: 500; cursor: pointer;">
+      <i class="fas fa-bolt"></i> Nova Regra
+    </button>
+  </div>
+</div>
+
+<div class="glass-card" style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
+  <div style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color);">
+    <h3 style="margin: 0; font-size: 1.1rem;">Regras Ativas (SE ➝ ENTÃO)</h3>
+  </div>
+  <table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <thead>
+      <tr style="background: var(--bg-input); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+        <th style="padding: 1rem 1.5rem; font-weight: 600;">Regra</th>
+        <th style="padding: 1rem 1.5rem; font-weight: 600;">Quando (Gatilho)</th>
+        <th style="padding: 1rem 1.5rem; font-weight: 600;">Então (Ação)</th>
+        <th style="padding: 1rem 1.5rem; font-weight: 600; text-align: center;">Status</th>
+      </tr>
+    </thead>
+    <tbody id="automacoes-list">
+      <tr><td colspan="4" style="text-align:center; padding: 2rem; color: var(--text-muted);">Carregando...</td></tr>
+    </tbody>
+  </table>
+</div>

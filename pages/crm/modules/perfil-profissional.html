@@ -1,0 +1,98 @@
+<div style="margin-bottom: 2rem;">
+  <a href="#profissionais" style="text-decoration: none; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; font-weight: 500; margin-bottom: 1rem;">
+    <i class="fas fa-arrow-left"></i> Voltar à lista
+  </a>
+</div>
+
+<!-- Header de Perfil Glassmorphism -->
+<div style="background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color); padding: 2rem; display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+  <div style="width: 100px; height: 100px; border-radius: 24px; background: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; box-shadow: 0 10px 20px rgba(0, 113, 227, 0.2);">
+    M
+  </div>
+  <div style="flex-grow: 1;">
+    <h2 style="margin: 0; font-size: 1.8rem; display: flex; align-items: center; gap: 0.5rem;">
+      Dr(a). Maria Silva 
+      <span style="background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">Ativo</span>
+    </h2>
+    <p style="color: var(--text-muted); margin: 0.5rem 0; font-size: 1rem;">Psicologia Clínica • CRP: 12345/SP</p>
+    
+    <div style="display: flex; gap: 1.5rem; margin-top: 1rem; color: var(--text-dark); font-size: 0.9rem;">
+      <span><i class="fab fa-whatsapp" style="color: #25D366; margin-right: 4px;"></i> (11) 98888-7777</span>
+      <span><i class="fas fa-envelope" style="color: var(--text-muted); margin-right: 4px;"></i> maria@clinicazoe.com</span>
+      <span style="color: var(--text-muted);"><i class="fas fa-user-circle" style="margin-right: 4px;"></i> Usuário vinculado: Sim</span>
+    </div>
+  </div>
+  <div>
+    <button class="btn" data-permission="profissionais.editar" style="padding: 0.75rem 1.5rem; border-radius: 10px; background: var(--bg-hover); color: var(--text-dark); border: 1px solid var(--border-color); font-weight: 500; cursor: pointer;">
+      <i class="fas fa-edit"></i> Editar Perfil
+    </button>
+  </div>
+</div>
+
+<!-- Tabs de Configuração -->
+<div style="display: flex; gap: 2rem; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; overflow-x: auto;">
+  <a href="#" style="padding: 1rem 0; color: var(--primary-color); font-weight: 600; border-bottom: 2px solid var(--primary-color); text-decoration: none;">Dados & Valores</a>
+  <a href="#" style="padding: 1rem 0; color: var(--text-muted); font-weight: 500; text-decoration: none;">Agenda & Bloqueios</a>
+  <a href="#" style="padding: 1rem 0; color: var(--text-muted); font-weight: 500; text-decoration: none;">Especialidades</a>
+  <a href="#" style="padding: 1rem 0; color: var(--text-muted); font-weight: 500; text-decoration: none;">Desempenho (Financeiro)</a>
+</div>
+
+<!-- Área de Conteúdo da Tab -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+  
+  <!-- Coluna 1: Informações -->
+  <div style="background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color); padding: 2rem;">
+    <h3 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.2rem;">Dados Profissionais</h3>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      <div>
+        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">Nome Completo</label>
+        <div style="font-weight: 500;">Maria Eduarda Silva</div>
+      </div>
+      <div>
+        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">CPF</label>
+        <div style="font-weight: 500;">***.456.789-**</div>
+      </div>
+      <div style="grid-column: span 2;">
+        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">Biografia / Resumo</label>
+        <div style="font-weight: 400; line-height: 1.5; color: var(--text-dark);">
+          Especialista em TCC com 8 anos de experiência em atendimento clínico adulto e ansiedade.
+        </div>
+      </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
+
+    <h3 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.2rem;">Financeiro & Repasse (Prepara Etapa 10)</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+      <div>
+        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">Valor da Sessão</label>
+        <div style="font-weight: 500; color: var(--primary-color);">R$ 250,00</div>
+      </div>
+      <div>
+        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">Comissão / Repasse</label>
+        <div style="font-weight: 500;">60%</div>
+      </div>
+      <div>
+        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">Chave PIX</label>
+        <div style="font-weight: 500;">+5511988887777</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coluna 2: Status do Sistema -->
+  <div style="display: flex; flex-direction: column; gap: 2rem;">
+    <div style="background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color); padding: 1.5rem;">
+      <h3 style="margin-top: 0; font-size: 1.1rem;">Acesso ao Sistema</h3>
+      <div style="background: var(--bg-hover); padding: 1rem; border-radius: 12px; margin-top: 1rem; border: 1px solid var(--border-color);">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+          <i class="fas fa-check-circle" style="color: #28a745;"></i> 
+          <strong style="font-size: 0.95rem;">Conta Vinculada</strong>
+        </div>
+        <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">
+          Este profissional pode realizar login no painel e tem acesso ao módulo de consultas.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

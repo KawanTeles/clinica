@@ -1,0 +1,60 @@
+<div class="module-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <div>
+    <h2 style="margin: 0; font-size: 1.5rem;">Comunicação & Mensageria</h2>
+    <p style="color: var(--text-muted); margin: 0.5rem 0 0 0; font-size: 0.95rem;">Fila de disparos de WhatsApp, e-mails e histórico integrado.</p>
+  </div>
+  
+  <div style="display: flex; gap: 1rem;">
+    <button class="btn btn-icon" id="btn-refresh-notif" style="padding: 0.75rem; border-radius: 10px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-dark); cursor: pointer;" title="Atualizar Fila">
+      <i class="fas fa-sync-alt"></i> Atualizar Fila
+    </button>
+  </div>
+</div>
+
+<!-- Indicadores Rápidos -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+  <div class="glass-card" style="padding: 1.5rem; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;">
+    <div style="background: rgba(0, 113, 227, 0.1); color: var(--primary-color); padding: 1rem; border-radius: 12px;"><i class="fas fa-paper-plane fa-lg"></i></div>
+    <div>
+      <div style="color: var(--text-muted); font-size: 0.85rem;">Enviadas (Hoje)</div>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark);" id="stat-enviadas">--</div>
+    </div>
+  </div>
+  <div class="glass-card" style="padding: 1.5rem; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;">
+    <div style="background: rgba(255, 149, 0, 0.1); color: var(--warning-color); padding: 1rem; border-radius: 12px;"><i class="fas fa-hourglass-half fa-lg"></i></div>
+    <div>
+      <div style="color: var(--text-muted); font-size: 0.85rem;">Na Fila (Pendentes)</div>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark);" id="stat-pendentes">--</div>
+    </div>
+  </div>
+  <div class="glass-card" style="padding: 1.5rem; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;">
+    <div style="background: rgba(255, 59, 48, 0.1); color: var(--danger-color); padding: 1rem; border-radius: 12px;"><i class="fas fa-exclamation-triangle fa-lg"></i></div>
+    <div>
+      <div style="color: var(--text-muted); font-size: 0.85rem;">Falhas</div>
+      <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark);" id="stat-falhas">--</div>
+    </div>
+  </div>
+</div>
+
+<div class="glass-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden;">
+  <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+    <h3 style="margin: 0; font-size: 1.1rem;">Fila de Mensagens</h3>
+    <span style="font-size: 0.85rem; color: var(--text-muted);"><i class="fab fa-whatsapp"></i> Provedor: Automático</span>
+  </div>
+  <div style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead>
+        <tr style="background: var(--bg-input); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
+          <th style="padding: 1rem 1.5rem; font-weight: 600;">Data/Hora</th>
+          <th style="padding: 1rem 1.5rem; font-weight: 600;">Destinatário</th>
+          <th style="padding: 1rem 1.5rem; font-weight: 600;">Canal</th>
+          <th style="padding: 1rem 1.5rem; font-weight: 600;">Status</th>
+          <th style="padding: 1rem 1.5rem; font-weight: 600;">Tentativas</th>
+        </tr>
+      </thead>
+      <tbody id="notificacoes-table-body">
+        <tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Carregando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>

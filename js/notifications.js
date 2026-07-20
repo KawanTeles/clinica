@@ -66,3 +66,4 @@ const Notifications = {
 };
 
 window.Notifications = Notifications;
+export { Notifications };

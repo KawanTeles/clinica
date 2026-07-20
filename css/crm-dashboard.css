@@ -1,0 +1,165 @@
+/* css/crm-dashboard.css - Estilos Premium Apple para Container do Dashboard */
+
+body.crm-body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-body, #f5f5f7);
+  font-family: var(--font-main, 'Inter', sans-serif);
+  color: var(--text-dark, #1d1d1f);
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.crm-sidebar {
+  width: 260px;
+  background: var(--bg-card, #ffffff);
+  border-right: 1px solid var(--border-color, #e5e5ea);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.crm-sidebar-logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color, #0071e3);
+  margin-bottom: 2.5rem;
+  padding-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.crm-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.crm-nav li {
+  margin-bottom: 0.5rem;
+}
+
+.crm-nav a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-muted, #86868b);
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.crm-nav a:hover, .crm-nav a.active {
+  background: var(--bg-hover, #f0f0f5);
+  color: var(--primary-color, #0071e3);
+}
+
+.crm-nav a i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.crm-user-profile {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e5e5ea);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.crm-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.crm-user-info h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+.crm-user-info span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.crm-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-body, #f5f5f7);
+  min-height: 0;
+  min-width: 0;
+}
+
+.crm-header {
+  height: 70px;
+  background: var(--bg-card, rgba(255, 255, 255, 0.8));
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--border-color, #e5e5ea);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.crm-content-area {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast-message {
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  animation: slideInRight 0.3s ease forwards;
+  border-left: 4px solid var(--primary-color);
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+[data-theme="dark"] .crm-sidebar, [data-theme="dark"] .crm-header {
+  background: #1c1c1e;
+  border-color: #333336;
+}
+[data-theme="dark"] .crm-nav a:hover, [data-theme="dark"] .crm-nav a.active {
+  background: #2c2c2e;
+}

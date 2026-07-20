@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Portal | Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/darkmode.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    body {
+      background: var(--bg-body);
+      color: var(--text-dark);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .portal-header {
+      background: var(--bg-card);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .portal-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .appointment-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: transform 0.2s;
+    }
+    .appointment-card:hover {
+      transform: translateY(-2px);
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .btn-portal {
+      padding: 0.85rem;
+      border-radius: 10px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      transition: opacity 0.2s;
+    }
+    .btn-confirm { background: var(--success-color); color: white; }
+    .btn-cancel { background: transparent; border: 1px solid var(--danger-color); color: var(--danger-color); }
+    .btn-reschedule { background: var(--bg-input); color: var(--text-dark); border: 1px solid var(--border-color); }
+    
+    @media (max-width: 600px) {
+      .action-buttons { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="portal-header">
+    <div style="font-size: 1.25rem; font-weight: 600; color: var(--primary-color);">
+      <i class="fas fa-hand-holding-heart"></i> Clínica Zoe
+    </div>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <span id="user-greeting" style="font-size: 0.9rem; font-weight: 500; display: none;"></span>
+      <button id="btn-logout" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem;"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </header>
+
+  <main class="portal-container">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+      <div>
+        <h1 style="margin: 0 0 0.25rem 0; font-size: 1.5rem;">Próximas Consultas</h1>
+        <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">Acompanhe seus agendamentos confirmados.</p>
+      </div>
+      <button id="btn-lgpd" style="background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 1.5rem;"><i class="fas fa-cog"></i></button>
+    </div>
+
+    <div id="agendamentos-list">
+      <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <p>Carregando...</p>
+      </div>
+    </div>
+
+    <h2 style="margin: 3rem 0 1rem 0; font-size: 1.25rem;">Histórico</h2>
+    <div id="historico-list" style="opacity: 0.8;">
+      <div style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem;">
+        Carregando histórico...
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal LGPD -->
+  <div class="modal-overlay" id="modal-lgpd" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+    <div class="modal-content" style="background: var(--bg-card); padding: 2rem; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid var(--border-color);">
+      <h3 style="margin-top:0;">Preferências de Comunicação</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Escolha como deseja receber lembretes e links da Clínica Zoe.</p>
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <label style="font-weight: 500;"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp</label>
+        <input type="checkbox" id="pref-whatsapp" style="width:1.2rem; height:1.2rem;">
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+        <label style="font-weight: 500;"><i class="fas fa-envelope"></i> E-mail</label>
+        <input type="checkbox" id="pref-email" style="width:1.2rem; height:1.2rem;">
+      </div>
+      
+      <div style="display:flex; gap:1rem;">
+        <button id="btn-fechar-lgpd" class="btn-portal btn-reschedule">Cancelar</button>
+        <button id="btn-salvar-lgpd" class="btn-portal" style="background: var(--primary-color); color: white;">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { PortalController } from '../../js/controllers/portal.controller.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      new PortalController();
+    });
+  </script>
+</body>
+</html>

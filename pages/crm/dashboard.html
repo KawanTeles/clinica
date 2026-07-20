@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Zoe CRM</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/darkmode.css">
+  <link rel="stylesheet" href="../../css/crm-dashboard.css">
+  <link rel="stylesheet" href="../../css/crm-agenda.css">
+  <script src="../../js/theme.js"></script>
+</head>
+<body class="crm-body">
+
+  <!-- Sidebar Modular (Protegida por RBAC) -->
+  <aside class="crm-sidebar" id="sidebar">
+    <div class="crm-sidebar-logo">
+      <i class="fas fa-hand-holding-heart"></i> Zoe CRM
+    </div>
+
+    <ul class="crm-nav">
+      <li>
+        <a href="#dashboard" class="nav-link active" data-module-permission="dashboard.visualizar">
+          <i class="fas fa-chart-pie"></i> Visão Geral
+        </a>
+      </li>
+      <li>
+        <a href="#agenda" class="nav-link" data-module-permission="agenda.visualizar">
+          <i class="far fa-calendar-alt"></i> Agenda
+        </a>
+      </li>
+      <li>
+        <a href="#aprovacoes" class="nav-link" data-module-permission="agenda.visualizar">
+          <i class="fas fa-clipboard-check"></i> Aprovações
+        </a>
+      </li>
+      <li>
+        <a href="#pacientes" class="nav-link" data-module-permission="pacientes.visualizar">
+          <i class="fas fa-users"></i> Pacientes (360)
+        </a>
+      </li>
+      <li>
+        <a href="#leads" class="nav-link" data-module-permission="leads.visualizar">
+          <i class="fas fa-filter"></i> Leads (Funil)
+        </a>
+      </li>
+      <li>
+        <a href="#financeiro" class="nav-link" data-module-permission="financeiro.visualizar">
+          <i class="fas fa-wallet"></i> Financeiro (ERP)
+        </a>
+      </li>
+      <li>
+        <a href="#marketing" class="nav-link" data-module-permission="marketing.gerenciar">
+          <i class="fas fa-bullhorn"></i> Marketing
+        </a>
+      </li>
+      <li>
+        <a href="#automacoes" class="nav-link" data-module-permission="automacoes.gerenciar">
+          <i class="fas fa-bolt"></i> Automações
+        </a>
+      </li>
+      <li>
+        <a href="#notificacoes" class="nav-link" data-module-permission="notificacoes.visualizar">
+          <i class="fas fa-paper-plane"></i> Mensageria
+        </a>
+      </li>
+      <li>
+        <a href="#usuarios" class="nav-link" data-module-permission="usuarios.visualizar">
+          <i class="fas fa-user-shield"></i> Gestão de Acessos
+        </a>
+      </li>
+      <li>
+        <a href="#profissionais" class="nav-link" data-module-permission="profissionais.visualizar">
+          <i class="fas fa-user-md"></i> Corpo Clínico
+        </a>
+      </li>
+      <li style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+        <a href="#especialidades" class="nav-link" data-module-permission="configuracoes.visualizar">
+          <i class="fas fa-cogs"></i> Config. Gerais
+        </a>
+      </li>
+    </ul>
+
+    <div class="crm-user-profile">
+      <div class="crm-user-avatar" id="user-avatar-initials">--</div>
+      <div class="crm-user-info">
+        <h4 id="user-name-display">Carregando...</h4>
+        <span id="user-role-display">Aguarde</span>
+      </div>
+      <button id="btn-logout" title="Sair" style="margin-left: auto; background: none; border: none; color: var(--text-muted); cursor: pointer;">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Área Principal -->
+  <main class="crm-main">
+    <header class="crm-header">
+      <h2 id="page-title">Carregando...</h2>
+    </header>
+
+    <div class="crm-content-area" id="dynamic-module-container">
+      <!-- Módulos injetados dinamicamente via Hash Router -->
+      <div style="display: flex; align-items: center; justify-content: center; height: 50vh;">
+        <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary-color);"></i>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { authGuard } from '../../js/guards/auth.guard.js';
+    import { SessionService } from '../../js/session.service.js';
+    import { AuthService } from '../../js/auth.service.js';
+    import { RoleManager } from '../../js/components/RoleManager.js';
+
+    // Controllers
+    import { UsuariosController } from '../../js/controllers/usuarios.controller.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Validar Sessão
+      const isAuthenticated = await authGuard();
+      if (!isAuthenticated) return;
+
+      // 2. Popular UI 
+      const session = SessionService.getSession();
+      if (session) {
+        document.getElementById('user-name-display').textContent = session.nome.split(' ')[0];
+        document.getElementById('user-role-display').textContent = session.cargo;
+        document.getElementById('user-avatar-initials').textContent = session.nome.substring(0, 2).toUpperCase();
+      }
+
+      // 3. Aplicar RBAC na Sidebar
+      RoleManager.applyPermissions(document.getElementById('sidebar'));
+
+      // Logout handler
+      document.getElementById('btn-logout').addEventListener('click', () => AuthService.logout());
+
+      // 4. SPA Router Simples
+      const container = document.getElementById('dynamic-module-container');
+      const title = document.getElementById('page-title');
+
+      async function loadModule() {
+        let hash = window.location.hash.substring(1) || 'dashboard';
+        
+        // Atualizar menu ativo
+        document.querySelectorAll('.crm-nav a').forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.crm-nav a[href="#${hash}"]`);
+        if (activeLink) activeLink.classList.add('active');
+
+        // Renderizar Módulos
+        try {
+          if (hash === 'dashboard') {
+            title.textContent = 'Visão Geral';
+            const { DashboardController } = await import('../../js/controllers/dashboard.controller.js');
+            const response = await fetch('./modules/overview.html');
+            container.innerHTML = await response.text();
+            
+            new DashboardController(container);
+          } 
+          else if (hash === 'agenda') {
+            title.textContent = 'Agenda Inteligente';
+            const { AgendaController } = await import('../../js/controllers/agenda.controller.js');
+            const response = await fetch('./modules/agenda.html');
+            container.innerHTML = await response.text();
+            
+            new AgendaController(container);
+          }
+          else if (hash === 'aprovacoes') {
+            title.textContent = 'Aprovação de Consultas';
+            const { AprovacoesController } = await import('../../js/controllers/aprovacoes.controller.js');
+            const response = await fetch('./modules/aprovacoes.html');
+            container.innerHTML = await response.text();
+            
+            new AprovacoesController(container);
+          }
+          else if (hash === 'pacientes') {
+            title.textContent = 'Visão 360° do Paciente';
+            const { PacientesController } = await import('../../js/controllers/pacientes.controller.js');
+            const response = await fetch('./modules/pacientes.html');
+            container.innerHTML = await response.text();
+            
+            new PacientesController(container);
+          }
+          else if (hash === 'leads') {
+            title.textContent = 'Funil Comercial';
+            const { LeadsController } = await import('../../js/controllers/leads.controller.js');
+            const response = await fetch('./modules/leads.html');
+            container.innerHTML = await response.text();
+            
+            new LeadsController(container);
+          }
+          else if (hash === 'financeiro') {
+            title.textContent = 'ERP Financeiro';
+            const { FinanceiroController } = await import('../../js/controllers/financeiro.controller.js');
+            const response = await fetch('./modules/financeiro.html');
+            container.innerHTML = await response.text();
+            
+            new FinanceiroController(container);
+          }
+          else if (hash === 'marketing') {
+            title.textContent = 'Marketing & Relacionamento';
+            const { MarketingController } = await import('../../js/controllers/marketing.controller.js');
+            const response = await fetch('./modules/marketing.html');
+            container.innerHTML = await response.text();
+            
+            new MarketingController(container);
+          }
+          else if (hash === 'automacoes') {
+            title.textContent = 'Motor de Automações';
+            const { AutomacoesController } = await import('../../js/controllers/automacoes.controller.js');
+            const response = await fetch('./modules/automacoes.html');
+            container.innerHTML = await response.text();
+            
+            new AutomacoesController(container);
+          }
+          else if (hash === 'usuarios') {
+            title.textContent = 'Configurações de Acesso';
+            const response = await fetch('./modules/usuarios.html');
+            const html = await response.text();
+            container.innerHTML = html;
+            
+            new UsuariosController(container);
+          }
+          else if (hash === 'notificacoes') {
+            title.textContent = 'Fila de Mensageria (WhatsApp)';
+            const { NotificacoesController } = await import('../../js/controllers/notificacoes.controller.js');
+            const response = await fetch('./modules/notificacoes.html');
+            container.innerHTML = await response.text();
+            
+            new NotificacoesController(container);
+          }
+          else if (hash === 'profissionais') {
+            title.textContent = 'Corpo Clínico';
+            const { ProfissionaisController } = await import('../../js/controllers/profissionais.controller.js');
+            const response = await fetch('./modules/profissionais.html');
+            container.innerHTML = await response.text();
+            
+            new ProfissionaisController(container);
+          }
+          else if (hash === 'especialidades') {
+            title.textContent = 'Especialidades e Setup';
+            const { EspecialidadesController } = await import('../../js/controllers/especialidades.controller.js');
+            const response = await fetch('./modules/especialidades.html');
+            container.innerHTML = await response.text();
+            
+            new EspecialidadesController(container);
+          }
+          else if (hash.startsWith('perfil-profissional')) {
+            title.textContent = 'Perfil do Profissional';
+            const response = await fetch('./modules/perfil-profissional.html');
+            container.innerHTML = await response.text();
+            RoleManager.applyPermissions(container); // Aplica RBAC no mock
+          }
+          else {
+            title.textContent = 'Em construção';
+            container.innerHTML = `<p class="text-muted">Módulo <b>${hash}</b> ainda não implementado (Fase seguinte).</p>`;
+          }
+        } catch (e) {
+          container.innerHTML = `<p style="color:red;">Erro ao carregar módulo: ${e.message}</p>`;
+        }
+      }
+
+      window.addEventListener('hashchange', loadModule);
+      loadModule(); // Load initial route
+    });
+  </script>
+</body>
+</html>
