@@ -544,12 +544,6 @@ img, video, iframe, embed, object {
     grid-template-columns: 1fr !important;
   }
 
-  /* ── Login container ── */
-  .login-container {
-    margin: 60px auto !important;
-    padding: 28px 20px !important;
-  }
-
   /* ── Highlight cards reduce padding ── */
   .highlight-card {
     padding: 28px !important;
@@ -804,12 +798,6 @@ img, video, iframe, embed, object {
     border-radius: var(--radius-full) !important;
   }
 
-  /* ── Login container ── */
-  .login-container {
-    margin: 40px 8px !important;
-    padding: 24px 16px !important;
-  }
-
   /* ── Contato form ── */
   #contato-form {
     padding: 24px 16px !important;
@@ -1011,16 +999,6 @@ img, video, iframe, embed, object {
 
   .cookie-content p {
     font-size: 0.8rem;
-  }
-
-  /* ── Login page ── */
-  .login-container {
-    margin: 30px 6px !important;
-    padding: 20px 12px !important;
-  }
-
-  .login-header h1 {
-    font-size: 1.3rem;
   }
 
   /* ── Booking wrapper ── */
@@ -1592,28 +1570,12 @@ img, video, iframe, embed, object {
     flex-direction: column;
   }
 
-  .legal-page,
-  .login-body-section,
-  .agendamento-body-section {
-    padding-top: 104px !important;
-  }
-
   .legal-container {
     line-height: 1.7;
   }
 
   .legal-subtitle {
     font-size: 1.25rem;
-  }
-
-  .login-container {
-    width: 100%;
-    max-width: 420px;
-  }
-
-  .login-form-group-div {
-    gap: 8px;
-    align-items: flex-start;
   }
 }
 
