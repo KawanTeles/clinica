@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       body[data-role="recepcionista"] .admin-nav-item[href="profissionais.html"],
       body[data-role="recepcionista"] .admin-nav-item[href="configuracoes.html"],
       body[data-role="recepcionista"] .admin-nav-item[href="crm-automations.html"],
+      body[data-role="recepcionista"] .admin-nav-item[href="crm-whatsapp.html"],
+      body[data-role="recepcionista"] .admin-nav-item[href="crm-analytics.html"],
       body[data-role="recepcionista"] .admin-nav-item[href="dashboard.html"] { display: none !important; }
       
       body[data-role="profissional"] .admin-only,
@@ -68,6 +70,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       body[data-role="profissional"] .admin-nav-item[href="profissionais.html"],
       body[data-role="profissional"] .admin-nav-item[href="configuracoes.html"],
       body[data-role="profissional"] .admin-nav-item[href="crm-automations.html"],
+      body[data-role="profissional"] .admin-nav-item[href="crm-whatsapp.html"],
+      body[data-role="profissional"] .admin-nav-item[href="crm-analytics.html"],
       body[data-role="profissional"] .admin-nav-item[href="dashboard.html"] { display: none !important; }
     `;
     document.head.appendChild(style);
@@ -81,16 +85,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     } 
     else if (roleName === 'RECEPCIONISTA') {
-      // Recepcionista só acessa agenda e pacientes
-      const allowedPages = ['agenda.html', 'pacientes.html', 'crm.html'];
+      // Recepcionista acessa agenda, pacientes, crm e feedbacks
+      const allowedPages = ['agenda.html', 'pacientes.html', 'crm.html', 'crm-feedback.html'];
       if (isLoginPage || !allowedPages.includes(filename)) {
         window.location.href = 'agenda.html';
         return;
       }
     } 
     else if (roleName === 'PROFISSIONAL') {
-      // Profissional acessa apenas sua agenda e pacientes
-      const allowedPages = ['agenda.html', 'pacientes.html'];
+      // Profissional acessa agenda, pacientes e feedbacks (apenas dos seus pacientes via RLS)
+      const allowedPages = ['agenda.html', 'pacientes.html', 'crm-feedback.html'];
       if (isLoginPage || !allowedPages.includes(filename)) {
         window.location.href = 'agenda.html';
         return;

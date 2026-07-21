@@ -2,6 +2,8 @@ import { CrmJobsRepository } from '../repositories/crm-jobs.repository.js';
 import { CrmRepository } from '../repositories/crm.repository.js';
 import { CrmUsersRepository } from '../repositories/crm-users.repository.js';
 import { CrmAutomationRulesRepository } from '../repositories/crm-automation-rules.repository.js';
+import { CrmEventsRepository } from '../repositories/crm-events.repository.js';
+import { AgendaRepository } from '../repositories/agenda.repository.js';
 import { CrmMessageWorkerService } from './crm-message-worker.service.js';
 
 export class CrmSchedulerService {
@@ -10,13 +12,17 @@ export class CrmSchedulerService {
   }
 
   /**
-   * Processa a fila de jobs pendentes
+   * Processa a fila de jobs pendentes e gera eventos baseados em tempo.
    */
   async processQueue() {
     if (this.isRunning) return;
     this.isRunning = true;
 
     try {
+      // 1. Gerar novos eventos baseados no tempo (ex: Lembretes 24h)
+      await this.generateTimeBasedEvents();
+
+      // 2. Processar a fila normal de Jobs (originados por eventos)
       const jobs = await CrmJobsRepository.getPendingJobs(20);
       
       if (jobs.length > 0) {
@@ -31,6 +37,36 @@ export class CrmSchedulerService {
       console.error('[SchedulerService] Erro ao processar fila:', err);
     } finally {
       this.isRunning = false;
+    }
+  }
+
+  /**
+   * Identifica eventos temporais como APPOINTMENT_REMINDER_24H e os injeta em crm_events
+   */
+  async generateTimeBasedEvents() {
+    try {
+      const proximasConsultas = await AgendaRepository.getConsultasParaLembrete24h();
+      for (const appt of proximasConsultas) {
+        // Evitar duplicidade
+        const alreadyHasEvent = await CrmEventsRepository.hasEventForAppointment(appt.id, 'APPOINTMENT_REMINDER_24H');
+        if (!alreadyHasEvent) {
+          await CrmEventsRepository.createEvent({
+            clinic_id: appt.clinic_id,
+            patient_id: appt.patient_id,
+            event_type: 'APPOINTMENT_REMINDER_24H',
+            payload: {
+              appointment_id: appt.id,
+              professional_id: appt.professional_id,
+              professional_name: appt.professionals?.nome || 'Profissional',
+              date: appt.data,
+              time: appt.hora_inicio
+            }
+          });
+          console.log(`[SchedulerService] Lembrete de 24h gerado para consulta ${appt.id}`);
+        }
+      }
+    } catch (err) {
+      console.error('[SchedulerService] Erro ao gerar eventos temporais:', err);
     }
   }
 

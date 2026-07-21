@@ -8,6 +8,19 @@ export class CrmEventsRepository {
     return data;
   }
 
+  // Verificar duplicidade de evento para um appointment
+  static async hasEventForAppointment(appointmentId, eventType) {
+    const { data, error } = await supabase
+      .from('crm_events')
+      .select('id')
+      .eq('event_type', eventType)
+      .contains('payload', { appointment_id: appointmentId })
+      .limit(1);
+    
+    if (error) throw error;
+    return data && data.length > 0;
+  }
+
   // Buscar eventos pendentes de processamento
   static async getPendingEvents(clinicId, limit = 50) {
     let query = supabase

@@ -12,13 +12,16 @@ export class CrmJobsRepository {
 
   /**
    * Busca jobs pendentes para execução que já estão no momento ou passaram da hora agendada.
+   * Também busca jobs travados em 'processing' por mais de 10 minutos (Timeout fallback).
    */
   static async getPendingJobs(limit = 20) {
+    const now = new Date().toISOString();
+    const tenMinsAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+
     const { data, error } = await supabase
       .from('crm_jobs')
       .select('*, crm_automation_rules(*), crm_events(*)')
-      .eq('status', 'pending')
-      .lte('scheduled_at', new Date().toISOString())
+      .or(`and(status.eq.pending,scheduled_at.lte.${now}),and(status.eq.processing,updated_at.lte.${tenMinsAgo})`)
       .order('scheduled_at', { ascending: true })
       .limit(limit);
 

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integração WhatsApp - Clínica Zoe</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../css/admin/dashboard.css">
+  <link rel="stylesheet" href="../../css/admin/crm-whatsapp.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="header-left">
+      <div class="logo">Clínica Zoe</div>
+    </div>
+    <div class="header-right">
+      <div class="user-profile">
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <span class="user-name" id="user-name-display">Carregando...</span>
+      </div>
+      <button id="btn-logout" class="btn-logout" title="Sair do sistema">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <nav class="admin-nav">
+        <a href="dashboard.html" class="admin-nav-item">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="agenda.html" class="admin-nav-item">
+          <i class="fas fa-calendar-alt"></i> Agenda
+        </a>
+        <a href="pacientes.html" class="admin-nav-item">
+          <i class="fas fa-users"></i> Pacientes
+        </a>
+        <a href="financeiro.html" class="admin-nav-item">
+          <i class="fas fa-dollar-sign"></i> Financeiro
+        </a>
+        
+        <div class="nav-divider"></div>
+        <div class="nav-section-title">CRM & Automação</div>
+        <a href="crm.html" class="admin-nav-item">
+          <i class="fas fa-columns"></i> CRM Kanban
+        </a>
+        <a href="crm-automations.html" class="admin-nav-item">
+          <i class="fas fa-robot"></i> Automações
+        </a>
+        <a href="crm-whatsapp.html" class="admin-nav-item active">
+          <i class="fab fa-whatsapp"></i> Integração WhatsApp
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="page-header">
+        <h1>Configuração de WhatsApp</h1>
+        <p>Gerencie a conexão da sua clínica com provedores de disparo via WhatsApp.</p>
+      </div>
+
+      <!-- Dashboard Status -->
+      <div class="wa-dashboard">
+        <div class="stat-card">
+          <div class="stat-icon" id="status-icon"><i class="fas fa-plug"></i></div>
+          <div class="stat-info">
+            <h3>Status da Integração</h3>
+            <p id="stat-status">Não configurada</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon primary"><i class="fas fa-server"></i></div>
+          <div class="stat-info">
+            <h3>Provedor Ativo</h3>
+            <p id="stat-provider">Nenhum</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon success"><i class="fas fa-paper-plane"></i></div>
+          <div class="stat-info">
+            <h3>Última Mensagem</h3>
+            <p id="stat-last-msg">N/A</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="wa-settings-card">
+        <h2>Configurar Provedor</h2>
+        <form id="wa-config-form">
+          <input type="hidden" id="wa-id" value="">
+          
+          <div class="form-group">
+            <label for="wa-provider">Provedor de Disparo</label>
+            <select id="wa-provider" required>
+              <option value="" disabled selected>Selecione um provedor...</option>
+              <option value="MOCK">MOCK (Ambiente de Testes)</option>
+              <option value="EVOLUTION">Evolution API</option>
+              <option value="CLOUD_API">Meta Cloud API Oficial</option>
+            </select>
+          </div>
+
+          <!-- MOCK -->
+          <div id="fields-mock" class="provider-fields" style="display: none;">
+            <div class="info-alert">
+              <i class="fas fa-info-circle"></i> 
+              O provedor Mock simula envios no log sem cobrar créditos ou usar telefones reais. Excelente para testar automações.
+            </div>
+          </div>
+
+          <!-- EVOLUTION -->
+          <div id="fields-evolution" class="provider-fields" style="display: none;">
+            <div class="form-group">
+              <label for="evo-api-url">API URL base</label>
+              <input type="url" id="evo-api-url" placeholder="Ex: https://evo.suaclinica.com">
+            </div>
+            <div class="form-group">
+              <label for="evo-instance">Nome da Instância (Phone Number ID)</label>
+              <input type="text" id="evo-instance" placeholder="Ex: clinica-zoe-1">
+            </div>
+            <div class="form-group">
+              <label for="evo-apikey">Global API Key</label>
+              <input type="password" id="evo-apikey" placeholder="Sua Global API Key da Evolution">
+            </div>
+          </div>
+
+          <!-- CLOUD API -->
+          <div id="fields-cloud" class="provider-fields" style="display: none;">
+            <div class="form-group">
+              <label for="cloud-phone-id">Phone Number ID</label>
+              <input type="text" id="cloud-phone-id" placeholder="ID do número de telefone (Meta)">
+            </div>
+            <div class="form-group">
+              <label for="cloud-token">Access Token (Permanente)</label>
+              <input type="password" id="cloud-token" placeholder="Bearer Token Meta">
+            </div>
+            <div class="form-group">
+              <label for="cloud-webhook-secret">Webhook Verify Token (Opcional)</label>
+              <input type="text" id="cloud-webhook-secret" placeholder="Para assinar webhooks de retorno">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="btn-test-connection" class="btn btn-secondary">Testar Conexão</button>
+            <button type="submit" class="btn btn-primary">Salvar Integração</button>
+          </div>
+          
+          <div id="test-result" class="test-result" style="display: none;"></div>
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="../../js/admin/guard.js"></script>
+  <script type="module" src="../../js/admin/crm-whatsapp.js"></script>
+</body>
+</html>

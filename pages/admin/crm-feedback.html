@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedbacks e Satisfação - Clínica Zoe</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../css/admin/dashboard.css">
+  <link rel="stylesheet" href="../../css/admin/crm-feedback.css">
+</head>
+<body>
+  <header class="admin-header">
+    <div class="header-left">
+      <div class="logo">Clínica Zoe</div>
+    </div>
+    <div class="header-right">
+      <div class="user-profile">
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <span class="user-name" id="user-name-display">Carregando...</span>
+      </div>
+      <button id="btn-logout" class="btn-logout" title="Sair do sistema">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    <aside class="admin-sidebar">
+      <nav class="admin-nav">
+        <a href="dashboard.html" class="admin-nav-item">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="agenda.html" class="admin-nav-item">
+          <i class="fas fa-calendar-alt"></i> Agenda
+        </a>
+        <a href="pacientes.html" class="admin-nav-item">
+          <i class="fas fa-users"></i> Pacientes
+        </a>
+        <a href="financeiro.html" class="admin-nav-item admin-only">
+          <i class="fas fa-dollar-sign"></i> Financeiro
+        </a>
+        
+        <div class="nav-divider"></div>
+        <div class="nav-section-title">CRM & Automação</div>
+        <a href="crm.html" class="admin-nav-item">
+          <i class="fas fa-columns"></i> CRM Kanban
+        </a>
+        <a href="crm-automations.html" class="admin-nav-item admin-only">
+          <i class="fas fa-robot"></i> Automações
+        </a>
+        <a href="crm-whatsapp.html" class="admin-nav-item admin-only">
+          <i class="fab fa-whatsapp"></i> Integração WhatsApp
+        </a>
+        <a href="crm-analytics.html" class="admin-nav-item admin-only">
+          <i class="fas fa-chart-line"></i> Analytics CRM
+        </a>
+        <a href="crm-feedback.html" class="admin-nav-item active">
+          <i class="fas fa-star"></i> Pós-Atendimento
+        </a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="page-header">
+        <h1>Pesquisa de Satisfação Pós-Consulta</h1>
+        <p>Acompanhe o NPS e feedbacks dos pacientes após os atendimentos.</p>
+        <div class="header-actions">
+            <button id="btn-refresh" class="btn btn-secondary">
+                <i class="fas fa-sync-alt"></i> Atualizar
+            </button>
+        </div>
+      </div>
+
+      <!-- Métricas Superiores -->
+      <div class="feedback-grid">
+        <div class="metric-card">
+          <div class="metric-icon primary"><i class="fas fa-comment-dots"></i></div>
+          <div class="metric-content">
+            <h3>Total Avaliações</h3>
+            <div class="metric-value" id="val-total">0</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon success"><i class="fas fa-star"></i></div>
+          <div class="metric-content">
+            <h3>Média das Notas</h3>
+            <div class="metric-value" id="val-avg-rating">0.0</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon danger"><i class="fas fa-thumbs-down"></i></div>
+          <div class="metric-content">
+            <h3>Avaliações Negativas</h3>
+            <div class="metric-value" id="val-bad-ratings">0</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon info"><i class="fas fa-percent"></i></div>
+          <div class="metric-content">
+            <h3>Taxa de Resposta</h3>
+            <div class="metric-value" id="val-response-rate">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela de Feedbacks -->
+      <div class="feedback-section">
+        <div class="section-header">
+          <h2>Últimos Feedbacks Recebidos</h2>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Profissional</th>
+                <th>Nota</th>
+                <th>Comentário</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody id="feedbacks-tbody">
+              <!-- Renderizado via JS -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="empty-state" style="display: none;">
+            Nenhum feedback recebido ainda.
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="../../js/admin/guard.js"></script>
+  <script type="module" src="../../js/admin/crm-feedback.js"></script>
+</body>
+</html>

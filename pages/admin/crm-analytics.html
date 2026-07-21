@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM Analytics - Clínica Zoe</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../css/admin/dashboard.css">
+  <link rel="stylesheet" href="../../css/admin/crm-analytics.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="header-left">
+      <div class="logo">Clínica Zoe</div>
+    </div>
+    <div class="header-right">
+      <div class="user-profile">
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+        <span class="user-name" id="user-name-display">Carregando...</span>
+      </div>
+      <button id="btn-logout" class="btn-logout" title="Sair do sistema">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <nav class="admin-nav">
+        <a href="dashboard.html" class="admin-nav-item">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="agenda.html" class="admin-nav-item">
+          <i class="fas fa-calendar-alt"></i> Agenda
+        </a>
+        <a href="pacientes.html" class="admin-nav-item">
+          <i class="fas fa-users"></i> Pacientes
+        </a>
+        <a href="financeiro.html" class="admin-nav-item">
+          <i class="fas fa-dollar-sign"></i> Financeiro
+        </a>
+        
+        <div class="nav-divider"></div>
+        <div class="nav-section-title">CRM & Automação</div>
+        <a href="crm.html" class="admin-nav-item">
+          <i class="fas fa-columns"></i> CRM Kanban
+        </a>
+        <a href="crm-automations.html" class="admin-nav-item">
+          <i class="fas fa-robot"></i> Automações
+        </a>
+        <a href="crm-whatsapp.html" class="admin-nav-item">
+          <i class="fab fa-whatsapp"></i> Integração WhatsApp
+        </a>
+        <a href="crm-analytics.html" class="admin-nav-item active">
+          <i class="fas fa-chart-line"></i> Analytics CRM
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="page-header">
+        <h1>Dashboard CRM Analytics</h1>
+        <p>Monitoramento em tempo real do tráfego, filas e observabilidade de automações.</p>
+        <div class="header-actions">
+            <button id="btn-refresh" class="btn btn-secondary">
+                <i class="fas fa-sync-alt"></i> Atualizar Agora
+            </button>
+        </div>
+      </div>
+
+      <!-- Métricas Superiores -->
+      <div class="analytics-grid">
+        <div class="metric-card">
+          <div class="metric-icon primary"><i class="fas fa-paper-plane"></i></div>
+          <div class="metric-content">
+            <h3>Mensagens Hoje</h3>
+            <div class="metric-value" id="val-sent">0</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon success"><i class="fas fa-check-circle"></i></div>
+          <div class="metric-content">
+            <h3>Taxa de Entrega</h3>
+            <div class="metric-value" id="val-delivery">0%</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon warning"><i class="fas fa-hourglass-half"></i></div>
+          <div class="metric-content">
+            <h3>Jobs Pendentes</h3>
+            <div class="metric-value" id="val-pending">0</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon info"><i class="fas fa-stopwatch"></i></div>
+          <div class="metric-content">
+            <h3>Tempo Médio (s)</h3>
+            <div class="metric-value" id="val-avg-time">0s</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Últimos Erros -->
+      <div class="analytics-section">
+        <div class="section-header">
+          <h2>Falhas Recentes</h2>
+          <span class="badge danger" id="val-failed-count">0 falhas hoje</span>
+        </div>
+        <div class="errors-list" id="errors-container">
+          <div class="empty-state">
+            <i class="fas fa-check-circle text-success"></i>
+            <p>Nenhuma falha de automação recente. Tudo operando normalmente.</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="../../js/admin/guard.js"></script>
+  <script type="module" src="../../js/admin/crm-analytics.js"></script>
+</body>
+</html>

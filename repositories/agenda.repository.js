@@ -21,17 +21,142 @@ export class AgendaRepository {
             .lte('data', dataFim);
     }
 
+    static async getConsultasParaLembrete24h() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+        // Buscar consultas de amanhã que estão agendadas/confirmadas
+        // Em um sistema real pesado, faríamos a junção via RPC para excluir as que já tem evento.
+        // Como estamos num supabase-js limpo, buscamos e filtramos no backend.
+        const { data, error } = await supabase
+            .from('appointments')
+            .select('*, professionals(nome)')
+            .eq('data', tomorrowStr)
+            .in('status', ['solicitada', 'aguardando_aprovacao', 'confirmada', 'Agendado', 'agendado', 'pendente', 'Pendente']);
+            
+        if (error) throw error;
+        return data || [];
+    }
+
+    static async getProximaConsulta(patientId, clinicId) {
+        const { data, error } = await supabase
+            .from('appointments')
+            .select('*')
+            .eq('patient_id', patientId)
+            .eq('clinic_id', clinicId)
+            .in('status', ['Agendado', 'agendado', 'pendente', 'Pendente'])
+            .gte('data', new Date().toISOString().split('T')[0])
+            .order('data', { ascending: true })
+            .order('hora_inicio', { ascending: true })
+            .limit(1)
+            .single();
+
+        if (error && error.code !== 'PGRST116') throw error;
+        return data;
+    }
+
     static async atualizarStatus(appointmentId, novoStatus, observacao = '') {
-        return await supabase.rpc('update_appointment_status', {
+        const { data, error } = await supabase.rpc('update_appointment_status', {
             p_appointment_id: appointmentId,
             p_new_status: novoStatus,
             p_observacao: observacao
         });
+
+        if (error) throw error;
+
+        // Se o status foi alterado para concluída, gerar evento pós-atendimento
+        if (novoStatus.toLowerCase() === 'concluida' || novoStatus.toLowerCase() === 'concluída') {
+            try {
+                // Obter dados da consulta para o payload
+                const { data: appt } = await supabase
+                    .from('appointments')
+                    .select('patient_id, professional_id, clinic_id')
+                    .eq('id', appointmentId)
+                    .single();
+
+                if (appt) {
+                    // Inserir registro pendente no crm_feedbacks e gerar evento
+                    // A inserção do crm_feedbacks não foi explicitada no fluxo APPOINTMENT_COMPLETED (pois pode ser gerado no recebimento ou antes).
+                    // Para rastrear qual appointment está pendente de feedback, é bom ter um registro PENDING ou criar no webhook.
+                    // A regra pede para salvar rating no webhook. Podemos criar PENDING agora ou apenas registrar o evento e o webhook cria o feedback. O prompt diz:
+                    // Criar evento APPOINTMENT_COMPLETED com payload. O event -> job -> worker envia a msg. O webhook recebe nota -> atualiza ou insere crm_feedbacks.
+                    // Vamos criar o registro inicial PENDING na tabela crm_feedbacks aqui, para cruzar o appointment_id quando a nota chegar.
+                    
+                    const { data: feedbackData } = await supabase
+                        .from('crm_feedbacks')
+                        .insert({
+                            clinic_id: appt.clinic_id,
+                            patient_id: appt.patient_id,
+                            appointment_id: appointmentId,
+                            status: 'PENDING'
+                        })
+                        .select()
+                        .single();
+
+                    await supabase.from('crm_events').insert({
+                        clinic_id: appt.clinic_id,
+                        event_type: 'APPOINTMENT_COMPLETED',
+                        patient_id: appt.patient_id,
+                        payload: {
+                            appointment_id: appointmentId,
+                            professional_id: appt.professional_id,
+                            completed_at: new Date().toISOString(),
+                            feedback_id: feedbackData?.id
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error('Erro ao gerar evento pós-consulta:', err);
+            }
+        }
+
+        return { data, error };
     }
 
     static async criarAgendamento(payload) {
-        return await supabase
+        // 1. Criar a consulta
+        const { data, error } = await supabase
             .from('appointments')
-            .insert(payload);
+            .insert(payload)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        // 2. Gerar evento no CRM para a esteira de automações
+        try {
+            // Obter nome do profissional
+            let professionalName = 'Profissional';
+            if (payload.professional_id) {
+                const { data: prof } = await supabase
+                    .from('professionals')
+                    .select('nome')
+                    .eq('id', payload.professional_id)
+                    .single();
+                if (prof) professionalName = prof.nome;
+            }
+
+            // Formatar data (YYYY-MM-DD para DD/MM/YYYY se necessário, ou mandar cru)
+            // Mandando cru (YYYY-MM-DD), o Worker formata. Ou formatamos no JS.
+
+            await supabase.from('crm_events').insert({
+                clinic_id: payload.clinic_id,
+                event_type: 'APPOINTMENT_CREATED',
+                patient_id: payload.patient_id,
+                payload: {
+                    appointment_id: data.id,
+                    professional_id: payload.professional_id,
+                    professional_name: professionalName,
+                    date: payload.data,
+                    time: payload.hora_inicio
+                }
+            });
+        } catch (eventErr) {
+            console.error('Falha ao gerar evento CRM para agendamento:', eventErr);
+            // Non-blocking error.
+        }
+
+        return { data, error: null };
     }
 }

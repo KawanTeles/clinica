@@ -73,4 +73,50 @@ export class CrmMessagesRepository {
     if (error) throw error;
     return data;
   }
+
+  /**
+   * Retorna a configuração de integração WhatsApp da clínica
+   */
+  static async getIntegrationConfig(clinicId) {
+    const { data, error } = await supabase
+      .from('crm_whatsapp_integrations')
+      .select('*')
+      .eq('clinic_id', clinicId)
+      .eq('active', true)
+      .single();
+      
+    if (error && error.code !== 'PGRST116') throw error;
+    return data;
+  }
+
+  /**
+   * Atualiza o external_message_id
+   */
+  static async updateMessageExternalId(messageId, externalId) {
+    const { data, error } = await supabase
+      .from('crm_messages')
+      .update({ external_message_id: externalId })
+      .eq('id', messageId);
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Atualiza o status pelo external_id (usado por webhooks)
+   */
+  static async updateMessageStatusByExternalId(externalId, status) {
+    // Para simplificar a permissão do Edge Function (Webhook), normalmente usa-se admin auth
+    // Como estamos na camada Repository do frontend, o usuário deve ter privilégios ou o webhook rodará num Node.
+    const { data, error } = await supabase
+      .from('crm_messages')
+      .update({ 
+        status: status,
+        sent_at: status === 'SENT' || status === 'DELIVERED' ? new Date().toISOString() : undefined
+      })
+      .eq('external_message_id', externalId);
+
+    if (error) throw error;
+    return data;
+  }
 }
