@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pacientes | Admin Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  <link rel="stylesheet" href="../../css/admin/components.css">
+  <link rel="stylesheet" href="../../css/admin/responsive-admin.css">
+  <style>
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+    .search-box { display: flex; align-items: center; background: var(--admin-bg); border: 1px solid var(--admin-border-color); border-radius: var(--admin-border-radius-sm); padding: 8px 12px; width: 350px; }
+    .search-box input { border: none; background: transparent; outline: none; margin-left: 8px; width: 100%; color: var(--admin-text-main); }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: var(--admin-surface); width: 95%; max-width: 900px; border-radius: var(--admin-border-radius); max-height: 90vh; display: flex; flex-direction: column;}
+    .modal-header { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--admin-border-color); }
+    .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+    .close-modal { cursor: pointer; font-size: 1.2rem; color: var(--admin-text-muted); }
+    
+    /* Tabs System */
+    .tabs { display: flex; border-bottom: 1px solid var(--admin-border-color); margin-bottom: 20px; }
+    .tab-link { padding: 10px 20px; cursor: pointer; color: var(--admin-text-muted); border-bottom: 2px solid transparent; font-weight: 500; }
+    .tab-link.active { color: var(--admin-primary); border-bottom-color: var(--admin-primary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { display: block; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600; color: var(--admin-text-main); }
+    .form-input { width: 100%; padding: 10px; border: 1px solid var(--admin-border-color); border-radius: 6px; box-sizing: border-box; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/admin/supabase-client.js"></script>
+  <script src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="dashboard.html" class="admin-brand"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></a>
+      </div>
+      <nav class="admin-sidebar-nav">
+        <a href="dashboard.html" class="admin-nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+        <a href="profissionais.html" class="admin-nav-item"><i class="fas fa-user-md"></i><span>Profissionais</span></a>
+        <a href="pacientes.html" class="admin-nav-item active"><i class="fas fa-users"></i><span>Pacientes</span></a>
+        <a href="agenda.html" class="admin-nav-item"><i class="far fa-calendar-alt"></i><span>Agenda</span></a>
+        <a href="financeiro.html" class="admin-nav-item"><i class="fas fa-wallet"></i><span>Financeiro</span></a>
+        <a href="usuarios.html" class="admin-nav-item"><i class="fas fa-user-shield"></i><span>Usuários</span></a>
+        <a href="configuracoes.html" class="admin-nav-item"><i class="fas fa-cog"></i><span>Configurações</span></a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+          <h1 class="page-title">Gestão de Pacientes</h1>
+        </div>
+        <div class="header-right">
+          <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Admin+Zoe&background=3498db&color=fff" class="user-avatar">
+            <div class="user-info"><span class="user-name">Administrador</span><span class="user-role">Acesso Total</span></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="admin-card">
+          <div class="toolbar">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-paciente" placeholder="Buscar por Nome, CPF, Telefone ou E-mail (Pesquisa Exata ou Aproximada)...">
+            </div>
+            <button class="admin-btn admin-btn-primary" id="btn-novo-paciente"><i class="fas fa-plus"></i> Novo Paciente</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-table" id="pacientes-table">
+              <thead>
+                <tr>
+                  <th>Nome / Contato</th>
+                  <th>CPF</th>
+                  <th>Telefone / Whats</th>
+                  <th>Próxima Consulta</th>
+                  <th>Financeiro (Em Aberto)</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="pacientes-table-body">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Cadastro/Edição -->
+  <div class="modal-overlay" id="modal-paciente">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="card-title" id="modal-title">Novo Paciente</h2>
+        <i class="fas fa-times close-modal"></i>
+      </div>
+      <div class="modal-body">
+        <div class="tabs">
+          <div class="tab-link active" onclick="openTab(event, 'tab-dados')">Dados Pessoais</div>
+          <div class="tab-link" onclick="openTab(event, 'tab-endereco')">Endereço</div>
+          <div class="tab-link" onclick="openTab(event, 'tab-financeiro')">Financeiro & Consultas</div>
+        </div>
+
+        <form id="form-paciente">
+          <input type="hidden" id="pac_id">
+          
+          <div id="tab-dados" class="tab-content active">
+            <div class="form-grid">
+              <div class="form-group full">
+                <label class="form-label">Nome Completo *</label>
+                <input type="text" id="pac_nome" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">CPF *</label>
+                <input type="text" id="pac_cpf" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data Nasc.</label>
+                <input type="date" id="pac_nascimento" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">WhatsApp</label>
+                <input type="text" id="pac_whatsapp" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">E-mail (Área do Cliente)</label>
+                <input type="email" id="pac_email" class="form-input">
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Alerta Médico Crítico</label>
+                <input type="text" id="pac_alerta" class="form-input" placeholder="Ex: Cadeirante, Alergia à Penicilina">
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-endereco" class="tab-content">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">CEP</label>
+                <input type="text" id="pac_cep" class="form-input">
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Logradouro</label>
+                <input type="text" id="pac_logradouro" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Número</label>
+                <input type="text" id="pac_numero" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bairro</label>
+                <input type="text" id="pac_bairro" class="form-input">
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-financeiro" class="tab-content">
+            <p style="font-size:0.9rem; color:var(--admin-text-muted);">As consultas e os status financeiros aparecerão aqui após o primeiro agendamento e liberação do Módulo Financeiro.</p>
+            <div style="margin-top:20px; display:flex; gap: 20px;">
+              <div style="flex:1; background:var(--admin-bg); padding:15px; border-radius:8px;">
+                <strong>Consultas Realizadas:</strong> <span id="lbl_total_consultas">0</span>
+              </div>
+              <div style="flex:1; background:var(--admin-bg); padding:15px; border-radius:8px;">
+                <strong>Em Aberto (Devendo):</strong> <span id="lbl_total_aberto">R$ 0,00</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px; text-align: right; border-top: 1px solid var(--admin-border-color); padding-top: 15px;">
+            <button type="button" class="admin-btn admin-btn-outline close-modal">Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary" id="btn-salvar">Salvar Paciente</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/admin/admin.js"></script>
+  <script src="../../js/admin/sidebar.js"></script>
+  <script type="module" src="../../js/admin/pacientes.js"></script>
+</body>
+</html>

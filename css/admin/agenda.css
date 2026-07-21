@@ -1,0 +1,124 @@
+/* Agenda CSS Integrado */
+.agenda-container {
+    display: flex;
+    gap: 20px;
+    height: calc(100vh - 120px);
+}
+
+.agenda-sidebar {
+    width: 300px;
+    background: var(--admin-surface);
+    border-radius: var(--admin-border-radius);
+    padding: 20px;
+    box-shadow: var(--admin-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.agenda-main {
+    flex: 1;
+    background: var(--admin-surface);
+    border-radius: var(--admin-border-radius);
+    padding: 20px;
+    box-shadow: var(--admin-shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.agenda-header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(7, 1fr);
+    flex: 1;
+    border: 1px solid var(--admin-border-color);
+    border-radius: var(--admin-border-radius-sm);
+    overflow-y: auto;
+    position: relative;
+}
+
+.calendar-header-row {
+    display: contents;
+}
+
+.calendar-header-cell {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--admin-border-color);
+    border-right: 1px solid var(--admin-border-color);
+    background: var(--admin-bg);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.calendar-time-col {
+    grid-column: 1;
+    border-right: 1px solid var(--admin-border-color);
+    background: var(--admin-bg);
+}
+
+.calendar-time-slot {
+    height: 60px;
+    border-bottom: 1px solid var(--admin-border-color);
+    padding: 8px;
+    font-size: 0.8rem;
+    color: var(--admin-text-muted);
+    text-align: right;
+    box-sizing: border-box;
+}
+
+.calendar-day-col {
+    border-right: 1px solid var(--admin-border-color);
+    position: relative;
+    background: #fff;
+}
+
+.calendar-cell {
+    height: 60px;
+    border-bottom: 1px solid var(--admin-border-color);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.calendar-cell:hover {
+    background: #f1f5f9;
+}
+
+/* Appointment Cards */
+.appointment-card {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    background: var(--admin-accent);
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 5;
+    border-left: 3px solid #2980b9;
+}
+
+.appointment-card.status-aguardando_aprovacao { background: #f39c12; border-color: #d68910; }
+.appointment-card.status-confirmada { background: #2ecc71; border-color: #27ae60; }
+.appointment-card.status-em_andamento { background: #3498db; border-color: #2980b9; }
+.appointment-card.status-cancelada { background: #e74c3c; border-color: #c0392b; opacity: 0.7; }
+.appointment-card.block { background: #95a5a6; border-color: #7f8c8d; cursor: not-allowed; }
+
+@media (max-width: 1024px) {
+    .agenda-container { flex-direction: column; height: auto; }
+    .agenda-sidebar { width: 100%; }
+    .calendar-grid { grid-template-columns: 60px 1fr; } /* Daily view for mobile */
+}

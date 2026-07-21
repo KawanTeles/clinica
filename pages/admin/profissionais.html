@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profissionais | Admin Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  <link rel="stylesheet" href="../../css/admin/components.css">
+  <link rel="stylesheet" href="../../css/admin/responsive-admin.css">
+
+  <style>
+    /* Estilos específicos para tabela e modais de profissionais */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border-color);
+      border-radius: var(--admin-border-radius-sm);
+      padding: 8px 12px;
+      width: 300px;
+    }
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      margin-left: 8px;
+      width: 100%;
+      color: var(--admin-text-main);
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: var(--admin-surface);
+      width: 90%; max-width: 600px;
+      border-radius: var(--admin-border-radius);
+      padding: 24px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px;
+    }
+    .close-modal { cursor: pointer; font-size: 1.2rem; color: var(--admin-text-muted); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group.full { grid-column: span 2; }
+    .form-label { display: block; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600; color: var(--admin-text-main); }
+    .form-input { width: 100%; padding: 10px; border: 1px solid var(--admin-border-color); border-radius: 6px; box-sizing: border-box;}
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc; transition: .4s; border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px;
+      background-color: white; transition: .4s; border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--admin-success); }
+    input:checked + .slider:before { transform: translateX(16px); }
+  </style>
+
+  <!-- Supabase CDN & Auth Guard -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/admin/supabase-client.js"></script>
+  <script src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="dashboard.html" class="admin-brand"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></a>
+      </div>
+      <nav class="admin-sidebar-nav">
+        <a href="dashboard.html" class="admin-nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+        <a href="profissionais.html" class="admin-nav-item active"><i class="fas fa-user-md"></i><span>Profissionais</span></a>
+        <a href="pacientes.html" class="admin-nav-item"><i class="fas fa-users"></i><span>Pacientes</span></a>
+        <a href="agenda.html" class="admin-nav-item"><i class="far fa-calendar-alt"></i><span>Agenda</span></a>
+        <a href="financeiro.html" class="admin-nav-item"><i class="fas fa-wallet"></i><span>Financeiro</span></a>
+        <a href="usuarios.html" class="admin-nav-item"><i class="fas fa-user-shield"></i><span>Usuários</span></a>
+        <a href="configuracoes.html" class="admin-nav-item"><i class="fas fa-cog"></i><span>Configurações</span></a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+          <h1 class="page-title">Gestão de Profissionais</h1>
+        </div>
+        <div class="header-right">
+          <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Admin+Zoe&background=3498db&color=fff" alt="Avatar" class="user-avatar">
+            <div class="user-info"><span class="user-name">Administrador</span><span class="user-role">Acesso Total</span></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="admin-card">
+          <div class="toolbar">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-prof" placeholder="Buscar por nome, especialidade...">
+            </div>
+            <button class="admin-btn admin-btn-primary" id="btn-novo-prof"><i class="fas fa-plus"></i> Novo Profissional</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-table" id="prof-table">
+              <thead>
+                <tr>
+                  <th>Profissional</th>
+                  <th>Especialidade</th>
+                  <th>Registro</th>
+                  <th>Valores (R$)</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="prof-table-body">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Cadastro/Edição -->
+  <div class="modal-overlay" id="modal-prof">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="card-title" id="modal-title">Novo Profissional</h2>
+        <i class="fas fa-times close-modal" id="close-modal-prof"></i>
+      </div>
+      <form id="form-prof">
+        <input type="hidden" id="prof_id">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Nome Completo</label>
+            <input type="text" id="prof_nome" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">E-mail de Acesso</label>
+            <input type="email" id="prof_email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Senha Inicial</label>
+            <input type="password" id="prof_senha" class="form-input" minlength="6" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Especialidade</label>
+            <input type="text" id="prof_especialidade" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Registro (CRM/CRP...)</label>
+            <input type="text" id="prof_registro" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">WhatsApp</label>
+            <input type="text" id="prof_whatsapp" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valor Consulta (R$)</label>
+            <input type="number" id="prof_avista" class="form-input" step="0.01" required>
+          </div>
+          <div class="form-group full" style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+            <label class="toggle-switch">
+              <input type="checkbox" id="prof_ativo" checked>
+              <span class="slider"></span>
+            </label>
+            <span style="font-size: 0.9rem; font-weight: 500;">Profissional Ativo</span>
+          </div>
+        </div>
+        <div style="margin-top: 24px; text-align: right;">
+          <button type="button" class="admin-btn admin-btn-outline" id="btn-cancelar">Cancelar</button>
+          <button type="submit" class="admin-btn admin-btn-primary" id="btn-salvar">
+            <i class="fas fa-save"></i> Salvar Profissional
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../../js/admin/admin.js"></script>
+  <script src="../../js/admin/sidebar.js"></script>
+  <script src="../../js/admin/profissionais.js"></script>
+</body>
+</html>

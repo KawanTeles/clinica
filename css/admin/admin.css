@@ -1,0 +1,277 @@
+/* =========================================
+   SaaS Admin Core Variables & Typography
+   ========================================= */
+
+:root {
+  /* Colors */
+  --admin-primary: #2c3e50;
+  --admin-secondary: #34495e;
+  --admin-accent: #3498db;
+  --admin-success: #2ecc71;
+  --admin-warning: #f1c40f;
+  --admin-danger: #e74c3c;
+  --admin-bg: #f8f9fa;
+  --admin-surface: #ffffff;
+  
+  /* Text */
+  --admin-text-main: #2d3748;
+  --admin-text-muted: #718096;
+  
+  /* Borders & Shadows */
+  --admin-border-color: #e2e8f0;
+  --admin-border-radius: 12px;
+  --admin-border-radius-sm: 8px;
+  --admin-shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --admin-shadow-md: 0 4px 6px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.08);
+  --admin-shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.03);
+  
+  /* Layout */
+  --sidebar-width: 260px;
+  --header-height: 70px;
+  --transition-speed: 0.3s;
+}
+
+/* Base resets for Admin area to avoid conflicting with global public css */
+body.admin-body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--admin-bg);
+  color: var(--admin-text-main);
+  overflow-x: hidden;
+}
+
+/* =========================================
+   Layout Grid (Sidebar + Main Content)
+   ========================================= */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--admin-surface);
+  border-right: 1px solid var(--admin-border-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-speed) ease;
+}
+
+.admin-sidebar-header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--admin-border-color);
+}
+
+.admin-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--admin-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-sidebar-nav {
+  flex: 1;
+  padding: 20px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--admin-text-muted);
+  text-decoration: none;
+  border-radius: var(--admin-border-radius-sm);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.admin-nav-item i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.admin-nav-item:hover {
+  background-color: #f1f5f9;
+  color: var(--admin-primary);
+}
+
+.admin-nav-item.active {
+  background-color: var(--admin-accent);
+  color: #ffffff;
+}
+
+.admin-sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--admin-border-color);
+}
+
+.clinic-tenant-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background-color: #f8fafc;
+  border-radius: var(--admin-border-radius-sm);
+  border: 1px solid var(--admin-border-color);
+}
+
+.tenant-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--admin-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.tenant-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.tenant-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--admin-text-main);
+}
+
+.tenant-plan {
+  font-size: 0.75rem;
+  color: var(--admin-accent);
+  font-weight: 600;
+}
+
+/* Main Content Area */
+.admin-main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left var(--transition-speed) ease;
+}
+
+/* Top Header */
+.admin-header {
+  height: var(--header-height);
+  background-color: var(--admin-surface);
+  border-bottom: 1px solid var(--admin-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--admin-text-main);
+  cursor: pointer;
+  padding: 8px;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.header-alerts {
+  position: relative;
+  cursor: pointer;
+  color: var(--admin-text-muted);
+}
+
+.header-alerts:hover {
+  color: var(--admin-primary);
+}
+
+.alert-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--admin-danger);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--admin-border-color);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--admin-text-main);
+}
+
+.user-role {
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+}
+
+/* Content Container */
+.admin-content {
+  padding: 32px;
+  flex: 1;
+}

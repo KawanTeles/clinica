@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caixa Diário | Admin</title>
+    <style>
+        .caixa-header { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .caixa-status { font-size: 1.25rem; font-weight: bold; }
+        .caixa-status.aberto { color: #10b981; }
+        .caixa-status.fechado { color: #ef4444; }
+        .caixa-actions { display: flex; gap: 0.5rem; }
+        
+        .resumo-caixa { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .resumo-item { background: #f9fafb; padding: 1rem; border-radius: 6px; border: 1px solid #e5e7eb; }
+        .resumo-label { font-size: 0.875rem; color: #6b7280; }
+        .resumo-valor { font-size: 1.25rem; font-weight: bold; color: #111827; }
+        
+        .movimentos-list { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .mov-item { display: flex; justify-content: space-between; padding: 1rem; border-bottom: 1px solid #e5e7eb; }
+        .mov-tipo { font-weight: bold; }
+        .mov-entrada { color: #10b981; }
+        .mov-saida { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <main class="admin-content">
+            <header class="page-header">
+                <h1>Caixa Diário (PDV)</h1>
+            </header>
+
+            <section class="caixa-header">
+                <div>
+                    <div class="caixa-status aberto" id="status-atual">● CAIXA ABERTO</div>
+                    <small id="operador-atual">Operador: João Silva</small>
+                </div>
+                <div class="caixa-actions">
+                    <button class="btn-secundario" id="btn-sangria">Sangria</button>
+                    <button class="btn-secundario" id="btn-suprimento">Suprimento</button>
+                    <button class="btn-danger" id="btn-fechar">Fechar Caixa</button>
+                </div>
+            </section>
+
+            <section class="resumo-caixa">
+                <div class="resumo-item">
+                    <div class="resumo-label">Saldo Inicial</div>
+                    <div class="resumo-valor" id="saldo-inicial">R$ 150,00</div>
+                </div>
+                <div class="resumo-item">
+                    <div class="resumo-label">Entradas</div>
+                    <div class="resumo-valor mov-entrada" id="total-entradas">+ R$ 850,00</div>
+                </div>
+                <div class="resumo-item">
+                    <div class="resumo-label">Saídas (Sangria)</div>
+                    <div class="resumo-valor mov-saida" id="total-saidas">- R$ 100,00</div>
+                </div>
+                <div class="resumo-item" style="background: #eff6ff; border-color: #bfdbfe;">
+                    <div class="resumo-label">Saldo Atual</div>
+                    <div class="resumo-valor" style="color: #1d4ed8;" id="saldo-atual">R$ 900,00</div>
+                </div>
+            </section>
+
+            <section class="movimentos-list">
+                <h3 style="padding: 1rem; border-bottom: 1px solid #e5e7eb; margin: 0;">Movimentações do Dia</h3>
+                <div id="lista-movimentos">
+                    <!-- Gerado via JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/js/admin/financeiro/caixa-diario.js" type="module"></script>
+</body>
+</html>
