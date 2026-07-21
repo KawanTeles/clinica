@@ -1,5 +1,5 @@
 // Caixa Diário JS
-import { supabase } from '../../supabase.js';
+import { FinanceiroRepository } from '../../../repositories/financeiro.repository.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarStatusCaixa();
@@ -7,11 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function carregarStatusCaixa() {
     try {
-        const { data, error } = await supabase
-            .from('cash_registers')
-            .select('*')
-            .eq('status', 'ABERTO')
-            .limit(1);
+        const { data, error } = await FinanceiroRepository.getCaixaAberto();
             
         if (error) throw error;
 

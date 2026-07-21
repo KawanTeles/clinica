@@ -1,11 +1,8 @@
-// Admin Guard - Route Protection & RBAC
-// Deve ser importado no <head> logo após o supabase-client.js
+import { AuthRepository } from '../../repositories/auth.repository.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const sb = window.supabaseClient;
-  
   // Obter sessão atual
-  const { data: { session }, error: sessionError } = await sb.auth.getSession();
+  const { data: { session }, error: sessionError } = await AuthRepository.getSession();
 
   const currentPath = window.location.pathname;
   const isLoginPage = currentPath.includes('login.html');
@@ -25,16 +22,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Validação de Role e Redirecionamento RBAC
   try {
-    const { data: profile, error: profileError } = await sb
-      .from('user_profiles')
-      .select('*, roles(nome)')
-      .eq('auth_user_id', session.user.id)
-      .single();
+    const { data: profile, error: profileError } = await AuthRepository.getPerfilUsuario(session.user.id);
 
     if (profileError || !profile) {
       console.error('Erro ao buscar perfil do usuário:', profileError);
       alert('Seu perfil não foi encontrado. Contate o administrador.');
-      await sb.auth.signOut();
+      await AuthRepository.signOut();
       window.location.href = 'login.html';
       return;
     }
@@ -42,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Bloqueio de usuários inativos
     if (!profile.ativo) {
       alert('Sua conta está inativa. Acesso bloqueado.');
-      await sb.auth.signOut();
+      await AuthRepository.signOut();
       window.location.href = 'login.html';
       return;
     }
@@ -102,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     else {
       // Outros perfis sem acesso ao painel admin
       alert('Acesso negado. Perfil não autorizado.');
-      await sb.auth.signOut();
+      await AuthRepository.signOut();
       window.location.href = 'login.html';
     }
 

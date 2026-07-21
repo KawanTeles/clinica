@@ -115,7 +115,7 @@
   <!-- Client Init -->
   <script src="../../js/admin/supabase-client.js"></script>
   <!-- Route Guard -->
-  <script src="../../js/admin/guard.js"></script>
+  <script type="module" src="../../js/admin/guard.js"></script>
 </head>
 <body class="admin-body">
 
@@ -146,7 +146,9 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { AuthRepository } from '../../repositories/auth.repository.js';
+
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
@@ -158,27 +160,22 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
       btn.disabled = true;
 
-      const sb = window.supabaseClient;
-      
       try {
-        const { data, error } = await sb.auth.signInWithPassword({
-          email: email,
-          password: password,
-        });
+        const { data, error } = await AuthRepository.signInWithPassword(email, password);
 
         if (error) {
           throw error;
         }
 
         // Validação imediata de inatividade
-        const { data: profile } = await sb.from('user_profiles').select('ativo').eq('auth_user_id', data.user.id).single();
+        const { data: profile } = await AuthRepository.getPerfilUsuario(data.user.id);
         if (profile && profile.ativo === false) {
-          await sb.auth.signOut();
+          await AuthRepository.signOut();
           throw new Error('Sua conta foi desativada. Acesso bloqueado.');
         }
 
         // Registrar login no log de auditoria
-        await sb.from('security_logs').insert({
+        await AuthRepository.registrarLogSeguranca({
           user_id: data.user.id,
           acao: 'LOGIN',
           descricao: 'Usuário realizou login com sucesso.'

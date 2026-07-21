@@ -1,5 +1,7 @@
+import { ProfissionaisRepository } from '../../repositories/profissionais.repository.js';
+import { AuthRepository } from '../../repositories/auth.repository.js';
+
 document.addEventListener('DOMContentLoaded', () => {
-  const sb = window.supabaseClient;
   const tableBody = document.getElementById('prof-table-body');
   
   // Modals
@@ -26,10 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Carregar Dados Iniciais
   const loadProfessionals = async () => {
     tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Carregando dados...</td></tr>';
-    const { data, error } = await sb.from('professionals')
-      .select('id, nome, especialidade, registro_profissional, valor_avista, ativo')
-      .order('created_at', { ascending: false })
-      .limit(100);
+    const { data, error } = await ProfissionaisRepository.listarProfissionais();
     
     if (error) {
       console.error(error);
@@ -74,9 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const editProfessional = async (id) => {
-    const { data, error } = await sb.from('professionals')
-      .select('id, nome, especialidade, registro_profissional, whatsapp, valor_avista, ativo, user_profiles(email)')
-      .eq('id', id).single();
+    const { data, error } = await ProfissionaisRepository.buscarProfissional(id);
     if (error || !data) return window.Toast.error('Erro ao carregar dados do profissional.');
 
     document.getElementById('modal-title').textContent = 'Editar Profissional';
@@ -116,15 +113,15 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       if (id) {
         // UPDATE lógico
-        const { error: updateError } = await sb.from('professionals').update({
+        const { error: updateError } = await ProfissionaisRepository.atualizarProfissional(id, {
           nome, especialidade, registro_profissional: registro,
           whatsapp, valor_avista: valorAvista, ativo
-        }).eq('id', id);
+        });
 
         if (updateError) throw updateError;
         
-        await sb.from('security_logs').insert({
-          user_id: (await sb.auth.getUser()).data.user.id,
+        await AuthRepository.registrarLogSeguranca({
+          user_id: (await AuthRepository.getUser()).data.user.id,
           acao: ativo ? 'UPDATE_PROFESSIONAL' : 'DISABLE_PROFESSIONAL',
           descricao: `Profissional ${nome} editado.`
         });
@@ -133,11 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // CREATE via Edge Function
         // Chamada nativa para a Edge Function do Supabase
-        const { data: resData, error: invokeError } = await sb.functions.invoke('create-professional', {
-          body: {
+        const { data: resData, error: invokeError } = await ProfissionaisRepository.invocarCriacaoProfissional({
             email, password: senha, nome, especialidade, 
             registro, whatsapp, valorAvista, valorCartao: valorAvista // Mock
-          }
         });
 
         if (invokeError) throw new Error(invokeError.message || 'Erro na criação');

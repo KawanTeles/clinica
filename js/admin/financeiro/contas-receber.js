@@ -1,5 +1,5 @@
 // Contas a Receber JS
-import { supabase } from '../../supabase.js';
+import { FinanceiroRepository } from '../../../repositories/financeiro.repository.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarContasReceber();
@@ -10,11 +10,7 @@ async function carregarContasReceber() {
         const tbody = document.querySelector('#tabela-receber tbody');
         tbody.innerHTML = '<tr><td colspan="9">Carregando...</td></tr>';
 
-        const { data, error } = await supabase
-            .from('financial_documents')
-            .select('*, patients(nome), appointments(professional_id)')
-            .eq('tipo', 'RECEITA')
-            .order('data_vencimento', { ascending: false });
+        const { data, error } = await FinanceiroRepository.getContasReceber();
 
         if (error) throw error;
 

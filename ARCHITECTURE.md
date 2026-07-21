@@ -10,11 +10,10 @@ O projeto adota uma arquitetura limpa (Clean Architecture / Layered Pattern) par
 ├── analytics/         # Views, Functions, Materialized e Jobs para Dashboards
 ├── css/               # Estilos globais e componentes reutilizáveis
 ├── js/
-│   └── admin/         # Lógica isolada de cada módulo administrativo do CRM
+│   └── admin/         # Controllers baseados em ES Modules
 ├── pages/
 │   └── admin/         # HTML dos módulos operacionais e de gestão (Exclusivo)
-├── repositories/      # Camada de abstração de dados (Queries Supabase)
-├── services/          # Regras de negócio, APIs e integrações externas
+├── repositories/      # Camada de abstração de dados pura (Queries Supabase)
 ├── supabase/
 │   ├── migrations/    # Versionamento imutável e incremental do banco
 │   └── functions/     # Edge Functions (Deno)
@@ -63,10 +62,10 @@ Desacoplado das consultas para flexibilidade máxima (pacotes, retornos, estorno
 - As atualizações de `saldo_devedor` ocorrem via Triggers automatizadas (`update_document_balance()`).
 - O Caixa Diário (`cash_registers`) é isolado e controla aberturas, fechamentos, sangrias e suprimentos da operação física.
 
-## 7. Padrão de Services e Repositories
-- **Repositories**: Nunca possuem regras de negócio. Exclusivos para realizar `supabase.from().select()`, `insert()`, abstraindo a sintaxe do ORM.
-- **Services**: Consomem repositories e tomam decisões. Disparam alertas no EventBus, realizam formatações lógicas.
-- Nenhuma view de UI (arquivos de `pages/`) deve ter código direto de Query ao Banco de Dados; tudo passa pelo repositório correspondente.
+## 7. Padrão de Repositories e Controllers
+- **Repositories**: Nunca possuem regras de UI. Exclusivos para realizar `supabase.from().select()`, `insert()`, abstraindo a sintaxe do ORM de todas as outras camadas.
+- **Controllers**: Consomem repositories e tomam decisões atualizando a UI (ex: `js/admin/pacientes.js`). Realizam validações DOM e controlam modais.
+- É ESTRITAMENTE PROIBIDO executar comandos diretos da API do Supabase (`.from()`, `.rpc()`, `.functions.invoke()`) fora do diretório `repositories/`. Todas as páginas de `pages/` interagem indiretamente via controllers em `js/admin/`.
 
 ## 8. Como adicionar Novas Clínicas
 1. Criação do Tenant na tabela `clinics`.

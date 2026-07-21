@@ -1,5 +1,6 @@
+import { UsuariosRepository } from '../../repositories/usuarios.repository.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
-  const sb = window.supabaseClient;
   const tableBody = document.getElementById('users-table-body');
   const roleSelect = document.getElementById('usr_role');
   
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btn-cancelar').addEventListener('click', closeModals);
 
   // Load Roles
-  const { data: roles } = await sb.from('roles').select('*');
+  const { data: roles } = await UsuariosRepository.listarRoles();
   roles.forEach(r => {
     if(r.nome !== 'CLIENTE') roleSelect.add(new Option(r.nome, r.id));
   });
@@ -36,10 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Carregando...</td></tr>';
     
     // Join with professionals to check links
-    const { data, error } = await sb.from('user_profiles')
-      .select('auth_user_id, nome, email, ativo, last_login_at, login_count, role_id, roles(nome), professionals(id)')
-      .order('created_at', { ascending: false })
-      .limit(100);
+    const { data, error } = await UsuariosRepository.listarUsuarios();
 
     if (error || !data) {
       tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:red;">Erro ao buscar usuários.</td></tr>';
@@ -76,9 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   const editUser = async (uid) => {
-    const { data } = await sb.from('user_profiles')
-      .select('auth_user_id, nome, email, role_id, ativo')
-      .eq('auth_user_id', uid).single();
+    const { data } = await UsuariosRepository.buscarUsuario(uid);
     document.getElementById('modal-title').textContent = 'Editar Usuário';
     document.getElementById('usr_auth_id').value = data.auth_user_id;
     document.getElementById('usr_nome').value = data.nome;
@@ -119,9 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.innerHTML = 'Salvando...';
 
     try {
-      const { data, error: invokeError } = await sb.functions.invoke('manage-user', {
-        body: payload
-      });
+      const { data, error: invokeError } = await UsuariosRepository.invocarManageUser(payload);
       if (invokeError) throw new Error(invokeError.message || 'Erro na requisição');
 
       closeModals();
@@ -140,13 +134,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const handlePass = async (action) => {
     try {
-      const { data, error: invokeError } = await sb.functions.invoke('reset-password', {
-        body: {
+      const { data, error: invokeError } = await UsuariosRepository.invocarResetPassword({
           action,
           userId: document.getElementById('pass_user_id').value,
           email: document.getElementById('pass_user_email').value,
           newPassword: document.getElementById('pass_new').value
-        }
       });
       if (invokeError) throw new Error(invokeError.message || 'Erro na requisição');
       window.Toast.success('Senha operada com sucesso!');
