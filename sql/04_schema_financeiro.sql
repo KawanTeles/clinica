@@ -1,12 +1,12 @@
 -- 04_schema_financeiro.sql
 
 CREATE TABLE formas_pagamento (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nome VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE financeiro (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE RESTRICT,
     paciente_id UUID REFERENCES pacientes(id) ON DELETE RESTRICT,
     profissional_id UUID REFERENCES profissionais(id) ON DELETE RESTRICT,
@@ -22,7 +22,7 @@ CREATE TABLE financeiro (
 );
 
 CREATE TABLE pagamentos (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     financeiro_id UUID NOT NULL REFERENCES financeiro(id) ON DELETE RESTRICT,
     forma_pagamento_id UUID NOT NULL REFERENCES formas_pagamento(id) ON DELETE RESTRICT,
     valor_pago NUMERIC(10,2) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE pagamentos (
 );
 
 CREATE TABLE financeiro_movimentacoes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     financeiro_id UUID NOT NULL REFERENCES financeiro(id) ON DELETE CASCADE,
     usuario_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
     acao VARCHAR(255) NOT NULL,

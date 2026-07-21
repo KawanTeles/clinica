@@ -5,7 +5,7 @@
 
 -- 1. Documento Financeiro Principal (Fatura / Conta)
 CREATE TABLE public.financial_documents (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   clinic_id UUID REFERENCES public.clinics(id) ON DELETE CASCADE,
   patient_id UUID REFERENCES public.patients(id) ON DELETE RESTRICT,
   appointment_id UUID REFERENCES public.appointments(id) ON DELETE SET NULL, -- Opcional
@@ -23,7 +23,7 @@ CREATE TABLE public.financial_documents (
 
 -- 2. Itens do Documento (Serviços, Produtos, Retornos)
 CREATE TABLE public.financial_document_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   document_id UUID REFERENCES public.financial_documents(id) ON DELETE CASCADE,
   procedure_id UUID REFERENCES public.procedures(id) ON DELETE SET NULL,
   descricao VARCHAR(255) NOT NULL,

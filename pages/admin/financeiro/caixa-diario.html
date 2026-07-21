@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caixa Diário | Admin</title>
     <style>
-        .caixa-header { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .caixa-header { display: flex; justify-content: space-between; align-items: center; background: var(--admin-surface); padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
         .caixa-status { font-size: 1.25rem; font-weight: bold; }
         .caixa-status.aberto { color: #10b981; }
         .caixa-status.fechado { color: #ef4444; }
         .caixa-actions { display: flex; gap: 0.5rem; }
         
         .resumo-caixa { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-        .resumo-item { background: #f9fafb; padding: 1rem; border-radius: 6px; border: 1px solid #e5e7eb; }
+        .resumo-item { background: var(--admin-card-header); padding: 1rem; border-radius: 6px; border: 1px solid var(--admin-border-color); }
         .resumo-label { font-size: 0.875rem; color: #6b7280; }
         .resumo-valor { font-size: 1.25rem; font-weight: bold; color: #111827; }
         
-        .movimentos-list { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .movimentos-list { background: var(--admin-surface); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .mov-item { display: flex; justify-content: space-between; padding: 1rem; border-bottom: 1px solid #e5e7eb; }
         .mov-tipo { font-weight: bold; }
         .mov-entrada { color: #10b981; }

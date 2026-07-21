@@ -3,7 +3,7 @@
 
 -- Nova tabela para Bloqueios Recorrentes / Exceções Complexas
 CREATE TABLE agenda_excecoes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profissional_id UUID REFERENCES profissionais(id) ON DELETE CASCADE, -- Se null, aplica-se a toda clínica (ex: Feriado)
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     tipo VARCHAR(50) NOT NULL, -- 'SEMANAL', 'MENSAL_DIA_SEMANA', 'DATA_ESPECIFICA'

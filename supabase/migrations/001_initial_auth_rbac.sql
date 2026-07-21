@@ -3,17 +3,17 @@
 -- Descrição: Criação das tabelas base para autenticação, RBAC e auditoria.
 -- =================================================================================
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- 1. Roles (Cargos)
 CREATE TABLE public.roles (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nome VARCHAR(50) UNIQUE NOT NULL
 );
 
 -- 2. Permissions (Permissões)
 CREATE TABLE public.permissions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nome VARCHAR(100) UNIQUE NOT NULL,
     descricao TEXT
 );
@@ -27,7 +27,7 @@ CREATE TABLE public.role_permissions (
 
 -- 4. User Profiles (Perfis de Usuário)
 CREATE TABLE public.user_profiles (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     auth_user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE NOT NULL,
     nome VARCHAR(150) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE public.user_profiles (
 
 -- 5. Security Logs (Auditoria)
 CREATE TABLE public.security_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     acao VARCHAR(100) NOT NULL,
     descricao TEXT,

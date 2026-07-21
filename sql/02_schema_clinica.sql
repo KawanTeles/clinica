@@ -1,7 +1,7 @@
 -- 02_schema_clinica.sql
 
 CREATE TABLE pacientes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE RESTRICT,
     nome VARCHAR(255) NOT NULL,
     cpf VARCHAR(20),
@@ -15,7 +15,7 @@ CREATE TABLE pacientes (
 );
 
 CREATE TABLE profissionais (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE RESTRICT,
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE RESTRICT,
     registro_conselho VARCHAR(50),
@@ -27,7 +27,7 @@ CREATE TABLE profissionais (
 );
 
 CREATE TABLE especialidades (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT,

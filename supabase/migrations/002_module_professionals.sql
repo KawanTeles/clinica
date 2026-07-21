@@ -11,7 +11,7 @@ $$ LANGUAGE sql SECURITY DEFINER;
 
 -- 2. Tabela professionals
 CREATE TABLE public.professionals (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_profile_id UUID REFERENCES public.user_profiles(id) ON DELETE RESTRICT UNIQUE NOT NULL,
     nome VARCHAR(150) NOT NULL,
     slug VARCHAR(150) UNIQUE,

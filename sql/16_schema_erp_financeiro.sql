@@ -22,7 +22,7 @@ ADD COLUMN taxa_operadora NUMERIC(10,2) DEFAULT 0;
 
 -- 3. Caixa Diário
 CREATE TABLE caixa_diario (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     data_caixa DATE NOT NULL,
     saldo_inicial NUMERIC(10,2) DEFAULT 0,
@@ -43,7 +43,7 @@ FOR EACH ROW EXECUTE PROCEDURE update_atualizado_em();
 
 -- 4. Contas Recorrentes (Despesas fixas)
 CREATE TABLE contas_recorrentes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(100) NOT NULL,
     categoria VARCHAR(50), -- Aluguel, Internet, Energia
@@ -55,7 +55,7 @@ CREATE TABLE contas_recorrentes (
 
 -- 5. Regras de Comissionamento e Metas por Profissional
 CREATE TABLE comissoes_regras (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profissional_id UUID NOT NULL REFERENCES profissionais(id) ON DELETE CASCADE,
     especialidade_id UUID NOT NULL REFERENCES especialidades(id) ON DELETE CASCADE,
     tipo VARCHAR(20) NOT NULL DEFAULT 'PERCENTUAL', -- PERCENTUAL, FIXO
@@ -64,7 +64,7 @@ CREATE TABLE comissoes_regras (
 );
 
 CREATE TABLE metas_profissionais (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profissional_id UUID NOT NULL REFERENCES profissionais(id) ON DELETE CASCADE,
     mes_ano VARCHAR(7) NOT NULL, -- YYYY-MM
     meta_faturamento NUMERIC(10,2) NOT NULL,

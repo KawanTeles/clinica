@@ -1,7 +1,7 @@
 -- 06_schema_auditoria.sql
 
 CREATE TABLE auditoria (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     usuario_id UUID,
     tabela VARCHAR(100) NOT NULL,
     operacao VARCHAR(20) NOT NULL,

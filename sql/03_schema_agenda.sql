@@ -1,7 +1,7 @@
 -- 03_schema_agenda.sql
 
 CREATE TABLE agenda_config (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profissional_id UUID NOT NULL REFERENCES profissionais(id) ON DELETE CASCADE,
     dia_semana INT NOT NULL,
     hora_inicio TIME NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE agenda_config (
 );
 
 CREATE TABLE agenda_bloqueios (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profissional_id UUID NOT NULL REFERENCES profissionais(id) ON DELETE CASCADE,
     data_inicio TIMESTAMPTZ NOT NULL,
     data_fim TIMESTAMPTZ NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE agenda_bloqueios (
 );
 
 CREATE TABLE agenda_disponibilidade (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profissional_id UUID NOT NULL REFERENCES profissionais(id) ON DELETE CASCADE,
     data DATE NOT NULL,
     hora_inicio TIME NOT NULL,
@@ -28,12 +28,12 @@ CREATE TABLE agenda_disponibilidade (
 );
 
 CREATE TABLE status_consulta (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nome VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE consultas (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE RESTRICT,
     paciente_id UUID NOT NULL REFERENCES pacientes(id) ON DELETE RESTRICT,
     profissional_id UUID NOT NULL REFERENCES profissionais(id) ON DELETE RESTRICT,

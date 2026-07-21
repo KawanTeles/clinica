@@ -3,21 +3,10 @@
 -- Descrição: Sistema Genérico e Incremental de Auditoria (Transição do modelo JSON)
 -- =================================================================================
 
--- 1. Criação da Tabela de Auditoria Unificada
-CREATE TABLE IF NOT EXISTS public.audit_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    clinic_id UUID REFERENCES public.clinics(id),
-    modulo VARCHAR(50),
-    entity_type VARCHAR(50) NOT NULL,
-    entity_id UUID NOT NULL,
-    action VARCHAR(20) NOT NULL CHECK (action IN ('INSERT', 'UPDATE', 'DELETE')),
-    old_data JSONB,
-    new_data JSONB,
-    changed_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-    ip VARCHAR(50),
-    user_agent TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
+-- 1. Atualização da Tabela de Auditoria Unificada (Criada na Migration 005)
+ALTER TABLE public.audit_logs 
+ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id),
+ADD COLUMN IF NOT EXISTS modulo VARCHAR(50);
 
 -- 2. Trigger Universal para Rastreio Dinâmico (Diff campo a campo)
 CREATE OR REPLACE FUNCTION public.trigger_audit_log_incremental()

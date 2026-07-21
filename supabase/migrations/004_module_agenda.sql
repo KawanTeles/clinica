@@ -27,7 +27,7 @@ CREATE TABLE public.professional_availability_settings (
 
 -- 3. Horário Fixo Semanal
 CREATE TABLE public.professional_schedule (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     professional_id UUID REFERENCES public.professionals(id) ON DELETE CASCADE NOT NULL,
     dia_semana INTEGER NOT NULL CHECK (dia_semana BETWEEN 0 AND 6),
     hora_inicio TIME NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE public.professional_schedule (
 
 -- 4. Bloqueios (Férias, Folgas)
 CREATE TABLE public.schedule_blocks (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     professional_id UUID REFERENCES public.professionals(id) ON DELETE CASCADE NOT NULL,
     tipo VARCHAR(50) NOT NULL CHECK (tipo IN ('FERIAS', 'FOLGA', 'BLOQUEIO')),
     data_inicio TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE public.schedule_blocks (
 
 -- 5. Consultas (Appointments)
 CREATE TABLE public.appointments (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     professional_id UUID REFERENCES public.professionals(id) ON DELETE RESTRICT NOT NULL,
     patient_id UUID, -- Referência futura na próxima migration
     data DATE NOT NULL,
@@ -83,7 +83,7 @@ WHERE (status IN ('solicitada', 'aguardando_aprovacao', 'confirmada', 'em_andame
 
 -- 7. Histórico de Auditoria da Consulta
 CREATE TABLE public.appointment_history (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     appointment_id UUID REFERENCES public.appointments(id) ON DELETE CASCADE NOT NULL,
     status_anterior VARCHAR(50),
     status_novo VARCHAR(50) NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE public.appointment_history (
 
 -- 8. Tabela de Notificações (Preparação WhatsApp)
 CREATE TABLE public.notifications (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id), -- Opcional, caso o cliente não tenha login
     appointment_id UUID REFERENCES public.appointments(id) ON DELETE CASCADE,
     tipo VARCHAR(50) NOT NULL CHECK (tipo IN (
@@ -162,11 +162,16 @@ BEGIN
     -- dar um UPDATE no registro recém-criado na trigger inserindo a observação,
     -- garantindo 100% de rastreabilidade num único evento.
     IF p_observacao IS NOT NULL THEN
-        UPDATE public.appointment_history 
-        SET observacao = p_observacao 
-        WHERE appointment_id = p_appointment_id 
-        ORDER BY created_at DESC LIMIT 1;
-    END IF;
+    UPDATE public.appointment_history
+    SET observacao = p_observacao
+    WHERE id = (
+        SELECT id
+        FROM public.appointment_history
+        WHERE appointment_id = p_appointment_id
+        ORDER BY created_at DESC
+        LIMIT 1
+    );
+END IF;
 
     -- Criar notificação para o pipeline do WhatsApp
     IF p_new_status = 'confirmada' THEN

@@ -84,7 +84,8 @@
 
   <!-- Supabase CDN & Auth Guard -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../../js/admin/supabase-client.js"></script>
+
+  <script src="../../js/theme.js"></script>
   <script type="module" src="../../js/admin/guard.js"></script>
 </head>
 <body class="admin-body">
@@ -100,7 +101,19 @@
         <a href="agenda.html" class="admin-nav-item"><i class="far fa-calendar-alt"></i><span>Agenda</span></a>
         <a href="financeiro.html" class="admin-nav-item"><i class="fas fa-wallet"></i><span>Financeiro</span></a>
         <a href="usuarios.html" class="admin-nav-item"><i class="fas fa-user-shield"></i><span>Usuários</span></a>
-        <a href="configuracoes.html" class="admin-nav-item"><i class="fas fa-cog"></i><span>Configurações</span></a>
+        <a href="configuracoes.html" class="admin-nav-item">
+          <i class="fas fa-cog"></i>
+          <span>Configurações</span>
+        </a>
+        <hr style="border: 0; border-top: 1px solid var(--admin-border-color); margin: 8px 0;" />
+        <a href="../../index.html" class="admin-nav-item">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Voltar ao Site</span>
+        </a>
+        <a href="#" class="admin-nav-item" id="btn-logout" style="color: var(--admin-danger);">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </a>
       </nav>
     </aside>
 

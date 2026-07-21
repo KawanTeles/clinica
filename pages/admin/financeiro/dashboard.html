@@ -7,14 +7,14 @@
     <!-- CSS Omitido para simplicidade - Herda estilos globais do Admin -->
     <style>
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-        .kpi-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6; }
+        .kpi-card { background: var(--admin-surface); padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid var(--admin-accent); }
         .kpi-title { font-size: 0.875rem; color: #6b7280; text-transform: uppercase; font-weight: 600; }
         .kpi-value { font-size: 1.5rem; font-weight: bold; color: #111827; margin-top: 0.5rem; }
-        .kpi-card.warning { border-color: #f59e0b; }
+        .kpi-card.warning { border-color: var(--admin-warning); }
         .kpi-card.danger { border-color: #ef4444; }
         .kpi-card.success { border-color: #10b981; }
         .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
-        .chart-box { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 300px; }
+        .chart-box { background: var(--admin-surface); padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 300px; }
     </style>
 </head>
 <body>

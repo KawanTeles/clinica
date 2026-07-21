@@ -4,31 +4,50 @@
 
 :root {
   /* Colors */
-  --admin-primary: #2c3e50;
-  --admin-secondary: #34495e;
-  --admin-accent: #3498db;
-  --admin-success: #2ecc71;
+  --admin-primary: #1D1D1F;
+  --admin-secondary: #86868B;
+  --admin-accent: #2E8B57;
+  --admin-success: #2E8B57;
   --admin-warning: #f1c40f;
   --admin-danger: #e74c3c;
-  --admin-bg: #f8f9fa;
-  --admin-surface: #ffffff;
+  --admin-bg: #F5F5F7;
+  --admin-surface: #FFFFFF;
   
   /* Text */
-  --admin-text-main: #2d3748;
-  --admin-text-muted: #718096;
+  --admin-text-main: #1D1D1F;
+  --admin-text-muted: #86868B;
   
   /* Borders & Shadows */
-  --admin-border-color: #e2e8f0;
-  --admin-border-radius: 12px;
+  --admin-border-color: rgba(0, 0, 0, 0.08);
+  --admin-border-radius: 14px;
   --admin-border-radius-sm: 8px;
-  --admin-shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-  --admin-shadow-md: 0 4px 6px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.08);
-  --admin-shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.03);
+  --admin-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --admin-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --admin-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.08);
   
-  /* Layout */
+  /* Layout & Interaction */
   --sidebar-width: 260px;
   --header-height: 70px;
   --transition-speed: 0.3s;
+  --admin-hover-bg: rgba(0, 0, 0, 0.05);
+  --admin-card-header: rgba(0, 0, 0, 0.03);
+  --admin-inverse-text: #FFFFFF;
+}
+
+body.dark-theme {
+  --admin-primary: #F2F2F7;
+  --admin-secondary: #8E8E93;
+  --admin-bg: #0F0F11;
+  --admin-surface: #1C1C1F;
+  --admin-text-main: #F2F2F7;
+  --admin-text-muted: #8E8E93;
+  --admin-border-color: rgba(255, 255, 255, 0.08);
+  --admin-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.40);
+  --admin-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --admin-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.65);
+  --admin-hover-bg: rgba(255, 255, 255, 0.05);
+  --admin-card-header: rgba(255, 255, 255, 0.03);
+  --admin-inverse-text: #F2F2F7;
 }
 
 /* Base resets for Admin area to avoid conflicting with global public css */
@@ -111,13 +130,13 @@ body.admin-body {
 }
 
 .admin-nav-item:hover {
-  background-color: #f1f5f9;
+  background-color: var(--admin-hover-bg);
   color: var(--admin-primary);
 }
 
 .admin-nav-item.active {
   background-color: var(--admin-accent);
-  color: #ffffff;
+  color: var(--admin-inverse-text);
 }
 
 .admin-sidebar-footer {
@@ -130,7 +149,7 @@ body.admin-body {
   align-items: center;
   gap: 12px;
   padding: 8px;
-  background-color: #f8fafc;
+  background-color: var(--admin-card-header);
   border-radius: var(--admin-border-radius-sm);
   border: 1px solid var(--admin-border-color);
 }
@@ -140,7 +159,7 @@ body.admin-body {
   height: 32px;
   border-radius: 50%;
   background-color: var(--admin-accent);
-  color: #fff;
+  color: var(--admin-inverse-text);
   display: flex;
   align-items: center;
   justify-content: center;

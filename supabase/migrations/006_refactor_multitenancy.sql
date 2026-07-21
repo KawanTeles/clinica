@@ -33,7 +33,7 @@ $$ LANGUAGE sql STABLE;
 
 -- 1. Criação retroativa da tabela de Clínicas, caso não exista (da Etapa 7)
 CREATE TABLE IF NOT EXISTS public.clinics (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   nome VARCHAR(150) NOT NULL,
   cnpj VARCHAR(20) UNIQUE,
   ativo BOOLEAN DEFAULT TRUE,
@@ -46,14 +46,29 @@ INSERT INTO public.clinics (nome)
 SELECT 'Clínica Zoe Matriz' WHERE NOT EXISTS (SELECT 1 FROM public.clinics);
 
 -- 2. Propagação retroativa da coluna clinic_id para as tabelas iniciais
-ALTER TABLE public.user_profiles ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.security_logs ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.professional_schedule ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.schedule_blocks ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.appointment_history ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.notifications ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
+ALTER TABLE public.user_profiles ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.user_profiles SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.roles SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.permissions SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.security_logs ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.security_logs SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.professional_schedule ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.professional_schedule SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.schedule_blocks ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.schedule_blocks SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.appointment_history ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.appointment_history SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.notifications ADD COLUMN IF NOT EXISTS clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.notifications SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
 
 -- 3. Criação de Índices Básicos de Performance
 CREATE INDEX IF NOT EXISTS idx_user_profiles_clinic ON public.user_profiles(clinic_id);

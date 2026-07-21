@@ -8,6 +8,7 @@ ALTER TABLE public.financial_document_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cash_registers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cash_movements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.payment_methods ENABLE ROW LEVEL SECURITY;
 
 -- 1. ADMIN - Acesso Total (Se pertence à clínica ativa)
 CREATE POLICY "Admin Finance Docs" ON public.financial_documents FOR ALL 
@@ -25,6 +26,9 @@ USING (public.is_admin() AND clinic_id = public.current_clinic_id());
 CREATE POLICY "Admin Cash Mov" ON public.cash_movements FOR ALL 
 USING (public.is_admin() AND cash_register_id IN (SELECT id FROM public.cash_registers WHERE clinic_id = public.current_clinic_id()));
 
+CREATE POLICY "Admin Payment Methods" ON public.payment_methods FOR ALL 
+USING (public.is_admin() AND clinic_id = public.current_clinic_id());
+
 -- 2. RECEPCIONISTA - Pode operar o PDV e lançar pagamentos/receitas (Não deleta)
 CREATE POLICY "Recep Finance Select Insert" ON public.financial_documents FOR SELECT 
 USING (public.has_role('RECEPCIONISTA') AND clinic_id = public.current_clinic_id());
@@ -37,5 +41,8 @@ USING (public.has_role('RECEPCIONISTA') AND clinic_id = public.current_clinic_id
 
 CREATE POLICY "Recep Payments Insert" ON public.payments FOR INSERT 
 WITH CHECK (public.has_role('RECEPCIONISTA') AND clinic_id = public.current_clinic_id());
+
+CREATE POLICY "Recep Payment Methods Select" ON public.payment_methods FOR SELECT 
+USING (public.has_role('RECEPCIONISTA') AND clinic_id = public.current_clinic_id());
 
 -- Assegurando operações seguras (sem permissão de DELETE para Recepcionistas)

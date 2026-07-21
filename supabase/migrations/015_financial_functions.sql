@@ -5,7 +5,7 @@
 
 -- 1. Tabela Dedicada à Auditoria Financeira
 CREATE TABLE public.financial_audit (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinic_id UUID REFERENCES public.clinics(id),
     document_id UUID REFERENCES public.financial_documents(id) ON DELETE CASCADE,
     campo_alterado VARCHAR(100),

@@ -3,7 +3,7 @@
 
 -- Tokens de Acesso Seguro (Magic Link)
 CREATE TABLE portal_tokens (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     paciente_id UUID NOT NULL REFERENCES pacientes(id) ON DELETE CASCADE,
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     token VARCHAR(255) NOT NULL UNIQUE,
@@ -18,7 +18,7 @@ CREATE INDEX idx_portal_tokens_paciente ON portal_tokens(paciente_id);
 
 -- Preparação para Documentos (Futuro)
 CREATE TABLE paciente_documentos (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     paciente_id UUID NOT NULL REFERENCES pacientes(id) ON DELETE CASCADE,
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     consulta_id UUID REFERENCES consultas(id) ON DELETE SET NULL, -- Se atrelado a uma consulta

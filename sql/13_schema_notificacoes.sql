@@ -3,7 +3,7 @@
 
 -- LGPD Consentimento de Pacientes
 CREATE TABLE pacientes_consentimento (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     paciente_id UUID NOT NULL REFERENCES pacientes(id) ON DELETE CASCADE,
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     aceita_whatsapp BOOLEAN DEFAULT FALSE,
@@ -16,7 +16,7 @@ CREATE TABLE pacientes_consentimento (
 
 -- Templates de Mensagens
 CREATE TABLE notificacoes_templates (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(100) NOT NULL, -- Ex: 'consulta_confirmada'
     canal VARCHAR(20) NOT NULL DEFAULT 'WHATSAPP', -- WHATSAPP, EMAIL, SMS
@@ -28,7 +28,7 @@ CREATE TABLE notificacoes_templates (
 
 -- Fila de Notificações
 CREATE TABLE notificacoes_fila (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     paciente_id UUID REFERENCES pacientes(id) ON DELETE SET NULL,
     profissional_id UUID REFERENCES profissionais(id) ON DELETE SET NULL,

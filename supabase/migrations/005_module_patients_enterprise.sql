@@ -5,7 +5,7 @@
 
 -- 1. Estrutura Multi-Tenant Base
 CREATE TABLE public.clinics (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   nome VARCHAR(150) NOT NULL,
   cnpj VARCHAR(20) UNIQUE,
   ativo BOOLEAN DEFAULT TRUE,
@@ -15,14 +15,15 @@ CREATE TABLE public.clinics (
 INSERT INTO public.clinics (nome) VALUES ('Clínica Zoe Matriz');
 
 -- Adicionando clinic_id nas tabelas preexistentes
-ALTER TABLE public.professionals 
-ADD COLUMN clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
-ALTER TABLE public.appointments 
-ADD COLUMN clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1);
+ALTER TABLE public.professionals ADD COLUMN clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.professionals SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
+
+ALTER TABLE public.appointments ADD COLUMN clinic_id UUID REFERENCES public.clinics(id);
+UPDATE public.appointments SET clinic_id = (SELECT id FROM public.clinics LIMIT 1) WHERE clinic_id IS NULL;
 
 -- 2. Auditoria Universal (Redução de JSONs gigantescos e reaproveitamento)
 CREATE TABLE public.audit_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     entity_type VARCHAR(50) NOT NULL, -- Ex: 'patients', 'appointments'
     entity_id UUID NOT NULL,
     action VARCHAR(20) NOT NULL CHECK (action IN ('INSERT', 'UPDATE', 'DELETE')),
@@ -69,8 +70,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- 3. Planos de Saúde (Catálogo)
 CREATE TABLE public.health_insurances (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID REFERENCES public.clinics(id),
   nome VARCHAR(150) NOT NULL UNIQUE,
   cnpj VARCHAR(20),
   telefone VARCHAR(20),
@@ -80,15 +81,15 @@ CREATE TABLE public.health_insurances (
 
 -- 4. Especialidades e Procedimentos
 CREATE TABLE public.specialties (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID REFERENCES public.clinics(id),
   nome VARCHAR(150) NOT NULL UNIQUE,
   descricao TEXT
 );
 
 CREATE TABLE public.procedures (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID REFERENCES public.clinics(id),
   specialty_id UUID REFERENCES public.specialties(id) ON DELETE CASCADE,
   nome VARCHAR(150) NOT NULL,
   descricao TEXT,
@@ -108,8 +109,8 @@ CREATE TABLE public.professional_procedures (
 
 -- 5. Pacientes
 CREATE TABLE public.patients (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    clinic_id UUID REFERENCES public.clinics(id),
     
     -- Login Cliente
     auth_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL, 
@@ -164,7 +165,7 @@ CREATE TRIGGER trg_patient_audit AFTER INSERT OR UPDATE OR DELETE ON public.pati
 
 -- 6. Convênios do Paciente
 CREATE TABLE public.patient_health_insurances (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   patient_id UUID REFERENCES public.patients(id) ON DELETE CASCADE,
   health_insurance_id UUID REFERENCES public.health_insurances(id) ON DELETE RESTRICT,
   numero_carteirinha VARCHAR(50) NOT NULL,
@@ -180,7 +181,7 @@ CREATE UNIQUE INDEX idx_patient_primary_insurance ON public.patient_health_insur
 
 -- 7. Contatos Familiares
 CREATE TABLE public.patient_contacts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   patient_id UUID REFERENCES public.patients(id) ON DELETE CASCADE,
   nome VARCHAR(150) NOT NULL,
   parentesco VARCHAR(50) NOT NULL CHECK (parentesco IN ('PAI','MAE','RESPONSAVEL','CONJUGE','FILHO','CUIDADOR','OUTRO')),
@@ -194,7 +195,7 @@ CREATE TABLE public.patient_contacts (
 
 -- 8. Alertas
 CREATE TABLE public.patient_alerts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   patient_id UUID REFERENCES public.patients(id) ON DELETE CASCADE,
   tipo VARCHAR(50) NOT NULL,
   descricao TEXT NOT NULL,
@@ -206,7 +207,7 @@ CREATE TRIGGER trg_alert_audit AFTER INSERT OR UPDATE OR DELETE ON public.patien
 
 -- 9. Documentos (Soft Delete & Versionamento)
 CREATE TABLE public.patient_documents (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   patient_id UUID REFERENCES public.patients(id) ON DELETE CASCADE,
   nome_arquivo VARCHAR(255) NOT NULL,
   descricao TEXT,
@@ -235,8 +236,8 @@ CREATE TRIGGER trg_appointment_audit AFTER INSERT OR UPDATE OR DELETE ON public.
 
 -- 11. Financeiro (Com Taxas e Gateways)
 CREATE TABLE public.financial_transactions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    clinic_id UUID REFERENCES public.clinics(id) DEFAULT (SELECT id FROM public.clinics LIMIT 1),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    clinic_id UUID REFERENCES public.clinics(id),
     patient_id UUID REFERENCES public.patients(id) ON DELETE RESTRICT,
     appointment_id UUID REFERENCES public.appointments(id) ON DELETE SET NULL,
     tipo VARCHAR(20) CHECK (tipo IN ('RECEITA', 'DESPESA', 'ESTORNO')),
@@ -274,7 +275,7 @@ GROUP BY p.id;
 
 -- 13. Otimizações de Busca
 ALTER TABLE public.patients ADD COLUMN text_search tsvector 
-GENERATED ALWAYS AS (to_tsvector('portuguese', coalesce(nome, '') || ' ' || coalesce(cpf, '') || ' ' || coalesce(email, ''))) STORED;
+GENERATED ALWAYS AS (to_tsvector('portuguese'::regconfig, coalesce(nome, '') || ' ' || coalesce(cpf, '') || ' ' || coalesce(email, ''))) STORED;
 CREATE INDEX idx_patients_search ON public.patients USING GIN(text_search);
 CREATE INDEX idx_patients_cpf ON public.patients(cpf);
 CREATE INDEX idx_patients_email ON public.patients(email);

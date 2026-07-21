@@ -79,7 +79,7 @@
 .calendar-day-col {
     border-right: 1px solid var(--admin-border-color);
     position: relative;
-    background: #fff;
+    background: var(--admin-surface);
 }
 
 .calendar-cell {
@@ -91,7 +91,7 @@
 }
 
 .calendar-cell:hover {
-    background: #f1f5f9;
+    background: var(--admin-hover-bg);
 }
 
 /* Appointment Cards */
@@ -100,7 +100,7 @@
     left: 4px;
     right: 4px;
     background: var(--admin-accent);
-    color: white;
+    color: var(--admin-inverse-text);
     border-radius: 4px;
     padding: 4px 8px;
     font-size: 0.8rem;
@@ -108,14 +108,14 @@
     cursor: pointer;
     overflow: hidden;
     z-index: 5;
-    border-left: 3px solid #2980b9;
+    border-left: 3px solid rgba(0,0,0,0.2);
 }
 
-.appointment-card.status-aguardando_aprovacao { background: #f39c12; border-color: #d68910; }
-.appointment-card.status-confirmada { background: #2ecc71; border-color: #27ae60; }
-.appointment-card.status-em_andamento { background: #3498db; border-color: #2980b9; }
-.appointment-card.status-cancelada { background: #e74c3c; border-color: #c0392b; opacity: 0.7; }
-.appointment-card.block { background: #95a5a6; border-color: #7f8c8d; cursor: not-allowed; }
+.appointment-card.status-aguardando_aprovacao { background: var(--admin-warning); border-color: rgba(0,0,0,0.2); }
+.appointment-card.status-confirmada { background: var(--admin-success); border-color: rgba(0,0,0,0.2); }
+.appointment-card.status-em_andamento { background: var(--admin-accent); border-color: rgba(0,0,0,0.2); }
+.appointment-card.status-cancelada { background: var(--admin-danger); border-color: rgba(0,0,0,0.2); opacity: 0.7; }
+.appointment-card.block { background: var(--admin-secondary); border-color: rgba(0,0,0,0.2); cursor: not-allowed; }
 
 @media (max-width: 1024px) {
     .agenda-container { flex-direction: column; height: auto; }

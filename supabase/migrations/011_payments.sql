@@ -3,9 +3,18 @@
 -- Descrição: Sistema granular de pagamentos vinculados a documentos financeiros.
 -- =================================================================================
 
--- Pagamentos Individuais (Permite Split: Dinheiro + Pix no mesmo documento)
+-- 1. Formas de Pagamento
+CREATE TABLE public.payment_methods (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID REFERENCES public.clinics(id) ON DELETE CASCADE,
+  nome VARCHAR(100) NOT NULL,
+  taxa DECIMAL(10,2) DEFAULT 0.00,
+  ativo BOOLEAN DEFAULT TRUE
+);
+
+-- 2. Pagamentos Individuais (Permite Split: Dinheiro + Pix no mesmo documento)
 CREATE TABLE public.payments (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   clinic_id UUID REFERENCES public.clinics(id) ON DELETE CASCADE,
   document_id UUID REFERENCES public.financial_documents(id) ON DELETE CASCADE,
   payment_method_id UUID REFERENCES public.payment_methods(id) ON DELETE RESTRICT,

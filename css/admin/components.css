@@ -117,7 +117,7 @@
 }
 
 .admin-table tr:hover td {
-  background-color: #f8fafc;
+  background-color: var(--admin-hover-bg);
 }
 
 /* Badges */
@@ -152,10 +152,10 @@
 
 .admin-btn-primary {
   background-color: var(--admin-accent);
-  color: white;
+  color: var(--admin-inverse-text);
 }
 .admin-btn-primary:hover {
-  background-color: #2980b9;
+  background-color: #246e43;
 }
 
 .admin-btn-outline {
@@ -164,13 +164,13 @@
   color: var(--admin-text-main);
 }
 .admin-btn-outline:hover {
-  background-color: #f1f5f9;
+  background-color: var(--admin-hover-bg);
 }
 
 /* Placeholder for charts */
 .chart-placeholder {
   height: 300px;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: var(--admin-card-header);
   border-radius: var(--admin-border-radius-sm);
   display: flex;
   align-items: center;

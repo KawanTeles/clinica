@@ -15,7 +15,8 @@
 
   <!-- Supabase CDN & Auth Guard -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../../js/admin/supabase-client.js"></script>
+
+  <script src="../../js/theme.js"></script>
   <script type="module" src="../../js/admin/guard.js"></script>
 </head>
 <body class="admin-body">
@@ -59,6 +60,15 @@
         <a href="configuracoes.html" class="admin-nav-item">
           <i class="fas fa-cog"></i>
           <span>Configurações</span>
+        </a>
+        <hr style="border: 0; border-top: 1px solid var(--admin-border-color); margin: 8px 0;" />
+        <a href="../../index.html" class="admin-nav-item">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Voltar ao Site</span>
+        </a>
+        <a href="#" class="admin-nav-item" id="btn-logout" style="color: var(--admin-danger);">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
         </a>
       </nav>
 
@@ -197,7 +207,7 @@
               <h2 class="card-title">Alertas e Pendências</h2>
             </div>
             <div style="display: flex; flex-direction: column; gap: 16px;">
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 4px solid var(--admin-warning); border-radius: 4px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                   <i class="fas fa-exclamation-triangle" style="color: #856404;"></i>
                   <span style="color: #856404; font-size: 0.9rem; font-weight: 500;">5 novos agendamentos aguardando aprovação</span>

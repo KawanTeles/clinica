@@ -3,7 +3,7 @@
 
 -- 1. Templates de Marketing
 CREATE TABLE marketing_templates (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(100) NOT NULL,
     tipo VARCHAR(50) DEFAULT 'WHATSAPP', -- WHATSAPP, EMAIL, SMS
@@ -19,7 +19,7 @@ FOR EACH ROW EXECUTE PROCEDURE update_atualizado_em();
 
 -- 2. Campanhas de Marketing
 CREATE TABLE marketing_campanhas (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(150) NOT NULL,
     objetivo VARCHAR(100),
@@ -44,7 +44,7 @@ ADD COLUMN campanha_id UUID REFERENCES marketing_campanhas(id) ON DELETE SET NUL
 
 -- 3. Motor de Automações (Event-Driven)
 CREATE TABLE automacoes_regras (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(100) NOT NULL,
     evento_gatilho VARCHAR(100) NOT NULL, -- CONSULTA_APROVADA, NOVO_LEAD, PAGAMENTO_RECEBIDO, ANIVERSARIO

@@ -5,8 +5,8 @@ body, html {
   padding: 0;
   height: 100%;
   font-family: var(--font-main, 'Inter', sans-serif);
-  background: var(--bg-body, #f7f9fc);
-  color: var(--text-dark, #1d1d1f);
+  background: var(--bg-body, #F5F5F7);
+  color: var(--text-dark, #1D1D1F);
 }
 
 .login-body-section {
@@ -18,9 +18,9 @@ body, html {
 }
 
 .login-container {
-  background: var(--bg-card, #ffffff);
+  background: var(--bg-card, #FFFFFF);
   border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
   width: 100%;
   max-width: 420px;
   padding: 3rem 2.5rem;
@@ -39,7 +39,7 @@ body, html {
 
 .login-header i {
   font-size: 2.5rem;
-  color: var(--primary-color, #0071e3);
+  color: var(--primary-color, #2E8B57);
   margin-bottom: 1rem;
 }
 
@@ -50,7 +50,7 @@ body, html {
 }
 
 .login-header p {
-  color: var(--text-muted, #86868b);
+  color: var(--text-muted, #86868B);
   font-size: 0.95rem;
 }
 
@@ -70,7 +70,7 @@ body, html {
 .form-group input {
   width: 100%;
   padding: 1rem 1.25rem;
-  border: 1px solid var(--border-color, #d2d2d7);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
   border-radius: 12px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -80,14 +80,14 @@ body, html {
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--primary-color, #0071e3);
-  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+  border-color: var(--primary-color, #2E8B57);
+  box-shadow: 0 0 0 4px rgba(46, 139, 87, 0.1);
 }
 
 .btn-login {
   width: 100%;
   padding: 1rem;
-  background: var(--primary-color, #0071e3);
+  background: var(--primary-color, #2E8B57);
   color: white;
   border: none;
   border-radius: 12px;
@@ -98,7 +98,7 @@ body, html {
 }
 
 .btn-login:hover {
-  background: var(--primary-hover, #0077ED);
+  background: var(--primary-hover, #246e43);
 }
 
 .btn-login:active {
@@ -112,7 +112,7 @@ body, html {
 }
 
 .form-footer a {
-  color: var(--primary-color, #0071e3);
+  color: var(--primary-color, #2E8B57);
   text-decoration: none;
   font-weight: 500;
 }
@@ -123,13 +123,13 @@ body, html {
 
 .alert-error {
   display: none;
-  background: #fce4e4;
-  color: #cc0033;
+  background: var(--error-bg, #fce4e4);
+  color: var(--error-text, #cc0033);
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
-  border: 1px solid #fcc2c3;
+  border: 1px solid var(--error-border, #fcc2c3);
 }
 
 [data-theme="dark"] .login-container {

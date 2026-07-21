@@ -6,14 +6,14 @@
     <title>Contas a Receber | Admin</title>
     <style>
         .filters { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .table-responsive { overflow-x: auto; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .table-responsive { overflow-x: auto; background: var(--admin-surface); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        th { background: #f9fafb; font-weight: 600; color: #374151; }
+        th { background: var(--admin-card-header); font-weight: 600; color: var(--admin-text-main); }
         .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: bold; }
-        .st-aberto { background: #fef3c7; color: #92400e; }
+        .st-aberto { background: rgba(245, 158, 11, 0.1); color: var(--admin-warning); }
         .st-pago { background: #d1fae5; color: #065f46; }
-        .st-vencido { background: #fee2e2; color: #991b1b; }
+        .st-vencido { background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); }
         
         /* Mobile Cards Layout */
         @media (max-width: 768px) {

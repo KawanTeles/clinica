@@ -1,7 +1,7 @@
 -- 01_schema_rbac.sql
 
 CREATE TABLE clinicas (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nome VARCHAR(255) NOT NULL,
     cnpj VARCHAR(20),
     criado_em TIMESTAMPTZ DEFAULT NOW(),
@@ -10,7 +10,7 @@ CREATE TABLE clinicas (
 );
 
 CREATE TABLE usuarios (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     auth_user_id UUID NOT NULL UNIQUE,
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE RESTRICT,
     nome VARCHAR(255) NOT NULL,
@@ -25,14 +25,14 @@ CREATE TABLE usuarios (
 );
 
 CREATE TABLE cargos (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT
 );
 
 CREATE TABLE permissoes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     slug VARCHAR(100) NOT NULL UNIQUE,
     descricao TEXT NOT NULL
 );

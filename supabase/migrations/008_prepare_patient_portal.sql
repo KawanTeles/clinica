@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS public.financial_transactions;
 
 -- 2. Área do Cliente: Sessões e Devices
 CREATE TABLE IF NOT EXISTS public.patient_devices (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     patient_id UUID REFERENCES public.patients(id) ON DELETE CASCADE,
     device_id VARCHAR(255) NOT NULL,
     device_model VARCHAR(100),
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.patient_devices (
 );
 
 CREATE TABLE IF NOT EXISTS public.patient_sessions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     patient_id UUID REFERENCES public.patients(id) ON DELETE CASCADE,
     refresh_token_hash TEXT UNIQUE NOT NULL,
     device_name VARCHAR(100),

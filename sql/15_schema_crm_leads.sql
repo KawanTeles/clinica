@@ -10,7 +10,7 @@ ADD COLUMN sexo VARCHAR(20);
 
 -- 2. Tabela de Leads (Funil Kanban)
 CREATE TABLE leads (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(255) NOT NULL,
     telefone VARCHAR(20),
@@ -36,7 +36,7 @@ CREATE INDEX idx_leads_status ON leads(status);
 
 -- 3. Observações Internas de Pacientes (Privado)
 CREATE TABLE pacientes_observacoes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     paciente_id UUID NOT NULL REFERENCES pacientes(id) ON DELETE CASCADE,
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     autor_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,

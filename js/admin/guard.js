@@ -14,11 +14,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Se já estiver logado e na tela de login, redirecionar para o painel principal
-  if (isLoginPage) {
-    window.location.href = 'dashboard.html';
-    return;
-  }
+  // Se já estiver logado e na tela de login, não redirecionar cegamente.
+  // Vamos buscar o perfil primeiro para enviar para a tela correta de acordo com a role.
 
   // Validação de Role e Redirecionamento RBAC
   try {
@@ -74,22 +71,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.head.appendChild(style);
 
     if (roleName === 'ADMIN') {
-      // Admin pode acessar tudo
+      // Admin pode acessar tudo, se estiver no login vai pro dashboard
+      if (isLoginPage) {
+        window.location.href = 'dashboard.html';
+        return;
+      }
       return;
     } 
     else if (roleName === 'RECEPCIONISTA') {
-      // Recepcionista só acessa agenda e pacientes relacionados (simulado para este escopo restrito)
+      // Recepcionista só acessa agenda e pacientes
       const allowedPages = ['agenda.html', 'pacientes.html'];
-      if (!allowedPages.includes(filename)) {
+      if (isLoginPage || !allowedPages.includes(filename)) {
         window.location.href = 'agenda.html';
+        return;
       }
     } 
     else if (roleName === 'PROFISSIONAL') {
-      // Profissional acessa apenas sua agenda
-      // Obs: Na vida real, a agenda e os pacientes vão filtrar no backend pelo uid()
+      // Profissional acessa apenas sua agenda e pacientes
       const allowedPages = ['agenda.html', 'pacientes.html'];
-      if (!allowedPages.includes(filename)) {
-        window.location.href = 'agenda.html'; // Idealmente, 'minha-agenda.html' mas usando 'agenda.html' provisoriamente
+      if (isLoginPage || !allowedPages.includes(filename)) {
+        window.location.href = 'agenda.html';
+        return;
       }
     }
     else {
@@ -101,5 +103,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   } catch (err) {
     console.error('Erro de validação Guard:', err);
+  }
+});
+
+// Setup global logout listener
+document.addEventListener('click', async (e) => {
+  const logoutBtn = e.target.closest('#btn-logout');
+  if (logoutBtn) {
+    e.preventDefault();
+    await AuthRepository.signOut();
+    window.location.href = 'login.html';
   }
 });

@@ -5,7 +5,7 @@
 
 -- 1. Sessão de Caixa
 CREATE TABLE public.cash_registers (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   clinic_id UUID REFERENCES public.clinics(id) ON DELETE CASCADE,
   opened_by UUID REFERENCES auth.users(id),
   closed_by UUID REFERENCES auth.users(id),
@@ -24,7 +24,7 @@ CREATE TABLE public.cash_registers (
 
 -- 2. Movimentos Avulsos ou Vinculados (Sangria, Suprimento, Pgto)
 CREATE TABLE public.cash_movements (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   cash_register_id UUID REFERENCES public.cash_registers(id) ON DELETE CASCADE,
   payment_id UUID REFERENCES public.payments(id) ON DELETE SET NULL, -- Se originado por pagamento
   

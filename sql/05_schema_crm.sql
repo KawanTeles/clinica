@@ -1,14 +1,14 @@
 -- 05_schema_crm.sql
 
 CREATE TABLE crm_funil (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(100) NOT NULL,
     ordem INT NOT NULL
 );
 
 CREATE TABLE crm_leads (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE RESTRICT,
     funil_id UUID NOT NULL REFERENCES crm_funil(id) ON DELETE RESTRICT,
     nome VARCHAR(255) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE crm_leads (
 );
 
 CREATE TABLE crm_tags (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     nome VARCHAR(50) NOT NULL,
     cor VARCHAR(20) DEFAULT '#cccccc'
@@ -34,7 +34,7 @@ CREATE TABLE crm_lead_tags (
 );
 
 CREATE TABLE crm_observacoes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     lead_id UUID REFERENCES crm_leads(id) ON DELETE CASCADE,
     paciente_id UUID REFERENCES pacientes(id) ON DELETE CASCADE,
     usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE RESTRICT,
@@ -43,7 +43,7 @@ CREATE TABLE crm_observacoes (
 );
 
 CREATE TABLE crm_historico (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     lead_id UUID REFERENCES crm_leads(id) ON DELETE CASCADE,
     paciente_id UUID REFERENCES pacientes(id) ON DELETE CASCADE,
     acao VARCHAR(255) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE crm_historico (
 );
 
 CREATE TABLE anexos (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     paciente_id UUID REFERENCES pacientes(id) ON DELETE CASCADE,
     url TEXT NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE anexos (
 );
 
 CREATE TABLE notificacoes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clinica_id UUID NOT NULL REFERENCES clinicas(id) ON DELETE CASCADE,
     tipo VARCHAR(50) NOT NULL,
     destinatario VARCHAR(255) NOT NULL,
