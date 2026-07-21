@@ -81,6 +81,38 @@
       </header>
 
       <div class="admin-content">
+        <!-- Dashboard de Pacientes -->
+        <div class="stats-grid" id="patients-dashboard" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(52, 152, 219, 0.1); color: var(--admin-primary);"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Total de Pacientes</span>
+              <h3 class="stat-value" id="dash_total">0</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);"><i class="fas fa-user-plus"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Novos no Mês</span>
+              <h3 class="stat-value" id="dash_novos">0</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(155, 89, 182, 0.1); color: var(--admin-accent);"><i class="fas fa-stethoscope"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Consultas Realizadas</span>
+              <h3 class="stat-value" id="dash_consultas">0</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(241, 196, 15, 0.1); color: var(--admin-warning);"><i class="fas fa-user-check"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Pacientes Ativos</span>
+              <h3 class="stat-value" id="dash_ativos">0</h3>
+            </div>
+          </div>
+        </div>
+
         <div class="admin-card">
           <div class="toolbar">
             <div class="search-box">
@@ -145,6 +177,18 @@
                 <input type="date" id="pac_nascimento" class="form-input">
               </div>
               <div class="form-group">
+                <label class="form-label">Sexo</label>
+                <select id="pac_sexo" class="form-input">
+                  <option value="F">Feminino</option>
+                  <option value="M">Masculino</option>
+                  <option value="O">Outro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Telefone</label>
+                <input type="text" id="pac_telefone" class="form-input">
+              </div>
+              <div class="form-group">
                 <label class="form-label">WhatsApp</label>
                 <input type="text" id="pac_whatsapp" class="form-input">
               </div>
@@ -152,9 +196,20 @@
                 <label class="form-label">E-mail (Área do Cliente)</label>
                 <input type="email" id="pac_email" class="form-input">
               </div>
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select id="pac_status" class="form-input">
+                  <option value="Ativo">Ativo</option>
+                  <option value="Inativo">Inativo</option>
+                </select>
+              </div>
               <div class="form-group full">
                 <label class="form-label">Alerta Médico Crítico</label>
                 <input type="text" id="pac_alerta" class="form-input" placeholder="Ex: Cadeirante, Alergia à Penicilina">
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Observações Clínicas / Histórico Básico</label>
+                <textarea id="pac_observacao" class="form-input" rows="3" placeholder="Informações gerais que aparecem no agendamento"></textarea>
               </div>
             </div>
           </div>

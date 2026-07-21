@@ -2,6 +2,7 @@ import { CrmMessagesRepository } from '../../repositories/crm-messages.repositor
 import { CrmRepository } from '../../repositories/crm.repository.js';
 import { AgendaRepository } from '../../repositories/agenda.repository.js';
 import { CrmFeedbackRepository } from '../../repositories/crm-feedback.repository.js';
+import { CrmReactivationRepository } from '../../repositories/crm-reactivation.repository.js';
 
 export class WhatsappWebhookService {
   /**
@@ -118,8 +119,9 @@ export class WhatsappWebhookService {
       description: `Paciente respondeu: ${event.content}`
     });
 
-    // 3. Checar intenção de confirmação de consulta
     const contentUpper = event.content.trim().toUpperCase();
+
+    // 3. Checar intenção de confirmação de consulta
     if (contentUpper === 'SIM' || contentUpper === 'CONFIRMO') {
       try {
         const nextAppt = await AgendaRepository.getProximaConsulta(patient.id, clinic_id);
@@ -132,13 +134,15 @@ export class WhatsappWebhookService {
             type: 'system_action',
             description: `Consulta de ${nextAppt.data} às ${nextAppt.hora_inicio} confirmada automaticamente.`
           });
+          return; // Para a execução se já tratou
         }
       } catch (err) {
         console.error('Falha ao tentar confirmar consulta via webhook:', err);
       }
     } 
+
     // 4. Checar intenção de cancelamento ou remarcação
-    else if (contentUpper === 'CANCELAR' || contentUpper === 'REMARCAR') {
+    if (contentUpper === 'CANCELAR' || contentUpper === 'REMARCAR') {
       try {
         const nextAppt = await AgendaRepository.getProximaConsulta(patient.id, clinic_id);
         if (nextAppt) {
@@ -151,7 +155,7 @@ export class WhatsappWebhookService {
             description: `Consulta de ${nextAppt.data} cancelada pelo paciente via WhatsApp.`
           });
 
-          // Criar tarefa para a recepção (Usaremos um dummy admin ID se não soubermos a recepção, ou chamaremos CrmRepository)
+          // Criar tarefa para a recepção
           await CrmRepository.createTask({
             clinic_id: clinic_id,
             patient_id: patient.id,
@@ -159,49 +163,75 @@ export class WhatsappWebhookService {
             description: `Paciente solicitou ${contentUpper} a consulta do dia ${nextAppt.data}. Entrar em contato.`,
             due_date: new Date().toISOString()
           });
+          return; // Para a execução
         }
       } catch (err) {
         console.error('Falha ao tentar cancelar consulta via webhook:', err);
       }
     } 
-    // 5. Checar feedback (NPS / Nota 1 a 5)
-    else {
-      // Extrair possível nota do texto (ex: "5", "nota 5", "excelente" -> mapear)
-      let rating = null;
-      
-      const matchNumber = event.content.match(/\b([1-5])\b/);
-      if (matchNumber) {
-        rating = parseInt(matchNumber[1], 10);
-      } else if (contentUpper.includes('EXCELENTE') || contentUpper.includes('OTIMO') || contentUpper.includes('ÓTIMO') || contentUpper.includes('PERFEITO')) {
-        rating = 5;
-      } else if (contentUpper.includes('PESSIMO') || contentUpper.includes('PÉSSIMO') || contentUpper.includes('RUIM') || contentUpper.includes('HORRIVEL') || contentUpper.includes('HORRÍVEL')) {
-        rating = 1;
-      }
 
-      if (rating !== null) {
-        try {
-          await CrmFeedbackRepository.registerFeedbackResponse(clinic_id, patient.id, rating, event.content);
+    // 5. Checar feedback (NPS / Nota 1 a 5)
+    let rating = null;
+    const matchNumber = event.content.match(/\b([1-5])\b/);
+    if (matchNumber) {
+      rating = parseInt(matchNumber[1], 10);
+    } else if (contentUpper.includes('EXCELENTE') || contentUpper.includes('OTIMO') || contentUpper.includes('ÓTIMO') || contentUpper.includes('PERFEITO')) {
+      rating = 5;
+    } else if (contentUpper.includes('PESSIMO') || contentUpper.includes('PÉSSIMO') || contentUpper.includes('RUIM') || contentUpper.includes('HORRIVEL') || contentUpper.includes('HORRÍVEL')) {
+      rating = 1;
+    }
+
+    if (rating !== null) {
+      try {
+        await CrmFeedbackRepository.registerFeedbackResponse(clinic_id, patient.id, rating, event.content);
+
+        await CrmRepository.createInteraction({
+          clinic_id: clinic_id,
+          patient_id: patient.id,
+          type: 'feedback',
+          description: `Paciente avaliou o atendimento com nota ${rating}.`
+        });
+
+        if (rating <= 3) {
+          await CrmRepository.createTask({
+            clinic_id: clinic_id,
+            patient_id: patient.id,
+            title: 'Paciente avaliou negativamente atendimento',
+            description: `Nota recebida: ${rating}. Comentário: ${event.content}. Entrar em contato para entender.`,
+            due_date: new Date().toISOString()
+          });
+        }
+        return; // Para a execução
+      } catch (err) {
+        console.error('Falha ao processar feedback via webhook:', err);
+      }
+    }
+
+    // 6. Checar intenção de Reativação de Paciente Inativo (Fase 6.4)
+    if (contentUpper.includes('SIM') || contentUpper.includes('QUERO') || contentUpper.includes('MARCAR') || contentUpper.includes('AGENDAR')) {
+      try {
+        // Verifica se o paciente tem uma campanha PENDING ou CONTACTED
+        const campaign = await CrmReactivationRepository.getActiveCampaign(patient.id, clinic_id);
+        if (campaign) {
+          await CrmReactivationRepository.updateCampaignStatus(campaign.id, 'RESPONDED');
+
+          await CrmRepository.createTask({
+            clinic_id: clinic_id,
+            patient_id: patient.id,
+            title: 'Paciente respondeu campanha de reativação',
+            description: `Paciente deseja marcar nova consulta (Respondeu: "${event.content}"). Entrar em contato!`,
+            due_date: new Date().toISOString()
+          });
 
           await CrmRepository.createInteraction({
             clinic_id: clinic_id,
             patient_id: patient.id,
-            type: 'feedback',
-            description: `Paciente avaliou o atendimento com nota ${rating}.`
+            type: 'system_action',
+            description: `Paciente respondeu positivamente à campanha de reativação.`
           });
-
-          // Se for ruim, alertar recepção
-          if (rating <= 3) {
-            await CrmRepository.createTask({
-              clinic_id: clinic_id,
-              patient_id: patient.id,
-              title: 'Paciente avaliou negativamente atendimento',
-              description: `Nota recebida: ${rating}. Comentário: ${event.content}. Entrar em contato para entender.`,
-              due_date: new Date().toISOString()
-            });
-          }
-        } catch (err) {
-          console.error('Falha ao processar feedback via webhook:', err);
         }
+      } catch (err) {
+        console.error('Falha ao processar resposta de reativação:', err);
       }
     }
   }

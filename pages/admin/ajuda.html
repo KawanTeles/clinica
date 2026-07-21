@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajuda e Manual | Admin Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  <link rel="stylesheet" href="../../css/admin/components.css">
+  <link rel="stylesheet" href="../../css/admin/responsive-admin.css">
+  <link rel="stylesheet" href="../../css/admin/ajuda.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/theme.js"></script>
+  <script type="module" src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="dashboard.html" class="admin-brand"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></a>
+      </div>
+      <nav class="admin-sidebar-nav">
+        <a href="dashboard.html" class="admin-nav-item admin-only"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+        <a href="profissionais.html" class="admin-nav-item admin-only"><i class="fas fa-user-md"></i><span>Profissionais</span></a>
+        <a href="pacientes.html" class="admin-nav-item"><i class="fas fa-users"></i><span>Pacientes</span></a>
+        <a href="crm.html" class="admin-nav-item reception-only"><i class="fas fa-bullseye"></i><span>CRM</span></a>
+        <a href="agenda.html" class="admin-nav-item"><i class="far fa-calendar-alt"></i><span>Agenda</span></a>
+        <a href="financeiro.html" class="admin-nav-item admin-only"><i class="fas fa-wallet"></i><span>Financeiro</span></a>
+        <a href="usuarios.html" class="admin-nav-item admin-only"><i class="fas fa-user-shield"></i><span>Usuários</span></a>
+        <a href="configuracoes.html" class="admin-nav-item admin-only"><i class="fas fa-cog"></i><span>Configurações</span></a>
+        <a href="ajuda.html" class="admin-nav-item active"><i class="fas fa-question-circle"></i><span>Ajuda</span></a>
+        <hr style="border: 0; border-top: 1px solid var(--admin-border-color); margin: 8px 0;" />
+        <a href="../../index.html" class="admin-nav-item"><i class="fas fa-external-link-alt"></i><span>Voltar ao Site</span></a>
+        <a href="#" class="admin-nav-item" id="btn-logout" style="color: var(--admin-danger);"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <div class="clinic-tenant-info">
+          <div class="tenant-logo">CZ</div>
+          <div class="tenant-details"><span class="tenant-name">Clínica Zoe - Matriz</span><span class="tenant-plan">Plano Premium</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+          <h1 class="page-title">Central de Ajuda e Manual</h1>
+        </div>
+        <div class="header-right">
+          <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=User+Zoe&background=3498db&color=fff" class="user-avatar" id="nav-user-avatar">
+            <div class="user-info"><span class="user-name">Usuário</span><span class="user-role">Nível</span></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        
+        <!-- Bloco de Pesquisa -->
+        <div class="help-search-container admin-card">
+          <h2>Como podemos ajudar?</h2>
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="help-search-input" class="form-input" placeholder="Digite sua dúvida (ex: como cadastrar profissional)...">
+          </div>
+        </div>
+
+        <!-- Guias Rápidos -->
+        <div class="help-grid">
+          <div class="admin-card help-quick-card" onclick="scrollToSection('sec-intro')">
+            <i class="fas fa-rocket"></i>
+            <h3>Primeiros passos</h3>
+            <p>Conceitos básicos e introdução.</p>
+          </div>
+          <div class="admin-card help-quick-card" onclick="scrollToSection('sec-agenda')">
+            <i class="far fa-calendar-alt"></i>
+            <h3>Como usar agenda</h3>
+            <p>Criar consultas e organizar horários.</p>
+          </div>
+          <div class="admin-card help-quick-card" onclick="scrollToSection('sec-pacientes')">
+            <i class="fas fa-users"></i>
+            <h3>Pacientes</h3>
+            <p>Cadastro, histórico e prontuários.</p>
+          </div>
+          <div class="admin-card help-quick-card admin-only" onclick="scrollToSection('sec-financeiro')">
+            <i class="fas fa-wallet"></i>
+            <h3>Pagamentos</h3>
+            <p>Faturamento e fluxo de caixa.</p>
+          </div>
+          <div class="admin-card help-quick-card admin-only" onclick="scrollToSection('sec-config')">
+            <i class="fas fa-cog"></i>
+            <h3>Configurações</h3>
+            <p>Ajustes, horários e clínica.</p>
+          </div>
+        </div>
+
+        <!-- Layout do Manual Interno -->
+        <div class="help-layout">
+          <!-- Sidebar do manual -->
+          <div class="help-sidebar admin-card">
+            <h3 style="margin-bottom: 15px; padding-bottom:10px; border-bottom:1px solid var(--admin-border-color);">Tópicos</h3>
+            <ul class="help-topic-list">
+              <li><a href="#sec-intro">Bem-vindo</a></li>
+              <li class="admin-only"><a href="#sec-dashboard">1. Dashboard</a></li>
+              <li class="admin-only"><a href="#sec-profissionais">2. Profissionais</a></li>
+              <li class="admin-only"><a href="#sec-usuarios">3. Usuários e Permissões</a></li>
+              <li><a href="#sec-agenda">4. Agenda</a></li>
+              <li><a href="#sec-pacientes">5. Pacientes</a></li>
+              <li class="admin-only"><a href="#sec-financeiro">6. Financeiro</a></li>
+              <li class="admin-only"><a href="#sec-config">7. Configurações</a></li>
+              <li><a href="#sec-faq">8. FAQ (Dúvidas Frequentes)</a></li>
+            </ul>
+          </div>
+
+          <!-- Conteudo do Manual -->
+          <div class="help-content admin-card">
+            
+            <div id="sec-intro" class="help-section">
+              <h2>Bem-vindo ao Painel Clínica Zoe</h2>
+              <p>O Painel Administrativo foi criado para unificar e facilitar toda a gestão clínica, unindo a visão de recepção, a sala do profissional e a diretoria financeira em um único lugar seguro.</p>
+              <p>Navegue pelo menu lateral para acessar os módulos liberados para o seu perfil. Tudo ocorre em tempo real, sem necessidade de recarregar a página.</p>
+            </div>
+            
+            <hr class="help-divider admin-only">
+
+            <div id="sec-dashboard" class="help-section admin-only">
+              <h2>1. Dashboard</h2>
+              <p>A tela principal resume a saúde da clínica através de *Cards* informativos.</p>
+              <ul>
+                <li><strong>Consultas Hoje:</strong> Mostra o volume diário.</li>
+                <li><strong>Faturamento Mensal:</strong> Soma de lançamentos já pagos.</li>
+                <li><strong>Pacientes Ativos:</strong> Volume de pessoas engajadas na clínica.</li>
+                <li><strong>Profissionais Ativos:</strong> Quadro clínico liberado no sistema.</li>
+              </ul>
+            </div>
+
+            <hr class="help-divider admin-only">
+
+            <div id="sec-profissionais" class="help-section admin-only">
+              <h2>2. Profissionais</h2>
+              <p>Como cadastrar um profissional:</p>
+              <ol>
+                <li>Acesse o menu lateral <strong>Profissionais</strong>.</li>
+                <li>Clique em <strong>+ Novo Profissional</strong>.</li>
+                <li>Preencha nome, especialidade, conselho de classe (registro), telefone e horários de bloco.</li>
+                <li>Salve.</li>
+              </ol>
+              <p><em>Nota: Criar o perfil de acesso é um passo secundário (veja Usuários).</em></p>
+            </div>
+
+            <hr class="help-divider admin-only">
+
+            <div id="sec-usuarios" class="help-section admin-only">
+              <h2>3. Usuários e Permissões</h2>
+              <p>As permissões (Roles) limitam o que cada usuário enxerga:</p>
+              <ul>
+                <li><strong>ADMIN:</strong> Acesso total a finanças, configurações e auditoria.</li>
+                <li><strong>RECEPCIONISTA:</strong> Foco em agenda de todos os médicos, cadastro de pacientes e WhatsApp.</li>
+                <li><strong>PROFISSIONAL:</strong> Vê apenas a sua agenda diária e prontuários dos pacientes vinculados às suas próprias consultas. Bloqueado de ver finanças e a agenda de colegas.</li>
+              </ul>
+            </div>
+
+            <hr class="help-divider">
+
+            <div id="sec-agenda" class="help-section">
+              <h2>4. Agenda</h2>
+              <p>A visão de calendário permite gerenciar horários de forma arrastar-e-soltar.</p>
+              <ul>
+                <li><strong>Criar Consulta:</strong> Clique num espaço vazio do calendário, ou no botão "+ Nova Consulta". Selecione o paciente, o profissional e o horário.</li>
+                <li><strong>Conflitos:</strong> O sistema bloqueará consultas simultâneas para o mesmo profissional.</li>
+                <li><strong>Filtros:</strong> Profissionais e Recepcionistas podem usar o filtro superior para mudar entre visões de Dia, Semana ou Mês.</li>
+              </ul>
+            </div>
+
+            <hr class="help-divider">
+
+            <div id="sec-pacientes" class="help-section">
+              <h2>5. Pacientes</h2>
+              <p>Área de Cadastro, Histórico Clínico e CRM.</p>
+              <ul>
+                <li><strong>Novo Paciente:</strong> Exige nome, e-mail (para alertas), telefone (WhatsApp) e documentos (se necessário).</li>
+                <li><strong>Prontuários:</strong> Toda consulta concluída fica anexada ao histórico perpétuo do paciente.</li>
+              </ul>
+            </div>
+
+            <hr class="help-divider admin-only">
+
+            <div id="sec-financeiro" class="help-section admin-only">
+              <h2>6. Financeiro</h2>
+              <p>Fluxo de pagamentos e Receitas. O sistema é engatilhado pela Agenda.</p>
+              <ul>
+                <li>Quando a Recepcionista cria uma consulta para um Paciente X com o Valor R$ 150,00, a Fatura nasce no status <strong>Pendente</strong>.</li>
+                <li>O Admin acessa "Financeiro" e realiza a *Baixa (Pagamento)* no cartão, dinheiro ou Pix.</li>
+              </ul>
+            </div>
+
+            <hr class="help-divider admin-only">
+
+            <div id="sec-config" class="help-section admin-only">
+              <h2>7. Configurações</h2>
+              <p>Apenas Administradores têm acesso a este setor sensível.</p>
+              <ul>
+                <li>Você pode definir os <strong>dias úteis de atendimento</strong> (Segunda a Sexta, etc).</li>
+                <li>Definir <strong>Horário Inicial</strong> (ex: 08:00) e <strong>Final</strong> (18:00). Isso limitará como o calendário da Agenda será renderizado (bloqueando blocos da madrugada).</li>
+              </ul>
+            </div>
+
+            <hr class="help-divider">
+
+            <div id="sec-faq" class="help-section">
+              <h2>8. FAQ (Perguntas Frequentes)</h2>
+              <div class="faq-item">
+                <h4>Como cadastrar um profissional?</h4>
+                <p>Vá em "Profissionais" no menu, clique em "+ Novo", preencha a ficha. Apenas Administradores podem fazer isso.</p>
+              </div>
+              <div class="faq-item">
+                <h4>Como criar uma consulta?</h4>
+                <p>Abra a Agenda, selecione o médico, escolha uma lacuna livre no calendário e vincule o paciente.</p>
+              </div>
+              <div class="faq-item">
+                <h4>Como alterar horário da clínica?</h4>
+                <p>Menu "Configurações" -> aba "Horários de Funcionamento". O calendário reagirá automaticamente.</p>
+              </div>
+              <div class="faq-item">
+                <h4>Quem pode acessar o financeiro?</h4>
+                <p>Estritamente o Administrador. O sistema de banco de dados e a interface travam automaticamente perfis operacionais e profissionais.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../js/admin/admin.js"></script>
+  <script src="../../js/admin/sidebar.js"></script>
+  <script type="module" src="../../js/admin/ajuda.js"></script>
+</body>
+</html>

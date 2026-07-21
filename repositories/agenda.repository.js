@@ -8,17 +8,29 @@ export class AgendaRepository {
     static async getProfissionaisAtivos() {
         return await supabase
             .from('professionals')
-            .select('id, nome')
+            .select('id, nome, horarios_atendimento, dias_disponiveis')
             .eq('ativo', true);
     }
 
-    static async getAgendamentosNaSemana(profissionalId, dataInicio, dataFim) {
+    static async getPacientes() {
         return await supabase
+            .from('patients')
+            .select('id, nome, cpf')
+            .order('nome', { ascending: true });
+    }
+
+    static async getAgendamentosNaSemana(profissionalId, dataInicio, dataFim) {
+        let query = supabase
             .from('appointments')
-            .select('*')
-            .eq('professional_id', profissionalId)
+            .select('*, patients(nome), professionals(nome)')
             .gte('data', dataInicio)
             .lte('data', dataFim);
+
+        if (profissionalId) {
+            query = query.eq('professional_id', profissionalId);
+        }
+
+        return await query;
     }
 
     static async getConsultasParaLembrete24h() {
@@ -158,5 +170,84 @@ export class AgendaRepository {
         }
 
         return { data, error: null };
+    }
+
+    // Novos métodos solicitados pela Etapa 5
+    static async getAppointments(dataInicio, dataFim) {
+        return await supabase
+            .from('appointments')
+            .select('*, patients(nome, cpf, telefone), professionals(nome)')
+            .gte('data', dataInicio)
+            .lte('data', dataFim);
+    }
+
+    static async getAppointmentsByProfessional(profissionalId, dataInicio, dataFim) {
+        return await supabase
+            .from('appointments')
+            .select('*, patients(nome, cpf, telefone), professionals(nome)')
+            .eq('professional_id', profissionalId)
+            .gte('data', dataInicio)
+            .lte('data', dataFim);
+    }
+
+    static async createAppointment(payload) {
+        // 1. Inserir a consulta
+        const { data: appData, error: appError } = await supabase
+            .from('appointments')
+            .insert(payload)
+            .select()
+            .single();
+
+        if (appError) return { data: null, error: appError };
+
+        // 2. Integração Financeira Automática (Etapa 6 Financeiro)
+        // Ao criar a consulta, geramos a fatura ABERTA baseada no valor do profissional.
+        try {
+            if (payload.professional_id) {
+                const { data: prof } = await supabase
+                    .from('professionals')
+                    .select('valor_avista')
+                    .eq('id', payload.professional_id)
+                    .single();
+
+                const valorConsulta = prof ? parseFloat(prof.valor_avista || 0) : 0;
+                
+                if (valorConsulta > 0) {
+                    await supabase.from('financial_documents').insert({
+                        clinic_id: payload.clinic_id,
+                        patient_id: payload.patient_id,
+                        appointment_id: appData.id,
+                        tipo: 'RECEITA',
+                        status: 'ABERTO',
+                        valor_total: valorConsulta,
+                        saldo_devedor: valorConsulta,
+                        data_emissao: new Date().toISOString().split('T')[0],
+                        data_vencimento: payload.data
+                    });
+                }
+            }
+        } catch (finErr) {
+            console.error('Falha ao gerar financeiro para agenda:', finErr);
+            // Non-blocking
+        }
+
+        return { data: appData, error: null };
+    }
+
+    static async updateAppointment(appointmentId, payload) {
+        return await supabase.from('appointments').update(payload).eq('id', appointmentId).select().single();
+    }
+
+    static async cancelAppointment(appointmentId, observacao) {
+        return await this.atualizarStatus(appointmentId, 'cancelada', observacao);
+    }
+
+    static async getAvailableSlots(profissionalId, dateStr) {
+        // Mock ou lógica simples para retornar horários disponíveis
+        // Como o banco tem exclude constraint, a forma mais simples de verificar
+        // a disponibilidade real de um dia é cruzar a tabela de `schedules` e `appointments`.
+        // Para simplificar, pode-se implementar no frontend ou via uma RPC.
+        // Aqui simularemos um array estático ou chamaremos uma RPC futura.
+        return { data: [], error: null };
     }
 }

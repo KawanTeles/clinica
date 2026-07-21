@@ -99,9 +99,16 @@
             <div class="agenda-header-controls">
               <div style="display:flex; gap: 10px; align-items:center;">
                 <button class="admin-btn admin-btn-outline" id="btn-prev-week"><i class="fas fa-chevron-left"></i></button>
-                <h3 class="card-title" id="current-week-label">Semana de 10 a 16 Nov</h3>
+                <h3 class="card-title" id="current-week-label" style="min-width: 200px; text-align: center; margin: 0;">Semana de 10 a 16 Nov</h3>
                 <button class="admin-btn admin-btn-outline" id="btn-next-week"><i class="fas fa-chevron-right"></i></button>
               </div>
+              
+              <div class="view-modes" style="display: flex; background: var(--admin-bg-color); border: 1px solid var(--admin-border-color); border-radius: 6px; overflow: hidden;">
+                <button class="admin-btn" id="btn-view-day" style="border:none; border-radius:0; border-right:1px solid var(--admin-border-color); background:transparent; padding: 6px 12px;">Dia</button>
+                <button class="admin-btn" id="btn-view-week" style="border:none; border-radius:0; border-right:1px solid var(--admin-border-color); background:var(--admin-primary); color:white; padding: 6px 12px;">Semana</button>
+                <button class="admin-btn" id="btn-view-month" style="border:none; border-radius:0; background:transparent; padding: 6px 12px;">Mês</button>
+              </div>
+
               <button class="admin-btn admin-btn-primary" id="btn-nova-consulta"><i class="fas fa-plus"></i> Agendar Paciente</button>
             </div>
 
@@ -124,6 +131,18 @@
       <form id="form-consulta">
         <input type="hidden" id="cons_id">
         <div class="form-group">
+          <label class="form-label">Paciente</label>
+          <select id="cons_paciente" class="form-input" required>
+            <option value="">Selecione um paciente...</option>
+          </select>
+        </div>
+        <div class="form-group" id="group_cons_profissional">
+          <label class="form-label">Profissional</label>
+          <select id="cons_profissional" class="form-input" required>
+            <option value="">Selecione um profissional...</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label class="form-label">Data</label>
           <input type="date" id="cons_data" class="form-input" required>
         </div>
@@ -137,21 +156,22 @@
             <input type="time" id="cons_fim" class="form-input" required>
           </div>
         </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de Atendimento / Procedimento</label>
+          <input type="text" id="cons_tipo" class="form-input" placeholder="Ex: Consulta Primeira Vez, Retorno, etc.">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observação</label>
+          <textarea id="cons_obs" class="form-input" rows="2"></textarea>
+        </div>
         <div class="form-group" id="status-group" style="display:none;">
           <label class="form-label">Status da Consulta</label>
           <select id="cons_status" class="form-input">
-            <option value="agendada">Agendada</option>
-            <option value="aguardando_aprovacao">Aguardando Aprovação</option>
+            <option value="solicitada">Pendente</option>
             <option value="confirmada">Confirmada</option>
-            <option value="aguardando_atendimento">Aguardando Atendimento</option>
-            <option value="em_atendimento">Em Atendimento</option>
-            <option value="aguardando_pagamento">Aguardando Pagamento</option>
-            <option value="pago">Pago</option>
             <option value="concluida">Concluída</option>
-            <option value="recusada">Recusada</option>
             <option value="cancelada">Cancelada</option>
-            <option value="remarcada">Remarcada</option>
-            <option value="nao_compareceu">Não Compareceu</option>
+            <option value="nao_compareceu">Faltou</option>
           </select>
         </div>
         <div style="margin-top:24px; display:flex; justify-content:space-between; align-items:center;">

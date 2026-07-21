@@ -5,6 +5,7 @@ import { CrmAutomationRulesRepository } from '../repositories/crm-automation-rul
 import { CrmEventsRepository } from '../repositories/crm-events.repository.js';
 import { AgendaRepository } from '../repositories/agenda.repository.js';
 import { CrmMessageWorkerService } from './crm-message-worker.service.js';
+import { CrmReactivationService } from './crm-reactivation.service.js';
 
 export class CrmSchedulerService {
   constructor() {
@@ -65,6 +66,10 @@ export class CrmSchedulerService {
           console.log(`[SchedulerService] Lembrete de 24h gerado para consulta ${appt.id}`);
         }
       }
+
+      // 2. Procurar pacientes inativos (Reativação de pacientes - Fase 6.4)
+      await CrmReactivationService.generateReactivationEvents(6); // 6 meses
+
     } catch (err) {
       console.error('[SchedulerService] Erro ao gerar eventos temporais:', err);
     }

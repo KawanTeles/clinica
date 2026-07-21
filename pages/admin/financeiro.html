@@ -67,17 +67,104 @@
       </header>
 
       <div class="admin-content">
-        <div class="admin-card">
-          <div class="card-header">
-            <h2 class="card-title">Visão Geral Financeira</h2>
-            <button class="admin-btn admin-btn-primary"><i class="fas fa-plus"></i> Nova Transação</button>
+        
+        <!-- Dashboard Financeiro -->
+        <div class="stats-grid" id="finance-dashboard" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);"><i class="fas fa-hand-holding-usd"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Receita do Mês</span>
+              <h3 class="stat-value" id="dash_receita">R$ 0,00</h3>
+            </div>
           </div>
-          <p style="color: var(--admin-text-muted);">O módulo financeiro será implementado na ETAPA 7.</p>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(52, 152, 219, 0.1); color: var(--admin-primary);"><i class="fas fa-stethoscope"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Consultas Realizadas</span>
+              <h3 class="stat-value" id="dash_consultas">0</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(241, 196, 15, 0.1); color: var(--admin-warning);"><i class="fas fa-clock"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Valores Pendentes</span>
+              <h3 class="stat-value" id="dash_pendente">R$ 0,00</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(46, 204, 113, 0.1); color: var(--admin-success);"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Pagamentos Recebidos</span>
+              <h3 class="stat-value" id="dash_recebido">R$ 0,00</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+            <h2 class="card-title">Lançamentos Financeiros</h2>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="admin-table" id="finance-table">
+              <thead>
+                <tr>
+                  <th>Paciente</th>
+                  <th>Profissional</th>
+                  <th>Consulta</th>
+                  <th>Valor</th>
+                  <th>Pagamento</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="finance-table-body">
+                <tr><td colspan="7" style="text-align:center;">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
   </div>
+
+  <!-- Modal Receber Pagamento -->
+  <div class="modal-overlay" id="modal-pagamento" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="modal-content" style="background: var(--admin-surface); width: 95%; max-width: 400px; border-radius: var(--admin-border-radius); display: flex; flex-direction: column;">
+      <div class="modal-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--admin-border-color);">
+        <h2 class="card-title">Registrar Pagamento</h2>
+        <i class="fas fa-times close-modal" style="cursor: pointer; color: var(--admin-text-muted);"></i>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <form id="form-pagamento">
+          <input type="hidden" id="pag_doc_id">
+          
+          <div style="margin-bottom: 15px; background: var(--admin-bg); padding: 10px; border-radius: 6px;">
+            <strong>Paciente:</strong> <span id="pag_paciente_nome">-</span><br>
+            <strong>Valor Total:</strong> <span id="pag_valor" style="color: var(--admin-success); font-weight:bold; font-size:1.1rem;">R$ 0,00</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label class="form-label" style="display:block; margin-bottom:5px; font-weight:bold;">Forma de pagamento</label>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label><input type="radio" name="pag_forma" value="PIX" required> Pix</label>
+              <label><input type="radio" name="pag_forma" value="DINHEIRO"> Dinheiro</label>
+              <label><input type="radio" name="pag_forma" value="CARTAO_DEBITO"> Cartão de Débito</label>
+              <label><input type="radio" name="pag_forma" value="CARTAO_CREDITO"> Cartão de Crédito</label>
+              <label><input type="radio" name="pag_forma" value="TRANSFERENCIA"> Transferência Bancária</label>
+            </div>
+          </div>
+          
+          <div style="margin-top:24px; text-align:right;">
+            <button type="submit" class="admin-btn admin-btn-primary" id="btn-confirmar-pagamento">Confirmar Recebimento</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script src="../../js/admin/admin.js"></script>
   <script src="../../js/admin/sidebar.js"></script>
+  <script type="module" src="../../js/admin/financeiro.js"></script>
 </body>
 </html>

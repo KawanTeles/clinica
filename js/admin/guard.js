@@ -85,16 +85,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     } 
     else if (roleName === 'RECEPCIONISTA') {
-      // Recepcionista acessa agenda, pacientes, crm e feedbacks
-      const allowedPages = ['agenda.html', 'pacientes.html', 'crm.html', 'crm-feedback.html'];
+      // Recepcionista acessa agenda, pacientes, crm, feedbacks e ajuda
+      const allowedPages = ['agenda.html', 'pacientes.html', 'crm.html', 'crm-feedback.html', 'crm-reactivation.html', 'ajuda.html'];
       if (isLoginPage || !allowedPages.includes(filename)) {
         window.location.href = 'agenda.html';
         return;
       }
     } 
     else if (roleName === 'PROFISSIONAL') {
-      // Profissional acessa agenda, pacientes e feedbacks (apenas dos seus pacientes via RLS)
-      const allowedPages = ['agenda.html', 'pacientes.html', 'crm-feedback.html'];
+      // Profissional acessa agenda, pacientes, feedbacks e ajuda (apenas dos seus pacientes via RLS)
+      const allowedPages = ['agenda.html', 'pacientes.html', 'crm-feedback.html', 'crm-reactivation.html', 'ajuda.html'];
       if (isLoginPage || !allowedPages.includes(filename)) {
         window.location.href = 'agenda.html';
         return;

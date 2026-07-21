@@ -183,7 +183,7 @@
           </div>
           <div class="form-group">
             <label class="form-label">Senha Inicial</label>
-            <input type="password" id="prof_senha" class="form-input" minlength="6" required>
+            <input type="password" id="prof_senha" class="form-input" minlength="6" placeholder="Deixe em branco p/ não alterar">
           </div>
           <div class="form-group">
             <label class="form-label">Especialidade</label>
@@ -194,12 +194,28 @@
             <input type="text" id="prof_registro" class="form-input">
           </div>
           <div class="form-group">
+            <label class="form-label">Telefone</label>
+            <input type="text" id="prof_telefone" class="form-input">
+          </div>
+          <div class="form-group">
             <label class="form-label">WhatsApp</label>
             <input type="text" id="prof_whatsapp" class="form-input">
           </div>
           <div class="form-group">
             <label class="form-label">Valor Consulta (R$)</label>
             <input type="number" id="prof_avista" class="form-input" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valor Cartão (R$)</label>
+            <input type="number" id="prof_cartao" class="form-input" step="0.01">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Dias Disponíveis (ex: SEG, TER, QUA)</label>
+            <input type="text" id="prof_dias" class="form-input" placeholder="Dias da semana">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Horários (ex: 08:00 - 18:00)</label>
+            <input type="text" id="prof_horarios" class="form-input" placeholder="Faixa de horário">
           </div>
           <div class="form-group full" style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
             <label class="toggle-switch">

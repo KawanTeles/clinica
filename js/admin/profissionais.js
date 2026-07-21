@@ -1,155 +1,212 @@
-import { ProfissionaisRepository } from '../../repositories/profissionais.repository.js';
+import { ProfessionalsRepository } from '../../repositories/professionals.repository.js';
 import { AuthRepository } from '../../repositories/auth.repository.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const tableBody = document.getElementById('prof-table-body');
-  
-  // Modals
-  const modal = document.getElementById('modal-prof');
-  const btnNovo = document.getElementById('btn-novo-prof');
-  const btnClose = document.getElementById('close-modal-prof');
-  const btnCancel = document.getElementById('btn-cancelar');
-  const form = document.getElementById('form-prof');
+document.addEventListener('DOMContentLoaded', async () => {
+  let clinicId = null;
+  let isEditMode = false;
+  let currentProfId = null;
 
-  const openModal = () => { modal.classList.add('active'); };
-  const closeModal = () => { modal.classList.remove('active'); form.reset(); };
+  try {
+    const { data: { session } } = await AuthRepository.getSession();
+    if (!session) return; 
 
-  btnNovo.addEventListener('click', () => {
-    document.getElementById('modal-title').textContent = 'Novo Profissional';
-    document.getElementById('prof_id').value = '';
-    document.getElementById('prof_email').disabled = false;
-    document.getElementById('prof_senha').required = true;
-    openModal();
-  });
+    const profileRes = await AuthRepository.getPerfilUsuario(session.user.id);
+    clinicId = profileRes.data.clinic_id;
+    const userRole = profileRes.data.roles.nome;
 
-  btnClose.addEventListener('click', closeModal);
-  btnCancel.addEventListener('click', closeModal);
-
-  // Carregar Dados Iniciais
-  const loadProfessionals = async () => {
-    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Carregando dados...</td></tr>';
-    const { data, error } = await ProfissionaisRepository.listarProfissionais();
-    
-    if (error) {
-      console.error(error);
-      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:red;">Erro ao buscar dados.</td></tr>';
-      return;
+    if (userRole === 'RECEPCIONISTA') {
+        // Guard already blocks, but just in case
+        return;
     }
 
-    if (!data || data.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Nenhum profissional cadastrado.</td></tr>';
-      return;
+    setupEvents(userRole);
+    await loadProfessionals();
+  } catch (err) {
+    console.error('Erro de inicialização Profissionais:', err);
+  }
+
+  function setupEvents(userRole) {
+    const btnNovo = document.getElementById('btn-novo-prof');
+    const modal = document.getElementById('modal-prof');
+    const btnClose = document.getElementById('close-modal-prof');
+    const btnCancelar = document.getElementById('btn-cancelar');
+    const form = document.getElementById('form-prof');
+    const searchInput = document.getElementById('search-prof');
+
+    if (userRole === 'PROFISSIONAL') {
+      if (btnNovo) btnNovo.style.display = 'none'; // Profissional não cria novo profissional
     }
 
-    tableBody.innerHTML = '';
-    data.forEach(prof => {
-      const statusBadge = prof.ativo 
-        ? '<span class="badge badge-success">Ativo</span>' 
-        : '<span class="badge badge-danger">Inativo</span>';
+    if (btnNovo) {
+      btnNovo.addEventListener('click', () => {
+        isEditMode = false;
+        currentProfId = null;
+        form.reset();
+        document.getElementById('modal-title').textContent = 'Novo Profissional';
+        document.getElementById('prof_senha').required = true;
+        document.getElementById('prof_email').readOnly = false;
+        modal.classList.add('active');
+      });
+    }
 
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>
-          <div style="display:flex; align-items:center; gap: 12px;">
-            <div class="tenant-logo" style="background:#3498db; width: 40px; height: 40px;">${prof.nome.charAt(0)}</div>
-            <span style="font-weight:600; color:var(--admin-text-main);">${prof.nome}</span>
-          </div>
-        </td>
-        <td>${prof.especialidade}</td>
-        <td>${prof.registro_profissional || '-'}</td>
-        <td>R$ ${prof.valor_avista.toFixed(2)}</td>
-        <td>${statusBadge}</td>
-        <td>
-          <button class="admin-btn admin-btn-outline btn-edit" data-id="${prof.id}" style="padding: 6px 10px;"><i class="fas fa-edit"></i></button>
-        </td>
-      `;
-      tableBody.appendChild(tr);
-    });
+    if (btnClose) btnClose.addEventListener('click', () => modal.classList.remove('active'));
+    if (btnCancelar) btnCancelar.addEventListener('click', () => modal.classList.remove('active'));
 
-    // Anexar eventos aos botões de edição
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-      btn.addEventListener('click', (e) => editProfessional(e.currentTarget.getAttribute('data-id')));
-    });
-  };
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btnSalvar = document.getElementById('btn-salvar');
+        btnSalvar.disabled = true;
+        btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
 
-  const editProfessional = async (id) => {
-    const { data, error } = await ProfissionaisRepository.buscarProfissional(id);
-    if (error || !data) return window.Toast.error('Erro ao carregar dados do profissional.');
+        try {
+          const payload = {
+            nome: document.getElementById('prof_nome').value,
+            email: document.getElementById('prof_email').value,
+            especialidade: document.getElementById('prof_especialidade').value,
+            registro_profissional: document.getElementById('prof_registro').value,
+            telefone: document.getElementById('prof_telefone').value,
+            whatsapp: document.getElementById('prof_whatsapp').value,
+            valor_avista: parseFloat(document.getElementById('prof_avista').value),
+            valor_cartao: parseFloat(document.getElementById('prof_cartao').value || 0),
+            horarios: [document.getElementById('prof_horarios').value],
+            dias: [document.getElementById('prof_dias').value],
+            ativo: document.getElementById('prof_ativo').checked
+          };
 
-    document.getElementById('modal-title').textContent = 'Editar Profissional';
-    document.getElementById('prof_id').value = data.id;
-    document.getElementById('prof_nome').value = data.nome;
-    document.getElementById('prof_especialidade').value = data.especialidade;
-    document.getElementById('prof_registro').value = data.registro_profissional;
-    document.getElementById('prof_whatsapp').value = data.whatsapp;
-    document.getElementById('prof_avista').value = data.valor_avista;
-    document.getElementById('prof_ativo').checked = data.ativo;
-    
-    // Email não pode ser alterado por aqui (é Auth), senha vira opcional
-    document.getElementById('prof_email').value = data.user_profiles.email;
-    document.getElementById('prof_email').disabled = true;
-    document.getElementById('prof_senha').required = false;
+          const password = document.getElementById('prof_senha').value;
 
-    openModal();
-  };
+          if (isEditMode) {
+            // Em modo de edição, se houver lógica para alterar senha (não suportado na RPC diretamente, precisaria de supabase admin)
+            // Vamos apenas atualizar os dados do professional.
+            await ProfessionalsRepository.updateProfessional(currentProfId, payload);
+            alert('Profissional atualizado com sucesso!');
+          } else {
+            // Criar Novo
+            payload.password = password;
+            await ProfessionalsRepository.createProfessional(payload);
+            alert('Profissional e usuário criados com sucesso!');
+          }
 
-  // Salvar ou Criar Profissional (Chamando a Edge Function Mock)
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btnSalvar = document.getElementById('btn-salvar');
-    btnSalvar.disabled = true;
-    btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+          modal.classList.remove('active');
+          await loadProfessionals();
+        } catch (err) {
+          console.error(err);
+          alert('Erro ao salvar profissional: ' + (err.message || err.error_description || 'Desconhecido'));
+        } finally {
+          btnSalvar.disabled = false;
+          btnSalvar.innerHTML = '<i class="fas fa-save"></i> Salvar Profissional';
+        }
+      });
+    }
 
-    const id = document.getElementById('prof_id').value;
-    const nome = document.getElementById('prof_nome').value;
-    const email = document.getElementById('prof_email').value;
-    const senha = document.getElementById('prof_senha').value;
-    const especialidade = document.getElementById('prof_especialidade').value;
-    const registro = document.getElementById('prof_registro').value;
-    const whatsapp = document.getElementById('prof_whatsapp').value;
-    const valorAvista = document.getElementById('prof_avista').value;
-    const ativo = document.getElementById('prof_ativo').checked;
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const termo = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#prof-table-body tr');
+        rows.forEach(row => {
+          const texto = row.innerText.toLowerCase();
+          row.style.display = texto.includes(termo) ? '' : 'none';
+        });
+      });
+    }
+  }
 
+  async function loadProfessionals() {
     try {
-      if (id) {
-        // UPDATE lógico
-        const { error: updateError } = await ProfissionaisRepository.atualizarProfissional(id, {
-          nome, especialidade, registro_profissional: registro,
-          whatsapp, valor_avista: valorAvista, ativo
-        });
-
-        if (updateError) throw updateError;
-        
-        await AuthRepository.registrarLogSeguranca({
-          user_id: (await AuthRepository.getUser()).data.user.id,
-          acao: ativo ? 'UPDATE_PROFESSIONAL' : 'DISABLE_PROFESSIONAL',
-          descricao: `Profissional ${nome} editado.`
-        });
-        
-        window.Toast.success('Profissional atualizado com sucesso!');
-      } else {
-        // CREATE via Edge Function
-        // Chamada nativa para a Edge Function do Supabase
-        const { data: resData, error: invokeError } = await ProfissionaisRepository.invocarCriacaoProfissional({
-            email, password: senha, nome, especialidade, 
-            registro, whatsapp, valorAvista, valorCartao: valorAvista // Mock
-        });
-
-        if (invokeError) throw new Error(invokeError.message || 'Erro na criação');
-        
-        window.Toast.success('Profissional criado com sucesso e e-mail vinculado!');
+      const profs = await ProfessionalsRepository.listProfessionals();
+      const tbody = document.getElementById('prof-table-body');
+      
+      if (!profs || profs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:2rem;">Nenhum profissional encontrado.</td></tr>';
+        return;
       }
 
-      closeModal();
-      loadProfessionals();
-    } catch (err) {
-      window.Toast.error(err.message || 'Erro ao processar requisição.');
-    } finally {
-      btnSalvar.disabled = false;
-      btnSalvar.innerHTML = '<i class="fas fa-save"></i> Salvar Profissional';
-    }
-  });
+      tbody.innerHTML = profs.map(p => `
+        <tr>
+          <td>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:32px; height:32px; border-radius:50%; background:var(--admin-primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                ${p.nome.charAt(0).toUpperCase()}
+              </div>
+              <div style="display:flex; flex-direction:column;">
+                <strong>${p.nome}</strong>
+                <small style="color:var(--admin-text-muted)">${p.telefone || ''}</small>
+              </div>
+            </div>
+          </td>
+          <td>${p.especialidade || '-'}</td>
+          <td>${p.registro_profissional || '-'}</td>
+          <td>À Vista: R$ ${p.valor_avista}<br>Cartão: R$ ${p.valor_cartao}</td>
+          <td>
+            <span class="status-badge ${p.ativo ? 'status-active' : 'status-inactive'}" style="padding:4px 8px; border-radius:4px; font-size:0.8rem; background:${p.ativo ? '#d4edda' : '#f8d7da'}; color:${p.ativo ? '#155724' : '#721c24'}">
+              ${p.ativo ? 'Ativo' : 'Inativo'}
+            </span>
+          </td>
+          <td>
+            <button class="btn-icon btn-edit" data-id="${p.id}" title="Editar" style="border:none; background:none; cursor:pointer; color:var(--admin-primary); margin-right:8px;"><i class="fas fa-edit"></i></button>
+            <button class="btn-icon btn-toggle" data-id="${p.id}" data-active="${p.ativo}" title="${p.ativo ? 'Desativar' : 'Ativar'}" style="border:none; background:none; cursor:pointer; color:${p.ativo ? 'var(--admin-danger)' : 'var(--admin-success)'};"><i class="fas ${p.ativo ? 'fa-ban' : 'fa-check'}"></i></button>
+          </td>
+        </tr>
+      `).join('');
 
-  // Init
-  loadProfessionals();
+      // Add listeners para os botões dinâmicos
+      document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+      });
+      document.querySelectorAll('.btn-toggle').forEach(btn => {
+        btn.addEventListener('click', () => toggleStatus(btn.dataset.id, btn.dataset.active === 'true'));
+      });
+
+    } catch (err) {
+      console.error('Erro ao carregar profissionais:', err);
+    }
+  }
+
+  async function openEditModal(id) {
+    try {
+      const prof = await ProfessionalsRepository.getProfessionalById(id);
+      
+      isEditMode = true;
+      currentProfId = id;
+      
+      document.getElementById('modal-title').textContent = 'Editar Profissional';
+      document.getElementById('prof_nome').value = prof.nome;
+      document.getElementById('prof_email').value = prof.email || '';
+      document.getElementById('prof_email').readOnly = true; // Não permite trocar email por aqui, apenas via painel auth se preciso
+      document.getElementById('prof_senha').required = false; // Não obriga preencher senha na edição
+      document.getElementById('prof_especialidade').value = prof.especialidade || '';
+      document.getElementById('prof_registro').value = prof.registro_profissional || '';
+      document.getElementById('prof_telefone').value = prof.telefone || '';
+      document.getElementById('prof_whatsapp').value = prof.whatsapp || '';
+      document.getElementById('prof_avista').value = prof.valor_avista || 0;
+      document.getElementById('prof_cartao').value = prof.valor_cartao || 0;
+      
+      // JSON arrays parsing
+      const horarios = Array.isArray(prof.horarios_atendimento) ? prof.horarios_atendimento : [];
+      const dias = Array.isArray(prof.dias_disponiveis) ? prof.dias_disponiveis : [];
+      
+      document.getElementById('prof_horarios').value = horarios.join(', ') || '';
+      document.getElementById('prof_dias').value = dias.join(', ') || '';
+      
+      document.getElementById('prof_ativo').checked = prof.ativo;
+      
+      document.getElementById('modal-prof').classList.add('active');
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao carregar dados do profissional.');
+    }
+  }
+
+  async function toggleStatus(id, currentlyActive) {
+    if (confirm(`Deseja realmente ${currentlyActive ? 'desativar' : 'ativar'} este profissional?`)) {
+      try {
+        await ProfessionalsRepository.toggleStatus(id, !currentlyActive);
+        await loadProfessionals();
+      } catch (err) {
+        console.error(err);
+        alert('Erro ao alterar status.');
+      }
+    }
+  }
 });
