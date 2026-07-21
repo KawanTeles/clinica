@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda | Admin Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  <link rel="stylesheet" href="../../css/admin/components.css">
+  <link rel="stylesheet" href="../../css/admin/responsive-admin.css">
+  <link rel="stylesheet" href="../../css/admin/agenda.css">
+
+  <!-- Supabase CDN & Auth Guard -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/admin/supabase-client.js"></script>
+  <script src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="dashboard.html" class="admin-brand"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></a>
+      </div>
+      <nav class="admin-sidebar-nav">
+        <a href="dashboard.html" class="admin-nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+        <a href="profissionais.html" class="admin-nav-item"><i class="fas fa-user-md"></i><span>Profissionais</span></a>
+        <a href="pacientes.html" class="admin-nav-item"><i class="fas fa-users"></i><span>Pacientes</span></a>
+        <a href="agenda.html" class="admin-nav-item active"><i class="far fa-calendar-alt"></i><span>Agenda</span></a>
+        <a href="financeiro.html" class="admin-nav-item"><i class="fas fa-wallet"></i><span>Financeiro</span></a>
+        <a href="usuarios.html" class="admin-nav-item"><i class="fas fa-user-shield"></i><span>Usuários</span></a>
+        <a href="configuracoes.html" class="admin-nav-item"><i class="fas fa-cog"></i><span>Configurações</span></a>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <div class="clinic-tenant-info">
+          <div class="tenant-logo">CZ</div>
+          <div class="tenant-details"><span class="tenant-name">Clínica Zoe - Matriz</span><span class="tenant-plan">Plano Premium</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+          <h1 class="page-title">Agenda Geral</h1>
+        </div>
+        <div class="header-right">
+          <div class="header-alerts"><i class="fas fa-bell"></i><span class="alert-badge">3</span></div>
+          <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Admin+Zoe&background=3498db&color=fff" alt="Avatar" class="user-avatar">
+            <div class="user-info"><span class="user-name">Administrador</span><span class="user-role">Acesso Total</span></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="agenda-container">
+          <!-- Sidebar -->
+          <aside class="agenda-sidebar">
+            <h3 class="card-title">Filtros da Agenda</h3>
+            <div class="form-group">
+              <label class="form-label">Profissional</label>
+              <select id="agenda_prof_filter" class="form-input">
+                <!-- Loaded via JS -->
+              </select>
+            </div>
+            
+            <hr style="border-top:1px solid var(--admin-border-color); margin:0;">
+
+            <div id="prof_settings_area" style="display:none;">
+              <h4 style="font-size:0.9rem; color:var(--admin-text-muted); margin-bottom:10px;">Regras do Profissional</h4>
+              <p style="font-size:0.85rem;" id="txt-rules">Carregando...</p>
+              
+              <button class="admin-btn admin-btn-outline" style="width:100%; margin-top:15px;" id="btn-manage-schedule">
+                <i class="fas fa-clock"></i> Gerenciar Horários
+              </button>
+              <button class="admin-btn admin-btn-outline" style="width:100%; margin-top:10px;" id="btn-manage-blocks">
+                <i class="fas fa-ban"></i> Criar Bloqueio
+              </button>
+            </div>
+          </aside>
+
+          <!-- Main Calendar Area -->
+          <main class="agenda-main">
+            <div class="agenda-header-controls">
+              <div style="display:flex; gap: 10px; align-items:center;">
+                <button class="admin-btn admin-btn-outline" id="btn-prev-week"><i class="fas fa-chevron-left"></i></button>
+                <h3 class="card-title" id="current-week-label">Semana de 10 a 16 Nov</h3>
+                <button class="admin-btn admin-btn-outline" id="btn-next-week"><i class="fas fa-chevron-right"></i></button>
+              </div>
+              <button class="admin-btn admin-btn-primary" id="btn-nova-consulta"><i class="fas fa-plus"></i> Agendar Paciente</button>
+            </div>
+
+            <div class="calendar-grid" id="calendar-grid">
+              <!-- Rendered via JS -->
+            </div>
+          </main>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Nova Consulta / Edição -->
+  <div class="modal-overlay" id="modal-consulta">
+    <div class="modal-content" style="max-width:500px;">
+      <div class="modal-header">
+        <h2 class="card-title" id="modal-consulta-title">Nova Consulta</h2>
+        <i class="fas fa-times close-modal"></i>
+      </div>
+      <form id="form-consulta">
+        <input type="hidden" id="cons_id">
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" id="cons_data" class="form-input" required>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label class="form-label">Hora Início</label>
+            <input type="time" id="cons_inicio" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hora Fim</label>
+            <input type="time" id="cons_fim" class="form-input" required>
+          </div>
+        </div>
+        <div class="form-group" id="status-group" style="display:none;">
+          <label class="form-label">Status da Consulta</label>
+          <select id="cons_status" class="form-input">
+            <option value="agendada">Agendada</option>
+            <option value="aguardando_aprovacao">Aguardando Aprovação</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="aguardando_atendimento">Aguardando Atendimento</option>
+            <option value="em_atendimento">Em Atendimento</option>
+            <option value="aguardando_pagamento">Aguardando Pagamento</option>
+            <option value="pago">Pago</option>
+            <option value="concluida">Concluída</option>
+            <option value="recusada">Recusada</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="remarcada">Remarcada</option>
+            <option value="nao_compareceu">Não Compareceu</option>
+          </select>
+        </div>
+        <div style="margin-top:24px; display:flex; justify-content:space-between; align-items:center;">
+          <button type="button" class="admin-btn" style="background:#10b981; color:#fff; display:none;" id="btn-abrir-pagamento"><i class="fas fa-dollar-sign"></i> Receber Pagamento</button>
+          <button type="submit" class="admin-btn admin-btn-primary" id="btn-salvar-consulta">Salvar Agendamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Pagamento -->
+  <div class="modal-overlay" id="modal-pagamento" style="z-index: 1000;">
+    <div class="modal-content" style="max-width:400px;">
+      <div class="modal-header">
+        <h2 class="card-title">Receber Pagamento</h2>
+        <i class="fas fa-times close-modal-pagamento" id="close-pagamento-btn"></i>
+      </div>
+      <form id="form-pagamento">
+        <input type="hidden" id="pag_cons_id">
+        <input type="hidden" id="pag_doc_id">
+        
+        <div style="margin-bottom: 15px; background: #f9fafb; padding: 10px; border-radius: 6px;">
+          <strong>Paciente:</strong> <span id="pag_paciente_nome">Paciente Exemplo</span><br>
+          <strong>Procedimento:</strong> <span id="pag_procedimento">Consulta Padrão</span><br>
+          <strong>Valor:</strong> <span id="pag_valor" style="color: #10b981; font-weight:bold; font-size:1.1rem;">R$ 0,00</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Forma de pagamento</label>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <label><input type="radio" name="pag_forma" value="PIX" required> Pix</label>
+            <label><input type="radio" name="pag_forma" value="DINHEIRO"> Dinheiro</label>
+            <label><input type="radio" name="pag_forma" value="CARTAO_DEBITO"> Cartão Débito</label>
+            <label><input type="radio" name="pag_forma" value="CARTAO_CREDITO"> Cartão Crédito</label>
+            <label><input type="radio" name="pag_forma" value="CONVENIO"> Convênio</label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Observação</label>
+          <input type="text" id="pag_obs" class="form-input">
+        </div>
+
+        <div style="margin-top:24px; text-align:right;">
+          <button type="submit" class="admin-btn admin-btn-primary" id="btn-confirmar-pagamento">Confirmar Recebimento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../../js/admin/admin.js"></script>
+  <script src="../../js/admin/sidebar.js"></script>
+  <script type="module" src="../../js/admin/agenda.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro | Admin</title>
+    <!-- CSS Omitido para simplicidade - Herda estilos globais do Admin -->
+    <style>
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .kpi-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6; }
+        .kpi-title { font-size: 0.875rem; color: #6b7280; text-transform: uppercase; font-weight: 600; }
+        .kpi-value { font-size: 1.5rem; font-weight: bold; color: #111827; margin-top: 0.5rem; }
+        .kpi-card.warning { border-color: #f59e0b; }
+        .kpi-card.danger { border-color: #ef4444; }
+        .kpi-card.success { border-color: #10b981; }
+        .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+        .chart-box { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 300px; }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar placeholder -->
+        <main class="admin-content">
+            <header class="page-header">
+                <h1>Dashboard Financeiro</h1>
+                <div class="actions">
+                    <select id="periodo-filtro" class="input-padrao">
+                        <option value="hoje">Hoje</option>
+                        <option value="semana">Esta Semana</option>
+                        <option value="mes" selected>Este Mês</option>
+                    </select>
+                </div>
+            </header>
+
+            <section class="kpi-grid">
+                <div class="kpi-card success">
+                    <div class="kpi-title">Receita (Período)</div>
+                    <div class="kpi-value" id="kpi-receita">R$ 0,00</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Ticket Médio</div>
+                    <div class="kpi-value" id="kpi-ticket">R$ 0,00</div>
+                </div>
+                <div class="kpi-card warning">
+                    <div class="kpi-title">Em Aberto</div>
+                    <div class="kpi-value" id="kpi-aberto">R$ 0,00</div>
+                </div>
+                <div class="kpi-card danger">
+                    <div class="kpi-title">Inadimplência</div>
+                    <div class="kpi-value" id="kpi-inadimplencia">R$ 0,00</div>
+                </div>
+            </section>
+
+            <section class="charts-container">
+                <div class="chart-box">
+                    <h3>Receita x Despesa (Evolução)</h3>
+                    <!-- Placeholder para Chart.js ou ApexCharts -->
+                    <canvas id="chart-evolucao"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Receita por Profissional</h3>
+                    <canvas id="chart-profissionais"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/js/admin/financeiro/dashboard.js" type="module"></script>
+</body>
+</html>

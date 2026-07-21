@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Admin Clínica Zoe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  
+  <style>
+    /* Estilos Isolados para a Tela de Login */
+    .login-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      background-color: var(--admin-bg);
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-box {
+      background-color: var(--admin-surface);
+      width: 100%;
+      max-width: 400px;
+      padding: 40px;
+      border-radius: var(--admin-border-radius);
+      box-shadow: var(--admin-shadow-lg);
+      border: 1px solid var(--admin-border-color);
+      text-align: center;
+    }
+    
+    .login-logo {
+      color: var(--admin-primary);
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+    
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--admin-text-main);
+      margin-bottom: 8px;
+    }
+    
+    .login-subtitle {
+      color: var(--admin-text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+    
+    .form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--admin-text-main);
+      margin-bottom: 8px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--admin-border-color);
+      border-radius: var(--admin-border-radius-sm);
+      font-size: 0.95rem;
+      color: var(--admin-text-main);
+      background-color: #f8fafc;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--admin-accent);
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--admin-accent);
+      color: white;
+      border: none;
+      border-radius: var(--admin-border-radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .login-btn:hover {
+      background-color: #2980b9;
+    }
+    
+    .error-msg {
+      color: var(--admin-danger);
+      font-size: 0.85rem;
+      margin-top: 16px;
+      display: none;
+    }
+  </style>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Client Init -->
+  <script src="../../js/admin/supabase-client.js"></script>
+  <!-- Route Guard -->
+  <script src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+
+  <div class="login-container">
+    <div class="login-box">
+      <i class="fas fa-hand-holding-heart login-logo"></i>
+      <h1 class="login-title">Zoe Admin</h1>
+      <p class="login-subtitle">Acesso restrito ao Painel Administrativo</p>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="email">E-mail Corporativo</label>
+          <input type="email" id="email" class="form-input" placeholder="exemplo@clinicazoe.com.br" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="password">Senha</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="login-btn" id="login-submit-btn">
+          <span>Entrar no Sistema</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <p class="error-msg" id="login-error-msg">Usuário ou senha incorretos.</p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('login-error-msg');
+      const btn = document.getElementById('login-submit-btn');
+      
+      errorMsg.style.display = 'none';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+      btn.disabled = true;
+
+      const sb = window.supabaseClient;
+      
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        // Validação imediata de inatividade
+        const { data: profile } = await sb.from('user_profiles').select('ativo').eq('auth_user_id', data.user.id).single();
+        if (profile && profile.ativo === false) {
+          await sb.auth.signOut();
+          throw new Error('Sua conta foi desativada. Acesso bloqueado.');
+        }
+
+        // Registrar login no log de auditoria
+        await sb.from('security_logs').insert({
+          user_id: data.user.id,
+          acao: 'LOGIN',
+          descricao: 'Usuário realizou login com sucesso.'
+        });
+
+        // O Guard.js irá pegar a sessão no reload ou redirecionaremos manualmente
+        window.location.href = 'dashboard.html';
+        
+      } catch (err) {
+        errorMsg.textContent = err.message || 'Falha na autenticação.';
+        errorMsg.style.display = 'block';
+        btn.innerHTML = '<span>Entrar no Sistema</span><i class="fas fa-arrow-right"></i>';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

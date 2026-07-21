@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contas a Receber | Admin</title>
+    <style>
+        .filters { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .table-responsive { overflow-x: auto; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background: #f9fafb; font-weight: 600; color: #374151; }
+        .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: bold; }
+        .st-aberto { background: #fef3c7; color: #92400e; }
+        .st-pago { background: #d1fae5; color: #065f46; }
+        .st-vencido { background: #fee2e2; color: #991b1b; }
+        
+        /* Mobile Cards Layout */
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border: 1px solid #e5e7eb; margin-bottom: 1rem; border-radius: 8px; }
+            td { border: none; position: relative; padding-left: 50%; }
+            td:before { position: absolute; left: 1rem; width: 45%; padding-right: 10px; white-space: nowrap; content: attr(data-label); font-weight: bold; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <main class="admin-content">
+            <header class="page-header">
+                <h1>Contas a Receber</h1>
+                <button class="btn-primary" id="btn-nova-cobranca">+ Nova Cobrança</button>
+            </header>
+
+            <section class="filters">
+                <input type="text" id="filtro-busca" placeholder="Buscar paciente ou doc..." class="input-padrao">
+                <select id="filtro-status" class="input-padrao">
+                    <option value="">Todos os Status</option>
+                    <option value="ABERTO">Em Aberto</option>
+                    <option value="PAGO">Pagos</option>
+                    <option value="VENCIDO">Vencidos</option>
+                </select>
+                <select id="filtro-profissional" class="input-padrao">
+                    <option value="">Qualquer Profissional</option>
+                    <!-- Populated via JS -->
+                </select>
+                <input type="date" id="filtro-data" class="input-padrao">
+            </section>
+
+            <div class="table-responsive">
+                <table id="tabela-receber">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Paciente</th>
+                            <th>Profissional</th>
+                            <th>Valor Total</th>
+                            <th>Pago</th>
+                            <th>Saldo</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Renderizado via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="/js/admin/financeiro/contas-receber.js" type="module"></script>
+</body>
+</html>

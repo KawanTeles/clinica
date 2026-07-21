@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Admin Clínica Zoe</title>
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Admin CSS -->
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  <link rel="stylesheet" href="../../css/admin/components.css">
+  <link rel="stylesheet" href="../../css/admin/responsive-admin.css">
+
+  <!-- Supabase CDN & Auth Guard -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/admin/supabase-client.js"></script>
+  <script src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="dashboard.html" class="admin-brand">
+          <i class="fas fa-hand-holding-heart"></i>
+          <span>Zoe Admin</span>
+        </a>
+      </div>
+
+      <nav class="admin-sidebar-nav">
+        <a href="dashboard.html" class="admin-nav-item active">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="profissionais.html" class="admin-nav-item">
+          <i class="fas fa-user-md"></i>
+          <span>Profissionais</span>
+        </a>
+        <a href="pacientes.html" class="admin-nav-item">
+          <i class="fas fa-users"></i>
+          <span>Pacientes</span>
+        </a>
+        <a href="agenda.html" class="admin-nav-item">
+          <i class="far fa-calendar-alt"></i>
+          <span>Agenda</span>
+        </a>
+        <a href="financeiro.html" class="admin-nav-item">
+          <i class="fas fa-wallet"></i>
+          <span>Financeiro</span>
+        </a>
+        <a href="usuarios.html" class="admin-nav-item">
+          <i class="fas fa-user-shield"></i>
+          <span>Usuários</span>
+        </a>
+        <a href="configuracoes.html" class="admin-nav-item">
+          <i class="fas fa-cog"></i>
+          <span>Configurações</span>
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="clinic-tenant-info">
+          <div class="tenant-logo">CZ</div>
+          <div class="tenant-details">
+            <span class="tenant-name">Clínica Zoe - Matriz</span>
+            <span class="tenant-plan">Plano Premium</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      
+      <!-- Top Header -->
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menu">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title">Visão Geral</h1>
+        </div>
+
+        <div class="header-right">
+          <div class="header-alerts">
+            <i class="fas fa-bell"></i>
+            <span class="alert-badge">3</span>
+          </div>
+          
+          <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Admin+Zoe&background=3498db&color=fff" alt="Avatar do usuário" class="user-avatar">
+            <div class="user-info">
+              <span class="user-name">Administrador</span>
+              <span class="user-role">Acesso Total</span>
+            </div>
+            <i class="fas fa-chevron-down" style="font-size: 0.8rem; color: var(--admin-text-muted);"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="admin-content">
+        
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon blue">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="metric-info">
+              <span class="metric-label">Consultas Hoje</span>
+              <span class="metric-value">18</span>
+            </div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-icon green">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div class="metric-info">
+              <span class="metric-label">Profissionais Ativos</span>
+              <span class="metric-value">12</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon purple">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="metric-info">
+              <span class="metric-label">Pacientes</span>
+              <span class="metric-value">1.240</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon orange">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="metric-info">
+              <span class="metric-label">Faturamento Mês</span>
+              <span class="metric-value">R$ 25.000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Appointments and Chart Placeholder -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+          
+          <!-- Next Appointments -->
+          <div class="admin-card">
+            <div class="card-header">
+              <h2 class="card-title">Próximas Consultas</h2>
+              <a href="agenda.html" class="admin-btn admin-btn-outline" style="font-size: 0.8rem; padding: 6px 12px;">Ver Agenda</a>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Horário</th>
+                    <th>Paciente</th>
+                    <th>Profissional</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>08:00</td>
+                    <td>Maria Souza</td>
+                    <td>Dr. João (Psicologia)</td>
+                    <td><span class="badge badge-success">Confirmada</span></td>
+                  </tr>
+                  <tr>
+                    <td>09:00</td>
+                    <td>Carlos Silva</td>
+                    <td>Dra. Ana (Nutrição)</td>
+                    <td><span class="badge badge-warning">Aguardando</span></td>
+                  </tr>
+                  <tr>
+                    <td>10:00</td>
+                    <td>Fernanda Lima</td>
+                    <td>Dr. Pedro (Pediatria)</td>
+                    <td><span class="badge badge-success">Confirmada</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Pending Approvals / Alerts -->
+          <div class="admin-card">
+            <div class="card-header">
+              <h2 class="card-title">Alertas e Pendências</h2>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <i class="fas fa-exclamation-triangle" style="color: #856404;"></i>
+                  <span style="color: #856404; font-size: 0.9rem; font-weight: 500;">5 novos agendamentos aguardando aprovação</span>
+                </div>
+                <a href="#" style="color: #856404; font-weight: 600; font-size: 0.85rem;">Ver</a>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <i class="fas fa-check-circle" style="color: #155724;"></i>
+                  <span style="color: #155724; font-size: 0.9rem; font-weight: 500;">Fechamento de caixa do dia anterior concluído.</span>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 32px;">
+              <h3 style="font-size: 0.95rem; margin-bottom: 12px; color: var(--admin-text-muted);">Desempenho Semanal</h3>
+              <div class="chart-placeholder">
+                <i class="fas fa-chart-bar" style="margin-right: 8px;"></i> Área reservada para gráfico (Chart.js ou ApexCharts)
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Admin JS -->
+  <script src="../../js/admin/admin.js"></script>
+  <script src="../../js/admin/sidebar.js"></script>
+  <script src="../../js/admin/dashboard.js"></script>
+</body>
+</html>
