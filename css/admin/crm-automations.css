@@ -1,0 +1,149 @@
+.automations-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--admin-border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background-color: var(--admin-border-color);
+  color: var(--text-color);
+}
+
+.stat-icon.success {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.stat-icon.primary {
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #007bff;
+}
+
+.stat-icon.danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.stat-info h3 {
+  font-size: 0.875rem;
+  color: var(--text-color-muted);
+  margin-bottom: 0.25rem;
+}
+
+.stat-info p {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.automations-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--admin-border-color);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-color);
+}
+
+.tab-btn.active {
+  color: var(--admin-primary);
+  border-bottom-color: var(--admin-primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.status-inactive {
+  background-color: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+}
+
+.status-SUCCESS {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.status-FAILED {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.btn-toggle-rule {
+  padding: 0.375rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-toggle-rule.active-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-toggle-rule.active-btn:hover {
+  background-color: #c82333;
+}
+
+.btn-toggle-rule.inactive-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-toggle-rule.inactive-btn:hover {
+  background-color: #218838;
+}

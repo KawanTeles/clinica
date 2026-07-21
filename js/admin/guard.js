@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       body[data-role="recepcionista"] .admin-nav-item[href="financeiro.html"],
       body[data-role="recepcionista"] .admin-nav-item[href="profissionais.html"],
       body[data-role="recepcionista"] .admin-nav-item[href="configuracoes.html"],
+      body[data-role="recepcionista"] .admin-nav-item[href="crm-automations.html"],
       body[data-role="recepcionista"] .admin-nav-item[href="dashboard.html"] { display: none !important; }
       
       body[data-role="profissional"] .admin-only,
@@ -66,6 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       body[data-role="profissional"] .admin-nav-item[href="financeiro.html"],
       body[data-role="profissional"] .admin-nav-item[href="profissionais.html"],
       body[data-role="profissional"] .admin-nav-item[href="configuracoes.html"],
+      body[data-role="profissional"] .admin-nav-item[href="crm-automations.html"],
       body[data-role="profissional"] .admin-nav-item[href="dashboard.html"] { display: none !important; }
     `;
     document.head.appendChild(style);
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } 
     else if (roleName === 'RECEPCIONISTA') {
       // Recepcionista só acessa agenda e pacientes
-      const allowedPages = ['agenda.html', 'pacientes.html'];
+      const allowedPages = ['agenda.html', 'pacientes.html', 'crm.html'];
       if (isLoginPage || !allowedPages.includes(filename)) {
         window.location.href = 'agenda.html';
         return;

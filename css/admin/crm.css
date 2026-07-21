@@ -1,0 +1,223 @@
+/* css/admin/crm.css - Estilos específicos do módulo CRM */
+
+.crm-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.crm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.kanban-board {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  flex-grow: 1;
+}
+
+.kanban-column {
+  flex: 0 0 300px;
+  background-color: var(--admin-bg-secondary);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 200px);
+  border: 1px solid var(--admin-border-color);
+}
+
+.kanban-column-header {
+  padding: 15px;
+  border-bottom: 2px solid var(--admin-border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kanban-column-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--admin-text-main);
+}
+
+.kanban-count {
+  background-color: var(--admin-border-color);
+  color: var(--admin-text-light);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.kanban-cards {
+  padding: 15px;
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-height: 150px;
+}
+
+/* Kanban Card */
+.kanban-card {
+  background-color: var(--admin-bg-main);
+  border: 1px solid var(--admin-border-color);
+  border-radius: 6px;
+  padding: 15px;
+  cursor: grab;
+  box-shadow: 0 2px 4px var(--admin-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.kanban-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--admin-shadow);
+}
+
+.kanban-card.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.kanban-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.kanban-card-title {
+  font-weight: 600;
+  color: var(--admin-text-main);
+  font-size: 0.95rem;
+}
+
+.kanban-card-priority {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.priority-alta { background-color: #ffeaea; color: var(--admin-danger); }
+.priority-media { background-color: #fff4e5; color: var(--admin-warning); }
+.priority-baixa { background-color: #e8f5e9; color: var(--admin-success); }
+
+.kanban-card-body {
+  font-size: 0.85rem;
+  color: var(--admin-text-light);
+}
+
+.kanban-card-footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+  color: var(--admin-text-light);
+}
+
+/* Modal CRM */
+.crm-modal {
+  max-width: 800px;
+  width: 95%;
+}
+
+.crm-modal-info {
+  background-color: var(--admin-bg-secondary);
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  border: 1px solid var(--admin-border-color);
+}
+
+.crm-modal-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--admin-text-main);
+}
+
+.crm-modal-info p strong {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--admin-text-light);
+  margin-bottom: 4px;
+}
+
+.crm-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .crm-modal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.crm-section h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--admin-text-main);
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--admin-border-color);
+  padding-bottom: 8px;
+}
+
+.crm-form .form-group {
+  margin-bottom: 15px;
+}
+
+.crm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.crm-list-item {
+  background-color: var(--admin-bg-secondary);
+  border: 1px solid var(--admin-border-color);
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.crm-list-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--admin-text-main);
+}
+
+.crm-list-item-body {
+  color: var(--admin-text-light);
+  margin-bottom: 8px;
+}
+
+.crm-list-item-footer {
+  font-size: 0.75rem;
+  color: var(--admin-text-muted);
+  text-align: right;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}

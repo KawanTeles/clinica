@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM | Admin Clínica Zoe</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  <link rel="stylesheet" href="../../css/admin/components.css">
+  <link rel="stylesheet" href="../../css/admin/responsive-admin.css">
+  <link rel="stylesheet" href="../../css/admin/crm.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/theme.js"></script>
+  <script type="module" src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="dashboard.html" class="admin-brand"><i class="fas fa-hand-holding-heart"></i><span>Zoe Admin</span></a>
+      </div>
+      <nav class="admin-sidebar-nav">
+        <a href="dashboard.html" class="admin-nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+        <a href="profissionais.html" class="admin-nav-item"><i class="fas fa-user-md"></i><span>Profissionais</span></a>
+        <a href="pacientes.html" class="admin-nav-item"><i class="fas fa-users"></i><span>Pacientes</span></a>
+        <a href="crm.html" class="admin-nav-item active"><i class="fas fa-bullseye"></i><span>CRM</span></a>
+        <a href="agenda.html" class="admin-nav-item"><i class="far fa-calendar-alt"></i><span>Agenda</span></a>
+        <a href="financeiro.html" class="admin-nav-item"><i class="fas fa-wallet"></i><span>Financeiro</span></a>
+        <a href="usuarios.html" class="admin-nav-item"><i class="fas fa-user-shield"></i><span>Usuários</span></a>
+        <a href="configuracoes.html" class="admin-nav-item">
+          <i class="fas fa-cog"></i>
+          <span>Configurações</span>
+        </a>
+        <hr style="border: 0; border-top: 1px solid var(--admin-border-color); margin: 8px 0;" />
+        <a href="../../index.html" class="admin-nav-item">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Voltar ao Site</span>
+        </a>
+        <a href="#" class="admin-nav-item" id="btn-logout" style="color: var(--admin-danger);">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </a>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <div class="clinic-tenant-info">
+          <div class="tenant-logo">CZ</div>
+          <div class="tenant-details"><span class="tenant-name">Clínica Zoe - Matriz</span><span class="tenant-plan">Plano Premium</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+          <h1 class="page-title">Gestão de Relacionamento (CRM)</h1>
+        </div>
+        <div class="header-right">
+          <div class="header-alerts"><i class="fas fa-bell"></i><span class="alert-badge">3</span></div>
+          <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Admin+Zoe&background=3498db&color=fff" alt="Avatar" class="user-avatar" id="header-user-avatar">
+            <div class="user-info">
+              <span class="user-name" id="header-user-name">Usuário</span>
+              <span class="user-role" id="header-user-role">Acesso</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="crm-container">
+          <div class="crm-header">
+            <h2>Kanban de Oportunidades</h2>
+            <button class="admin-btn primary" id="btn-novo-lead"><i class="fas fa-plus"></i> Novo Lead</button>
+          </div>
+          
+          <div class="kanban-board">
+            
+            <div class="kanban-column" data-stage="novo_lead">
+              <div class="kanban-column-header">
+                <h3>Novo Lead</h3>
+                <span class="kanban-count">0</span>
+              </div>
+              <div class="kanban-cards" id="col-novo-lead"></div>
+            </div>
+            
+            <div class="kanban-column" data-stage="contato_realizado">
+              <div class="kanban-column-header">
+                <h3>Contato Realizado</h3>
+                <span class="kanban-count">0</span>
+              </div>
+              <div class="kanban-cards" id="col-contato-realizado"></div>
+            </div>
+            
+            <div class="kanban-column" data-stage="consulta_agendada">
+              <div class="kanban-column-header">
+                <h3>Consulta Agendada</h3>
+                <span class="kanban-count">0</span>
+              </div>
+              <div class="kanban-cards" id="col-consulta-agendada"></div>
+            </div>
+            
+            <div class="kanban-column" data-stage="paciente_ativo">
+              <div class="kanban-column-header">
+                <h3>Paciente Ativo</h3>
+                <span class="kanban-count">0</span>
+              </div>
+              <div class="kanban-cards" id="col-paciente-ativo"></div>
+            </div>
+            
+            <div class="kanban-column" data-stage="retorno">
+              <div class="kanban-column-header">
+                <h3>Retorno</h3>
+                <span class="kanban-count">0</span>
+              </div>
+              <div class="kanban-cards" id="col-retorno"></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal CRM Detalhes -->
+      <div id="modal-crm-detalhes" class="modal-overlay" style="display: none;">
+        <div class="modal-content crm-modal">
+          <div class="modal-header">
+            <h2 id="crm-modal-title">Detalhes do Paciente</h2>
+            <button class="modal-close" id="btn-close-crm-modal"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-body crm-modal-body">
+            
+            <div class="crm-modal-info" id="crm-modal-info">
+              <!-- Preenchido via JS: Nome, Telefone, Email, Estágio, Prioridade, Data -->
+            </div>
+            
+            <div class="crm-modal-grid">
+              <!-- Esquerda: Formulário de Interação e Tarefas -->
+              <div class="crm-modal-left">
+                
+                <div class="crm-section">
+                  <h3><i class="fas fa-comment-medical"></i> Nova Interação</h3>
+                  <form id="form-nova-interacao" class="crm-form">
+                    <input type="hidden" id="interacao-patient-id">
+                    <input type="hidden" id="interacao-clinic-id">
+                    <div class="form-group">
+                      <label class="form-label">Tipo</label>
+                      <select id="interacao-tipo" class="form-input" required>
+                        <option value="ligacao">Ligação</option>
+                        <option value="whatsapp">WhatsApp</option>
+                        <option value="email">E-mail</option>
+                        <option value="presencial">Presencial</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Descrição</label>
+                      <textarea id="interacao-descricao" class="form-input" rows="3" required placeholder="O que foi conversado?"></textarea>
+                    </div>
+                    <div class="form-actions">
+                      <button type="submit" class="admin-btn primary">Salvar Interação</button>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="crm-section mt-4">
+                  <h3><i class="fas fa-tasks"></i> Tarefas Pendentes</h3>
+                  <div id="crm-modal-tasks" class="crm-list">
+                    <!-- Preenchido via JS -->
+                  </div>
+                </div>
+
+              </div>
+              
+              <!-- Direita: Histórico de Interações -->
+              <div class="crm-modal-right">
+                <div class="crm-section">
+                  <h3><i class="fas fa-history"></i> Histórico de Interações</h3>
+                  <div id="crm-modal-history" class="crm-list history-list">
+                    <!-- Preenchido via JS -->
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal Novo Lead -->
+      <div id="modal-novo-lead" class="modal-overlay" style="display: none;">
+        <div class="modal-content crm-modal" style="max-width: 500px;">
+          <div class="modal-header">
+            <h2>Novo Lead</h2>
+            <button class="modal-close" id="btn-close-novo-lead"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-body crm-modal-body">
+            <form id="form-novo-lead" class="crm-form">
+              <div class="form-group">
+                <label class="form-label">Nome Completo</label>
+                <input type="text" id="lead-nome" class="form-input" required placeholder="Nome do paciente">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Telefone / WhatsApp</label>
+                <input type="text" id="lead-telefone" class="form-input" required placeholder="(00) 00000-0000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">E-mail (Opcional)</label>
+                <input type="email" id="lead-email" class="form-input" placeholder="email@exemplo.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Origem do Contato</label>
+                <select id="lead-origem" class="form-input" required>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="site">Site</option>
+                  <option value="indicacao">Indicação</option>
+                  <option value="ligacao">Ligação Ativa</option>
+                  <option value="balcao">Balcão (Presencial)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Observação Inicial</label>
+                <textarea id="lead-observacao" class="form-input" rows="3" placeholder="Qual a queixa/dúvida do paciente?"></textarea>
+              </div>
+              <div class="form-actions" style="margin-top: 20px;">
+                <button type="submit" class="admin-btn primary" id="btn-salvar-lead" style="width: 100%;">Salvar Novo Lead</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+
+  <script type="module" src="../../js/admin/sidebar.js"></script>
+  <script type="module" src="../../js/admin/crm.js"></script>
+</body>
+</html>

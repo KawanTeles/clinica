@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automações CRM | Admin Clínica Zoe</title>
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Admin CSS -->
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+  <link rel="stylesheet" href="../../css/admin/components.css">
+  <link rel="stylesheet" href="../../css/admin/responsive-admin.css">
+  <link rel="stylesheet" href="../../css/admin/crm-automations.css">
+
+  <!-- Supabase CDN & Auth Guard -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="../../js/theme.js"></script>
+  <script type="module" src="../../js/admin/guard.js"></script>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="dashboard.html" class="admin-brand">
+          <i class="fas fa-hand-holding-heart"></i>
+          <span>Zoe Admin</span>
+        </a>
+      </div>
+
+      <nav class="admin-sidebar-nav">
+        <a href="dashboard.html" class="admin-nav-item">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="profissionais.html" class="admin-nav-item">
+          <i class="fas fa-user-md"></i>
+          <span>Profissionais</span>
+        </a>
+        <a href="pacientes.html" class="admin-nav-item">
+          <i class="fas fa-users"></i>
+          <span>Pacientes</span>
+        </a>
+        <a href="crm.html" class="admin-nav-item">
+          <i class="fas fa-bullseye"></i>
+          <span>CRM</span>
+        </a>
+        <a href="crm-automations.html" class="admin-nav-item active">
+          <i class="fas fa-robot"></i>
+          <span>Automações CRM</span>
+        </a>
+        <a href="agenda.html" class="admin-nav-item">
+          <i class="far fa-calendar-alt"></i>
+          <span>Agenda</span>
+        </a>
+        <a href="financeiro.html" class="admin-nav-item">
+          <i class="fas fa-wallet"></i>
+          <span>Financeiro</span>
+        </a>
+        <a href="usuarios.html" class="admin-nav-item">
+          <i class="fas fa-user-shield"></i>
+          <span>Usuários</span>
+        </a>
+        <a href="configuracoes.html" class="admin-nav-item">
+          <i class="fas fa-cog"></i>
+          <span>Configurações</span>
+        </a>
+        <hr style="border: 0; border-top: 1px solid var(--admin-border-color); margin: 8px 0;" />
+        <a href="../../index.html" class="admin-nav-item">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Voltar ao Site</span>
+        </a>
+        <a href="#" class="admin-nav-item" id="btn-logout" style="color: var(--admin-danger);">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="clinic-tenant-info">
+          <div class="tenant-logo">CZ</div>
+          <div class="tenant-details">
+            <span class="tenant-name">Clínica Zoe - Matriz</span>
+            <span class="tenant-plan">Plano Premium</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      
+      <!-- Top Header -->
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir menu">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title">Automações CRM</h1>
+        </div>
+        
+        <div class="header-right">
+          <div class="user-profile">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+              <span class="user-name">Carregando...</span>
+              <span class="user-role">...</span>
+            </div>
+          </div>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="admin-content">
+        
+        <!-- Dashboard Stats -->
+        <div class="automations-dashboard">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-list-ol"></i></div>
+            <div class="stat-info">
+              <h3>Total de Regras</h3>
+              <p id="stat-total-rules">-</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon success"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-info">
+              <h3>Regras Ativas</h3>
+              <p id="stat-active-rules">-</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon primary"><i class="fas fa-bolt"></i></div>
+            <div class="stat-info">
+              <h3>Execuções Hoje</h3>
+              <p id="stat-executions-today">-</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon danger"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="stat-info">
+              <h3>Falhas (24h)</h3>
+              <p id="stat-recent-failures">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="automations-tabs">
+          <button class="tab-btn active" data-tab="rules">Regras de Automação</button>
+          <button class="tab-btn" data-tab="history">Histórico de Execuções</button>
+        </div>
+
+        <!-- Tab Content: Rules -->
+        <div class="tab-content active" id="tab-rules">
+          <div class="card">
+            <div class="card-header">
+              <h2>Lista de Regras</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Evento</th>
+                    <th>Ação</th>
+                    <th>Status</th>
+                    <th>Criado em</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="rules-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Carregando regras...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content: History -->
+        <div class="tab-content" id="tab-history">
+          <div class="card">
+            <div class="card-header">
+              <h2>Histórico (Últimas execuções)</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Data/Hora</th>
+                    <th>Evento</th>
+                    <th>Status</th>
+                    <th>Paciente Relacionado</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <tr><td colspan="4" style="text-align: center;">Carregando histórico...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="../../js/admin/sidebar.js"></script>
+  <script type="module" src="../../js/admin/crm-automations.js"></script>
+</body>
+</html>
