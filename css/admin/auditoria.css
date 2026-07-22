@@ -1,0 +1,31 @@
+.audit-filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.log-action-insert {
+  color: var(--admin-success);
+  font-weight: 600;
+}
+
+.log-action-update {
+  color: var(--admin-primary);
+  font-weight: 600;
+}
+
+.log-action-delete {
+  color: var(--admin-danger);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .audit-filters {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .audit-filters select, .audit-filters input, .audit-filters button {
+    width: 100% !important;
+  }
+}

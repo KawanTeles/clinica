@@ -1,33 +1,87 @@
 /* =========================================
-   SaaS Admin Responsive Layout
+   SaaS Admin Responsive Layout - Professional
    ========================================= */
 
-/* Desktop (Default) - 1920x1080 and 1366x768 are covered by base styles */
+/* Typography & Base Spacing with clamp() */
+:root {
+  --font-base: clamp(0.875rem, 1vw + 0.5rem, 1rem);
+  --h1-size: clamp(1.25rem, 2vw + 1rem, 1.75rem);
+  --h2-size: clamp(1.1rem, 1.5vw + 0.9rem, 1.5rem);
+  --spacing-base: clamp(12px, 2vw, 24px);
+}
 
-/* Tablet (max-width: 1024px) */
-@media (max-width: 1024px) {
-  .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
+body.admin-body {
+  font-size: var(--font-base);
+}
+
+.page-title {
+  font-size: var(--h1-size) !important;
+}
+
+h2.card-title {
+  font-size: var(--h2-size) !important;
+}
+
+/* ==================================================
+   GLOBAL FIXES: TABLES & MODALS
+   ================================================== */
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: var(--spacing-base);
+  border-radius: var(--admin-border-radius-sm);
+  background: var(--admin-surface);
+  box-shadow: 0 0 0 1px var(--admin-border-color);
+}
+
+.table-responsive table {
+  min-width: 700px; /* Evita achatamento de tabelas complexas */
+  width: 100%;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 5vh auto;
+  border-radius: var(--admin-border-radius);
+  box-shadow: var(--admin-shadow-lg);
+  padding: var(--spacing-base);
+}
+
+/* ==================================================
+   DESKTOP & LARGE NOTEBOOK (1200px - 1440px)
+   ================================================== */
+@media (max-width: 1200px) {
+  .dashboard-grid, .metrics-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 }
 
-/* Tablet & Mobile (max-width: 768px) */
+/* ==================================================
+   TABLET (992px)
+   ================================================== */
+@media (max-width: 992px) {
+  .dashboard-grid, .metrics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .admin-content {
+    padding: 24px;
+  }
+}
+
+/* ==================================================
+   TABLET & MOBILE MENU/OFF-CANVAS (max-width: 768px)
+   ================================================== */
 @media (max-width: 768px) {
-  .admin-sidebar {
-    transform: translateX(-100%);
-  }
-
-  .admin-sidebar.sidebar-open {
-    transform: translateX(0);
-    box-shadow: var(--admin-shadow-lg);
-  }
-
+  /* Layout Base */
   .admin-main {
-    margin-left: 0;
-  }
-
-  .mobile-menu-btn {
-    display: block;
+    margin-left: 0 !important;
+    width: 100%;
   }
 
   .admin-header {
@@ -37,12 +91,43 @@
   .admin-content {
     padding: 16px;
   }
-  
-  .user-name, .user-role {
-    display: none; /* Hide name/role on mobile, show only avatar */
+
+  /* Header mobile fixes */
+  .header-left .page-title {
+    font-size: 1.1rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
   }
 
-  /* Overlay for when sidebar is open */
+  .mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    margin-right: 10px;
+  }
+  
+  .user-name, .user-role {
+    display: none !important; /* Esconde texto do usuário, deixa só avatar */
+  }
+
+  /* Sidebar Off-Canvas */
+  .admin-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+  }
+
+  .admin-sidebar.sidebar-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+
+  /* Overlay Escuro */
   .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -50,40 +135,73 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 95; /* Just below sidebar */
+    backdrop-filter: blur(2px);
+    z-index: 999;
     display: none;
     opacity: 0;
-    transition: opacity var(--transition-speed) ease;
+    transition: opacity 0.3s ease;
   }
 
   .sidebar-overlay.active {
     display: block;
     opacity: 1;
   }
-}
 
-/* Mobile Small (max-width: 480px) - covers 360px */
-@media (max-width: 480px) {
-  .metrics-grid {
-    grid-template-columns: 1fr;
+  /* Formulários */
+  .form-row {
+    flex-direction: column !important;
+    gap: 16px !important;
   }
   
+  .form-row > * {
+    width: 100% !important;
+  }
+}
+
+/* ==================================================
+   MOBILE SMALL (max-width: 480px)
+   ================================================== */
+@media (max-width: 480px) {
+  .dashboard-grid, .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-header {
+    height: 60px;
+  }
+
   .header-right {
     gap: 12px;
   }
 
-  .page-title {
-    font-size: 1.1rem;
-  }
-
+  /* Botões e Cards Header */
   .card-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: flex-start !important;
+    gap: 16px;
+  }
+  
+  .card-header .actions, 
+  .card-header .filters {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .card-header .admin-btn {
+    width: 100%;
+    justify-content: center;
   }
 
+  /* Ajustes finos de inputs/selects */
+  .form-input {
+    font-size: 16px; /* Evita zoom automático no iOS */
+  }
+
+  /* Tabelas */
   .admin-table th, .admin-table td {
-    padding: 12px 8px;
+    padding: 12px 10px;
     font-size: 0.85rem;
   }
 }

@@ -15,6 +15,260 @@
 
   <script src="../../js/theme.js"></script>
   <script type="module" src="../../js/admin/guard.js"></script>
+
+  <style>
+    /* ULTRA PREMIUM MODAL OVERRIDES - Linear/Tailwind UI Style */
+    .modal-overlay {
+      background-color: rgba(0, 0, 0, 0.4) !important;
+      backdrop-filter: blur(6px) !important;
+      -webkit-backdrop-filter: blur(6px) !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    .modal-content {
+      background: var(--admin-surface) !important;
+      border-radius: 20px !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.05) !important;
+      transform: scale(0.95) translateY(10px) !important;
+      opacity: 0 !important;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      border: none !important;
+      overflow: hidden !important;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1) translateY(0) !important;
+      opacity: 1 !important;
+    }
+
+    /* Typography & Inputs */
+    .premium-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: var(--admin-text-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .premium-input {
+      width: 100%;
+      background: var(--admin-bg);
+      border: 1px solid var(--admin-border-color);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      color: var(--admin-text-main);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .premium-input:hover {
+      background: var(--admin-surface);
+      border-color: #a0aec0;
+    }
+
+    .premium-input:focus {
+      background: var(--admin-surface);
+      border-color: var(--admin-accent);
+      box-shadow: 0 0 0 4px rgba(46, 139, 87, 0.15); /* Accent color with opacity */
+      outline: none;
+    }
+
+    .premium-select-wrapper {
+      position: relative;
+    }
+    
+    .premium-select-wrapper::after {
+      content: '\f107';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--admin-text-muted);
+      pointer-events: none;
+    }
+
+    .premium-input.is-select {
+      appearance: none;
+      padding-right: 40px;
+    }
+
+    /* Buttons */
+    .btn-premium {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+    }
+
+    .btn-premium-cancel {
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border-color);
+      color: var(--admin-text-main);
+    }
+
+    .btn-premium-cancel:hover {
+      background: var(--admin-bg);
+      color: var(--admin-primary);
+    }
+
+    .btn-premium-primary {
+      background: var(--admin-primary);
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(29, 29, 31, 0.2);
+    }
+
+    .btn-premium-primary:hover {
+      background: #000000;
+      box-shadow: 0 6px 8px -1px rgba(29, 29, 31, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-premium-success {
+      background: var(--admin-success);
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(46, 139, 87, 0.2);
+    }
+
+    .btn-premium-success:hover {
+      background: #236b43;
+      transform: translateY(-1px);
+    }
+
+    /* Radio Cards for Payment */
+    .radio-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .radio-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      border: 2px solid var(--admin-border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      background: var(--admin-surface);
+      transition: all 0.2s;
+      gap: 8px;
+    }
+
+    .radio-card:hover {
+      border-color: #cbd5e1;
+      background: var(--admin-bg);
+    }
+
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .radio-card:has(input:checked) {
+      border-color: var(--admin-accent);
+      background: rgba(46, 139, 87, 0.05);
+      box-shadow: 0 4px 6px -1px rgba(46, 139, 87, 0.1);
+    }
+
+    .radio-icon {
+      font-size: 1.5rem;
+      color: var(--admin-text-muted);
+      transition: color 0.2s;
+    }
+
+    .radio-card:has(input:checked) .radio-icon {
+      color: var(--admin-accent);
+    }
+
+    .radio-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--admin-text-main);
+    }
+
+    .radio-card:has(input:checked) .radio-label {
+      color: var(--admin-primary);
+    }
+
+    /* Header & Footer Areas */
+    .premium-header {
+      padding: 24px 32px 20px;
+      border-bottom: 1px solid var(--admin-border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--admin-surface);
+    }
+
+    .premium-header-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(46, 139, 87, 0.1);
+      color: var(--admin-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-right: 16px;
+    }
+
+    .premium-body {
+      padding: 24px 32px;
+      background: var(--admin-surface);
+      max-height: 65vh;
+      overflow-y: auto;
+    }
+
+    .premium-footer {
+      padding: 20px 32px;
+      background: var(--admin-bg);
+      border-top: 1px solid var(--admin-border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* Receipt Card */
+    .receipt-card {
+      background: linear-gradient(135deg, var(--admin-bg) 0%, var(--admin-surface) 100%);
+      border: 1px solid var(--admin-border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .receipt-row:last-child {
+      margin-bottom: 0;
+      padding-top: 12px;
+      border-top: 1px dashed var(--admin-border-color);
+      align-items: center;
+    }
+
+    .receipt-label { color: var(--admin-text-muted); font-size: 0.9rem; }
+    .receipt-val { color: var(--admin-text-main); font-weight: 600; }
+    .receipt-total { color: var(--admin-accent); font-size: 1.4rem; font-weight: 800; }
+  </style>
 </head>
 <body class="admin-body">
   <div class="admin-layout">
@@ -56,7 +310,7 @@
       <header class="admin-header">
         <div class="header-left">
           <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
-          <h1 class="page-title">Agenda Geral</h1>
+          <h1 class="page-title">Agenda</h1>
         </div>
         <div class="header-right">
           <div class="header-alerts"><i class="fas fa-bell"></i><span class="alert-badge">3</span></div>
@@ -68,54 +322,56 @@
       </header>
 
       <div class="admin-content">
-        <div class="agenda-container">
-          <!-- Sidebar -->
-          <aside class="agenda-sidebar">
-            <h3 class="card-title">Filtros da Agenda</h3>
-            <div class="form-group">
-              <label class="form-label">Profissional</label>
-              <select id="agenda_prof_filter" class="form-input">
+        <div class="agenda-premium-card">
+          
+          <div class="agenda-toolbar">
+            <div class="toolbar-left">
+              <div class="date-navigator">
+                <button class="admin-btn admin-btn-outline icon-btn" id="btn-prev-week"><i class="fas fa-chevron-left"></i></button>
+                <h3 class="current-date-display" id="current-week-label">Semana de 10 a 16 Nov</h3>
+                <button class="admin-btn admin-btn-outline icon-btn" id="btn-next-week"><i class="fas fa-chevron-right"></i></button>
+              </div>
+            </div>
+
+            <div class="toolbar-center">
+              <div class="view-modes">
+                <button class="view-btn" id="btn-view-day">Dia</button>
+                <button class="view-btn active" id="btn-view-week">Semana</button>
+                <button class="view-btn" id="btn-view-month">Mês</button>
+              </div>
+            </div>
+
+            <div class="toolbar-right">
+              <button class="admin-btn admin-btn-primary" id="btn-nova-consulta"><i class="fas fa-plus"></i> Agendar Paciente</button>
+            </div>
+          </div>
+
+          <div class="agenda-filters-bar">
+            <div class="filter-group">
+              <i class="fas fa-user-md filter-icon"></i>
+              <select id="agenda_prof_filter" class="form-input premium-select">
+                <option value="">Selecione um profissional para carregar agenda...</option>
                 <!-- Loaded via JS -->
               </select>
             </div>
-            
-            <hr style="border-top:1px solid var(--admin-border-color); margin:0;">
 
-            <div id="prof_settings_area" style="display:none;">
-              <h4 style="font-size:0.9rem; color:var(--admin-text-muted); margin-bottom:10px;">Regras do Profissional</h4>
-              <p style="font-size:0.85rem;" id="txt-rules">Carregando...</p>
-              
-              <button class="admin-btn admin-btn-outline" style="width:100%; margin-top:15px;" id="btn-manage-schedule">
-                <i class="fas fa-clock"></i> Gerenciar Horários
+            <div id="prof_settings_area" class="prof-settings-group" style="display:none;">
+              <span class="rules-badge" id="txt-rules"><i class="fas fa-info-circle"></i> Regras Carregadas</span>
+              <button class="admin-btn admin-btn-outline small-btn" id="btn-manage-schedule">
+                <i class="fas fa-clock"></i> Horários
               </button>
-              <button class="admin-btn admin-btn-outline" style="width:100%; margin-top:10px;" id="btn-manage-blocks">
-                <i class="fas fa-ban"></i> Criar Bloqueio
+              <button class="admin-btn admin-btn-outline small-btn" id="btn-manage-blocks">
+                <i class="fas fa-ban"></i> Bloqueio
               </button>
             </div>
-          </aside>
+          </div>
 
-          <!-- Main Calendar Area -->
-          <main class="agenda-main">
-            <div class="agenda-header-controls">
-              <div style="display:flex; gap: 10px; align-items:center;">
-                <button class="admin-btn admin-btn-outline" id="btn-prev-week"><i class="fas fa-chevron-left"></i></button>
-                <h3 class="card-title" id="current-week-label" style="min-width: 200px; text-align: center; margin: 0;">Semana de 10 a 16 Nov</h3>
-                <button class="admin-btn admin-btn-outline" id="btn-next-week"><i class="fas fa-chevron-right"></i></button>
-              </div>
-              
-              <div class="view-modes" style="display: flex; background: var(--admin-bg-color); border: 1px solid var(--admin-border-color); border-radius: 6px; overflow: hidden;">
-                <button class="admin-btn" id="btn-view-day" style="border:none; border-radius:0; border-right:1px solid var(--admin-border-color); background:transparent; padding: 6px 12px;">Dia</button>
-                <button class="admin-btn" id="btn-view-week" style="border:none; border-radius:0; border-right:1px solid var(--admin-border-color); background:var(--admin-primary); color:white; padding: 6px 12px;">Semana</button>
-                <button class="admin-btn" id="btn-view-month" style="border:none; border-radius:0; background:transparent; padding: 6px 12px;">Mês</button>
-              </div>
-
-              <button class="admin-btn admin-btn-primary" id="btn-nova-consulta"><i class="fas fa-plus"></i> Agendar Paciente</button>
-            </div>
-
+          <div class="calendar-wrapper">
             <div class="calendar-grid" id="calendar-grid">
               <!-- Rendered via JS -->
             </div>
-          </main>
+          </div>
+          
         </div>
       </div>
     </main>
@@ -123,100 +379,178 @@
 
   <!-- Modal Nova Consulta / Edição -->
   <div class="modal-overlay" id="modal-consulta">
-    <div class="modal-content" style="max-width:500px;">
-      <div class="modal-header">
-        <h2 class="card-title" id="modal-consulta-title">Nova Consulta</h2>
-        <i class="fas fa-times close-modal"></i>
+    <div class="modal-content" style="max-width: 580px;">
+      
+      <div class="premium-header">
+        <div style="display: flex; align-items: center;">
+          <div class="premium-header-icon">
+            <i class="far fa-calendar-check"></i>
+          </div>
+          <div>
+            <h2 class="card-title" id="modal-consulta-title" style="font-size: 1.3rem; margin: 0; color: #0f172a;">Agendar Paciente</h2>
+            <p style="margin: 4px 0 0; font-size: 0.85rem; color: #64748b;">Preencha os detalhes para reservar o horário.</p>
+          </div>
+        </div>
+        <button type="button" class="close-modal" style="background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; padding: 4px; line-height: 1; transition: color 0.2s;">&times;</button>
       </div>
+      
       <form id="form-consulta">
-        <input type="hidden" id="cons_id">
-        <div class="form-group">
-          <label class="form-label">Paciente</label>
-          <select id="cons_paciente" class="form-input" required>
-            <option value="">Selecione um paciente...</option>
-          </select>
-        </div>
-        <div class="form-group" id="group_cons_profissional">
-          <label class="form-label">Profissional</label>
-          <select id="cons_profissional" class="form-input" required>
-            <option value="">Selecione um profissional...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Data</label>
-          <input type="date" id="cons_data" class="form-input" required>
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-          <div class="form-group">
-            <label class="form-label">Hora Início</label>
-            <input type="time" id="cons_inicio" class="form-input" required>
+        <div class="premium-body">
+          <input type="hidden" id="cons_id">
+          
+          <div style="margin-bottom: 20px;">
+            <label class="premium-label">Paciente</label>
+            <div class="premium-select-wrapper">
+              <select id="cons_paciente" class="premium-input is-select" required>
+                <option value="">Selecione um paciente...</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Hora Fim</label>
-            <input type="time" id="cons_fim" class="form-input" required>
+          
+          <div id="group_cons_profissional" style="margin-bottom: 24px;">
+            <label class="premium-label">Profissional</label>
+            <div class="premium-select-wrapper">
+              <select id="cons_profissional" class="premium-input is-select" required>
+                <option value="">Selecione um profissional...</option>
+              </select>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+            <div>
+              <label class="premium-label">Data</label>
+              <input type="date" id="cons_data" class="premium-input" required>
+            </div>
+            <div id="status-group" style="display: none;">
+              <label class="premium-label">Status</label>
+              <div class="premium-select-wrapper">
+                <select id="cons_status" class="premium-input is-select">
+                  <option value="solicitada">Pendente</option>
+                  <option value="confirmada">Confirmada</option>
+                  <option value="concluida">Concluída</option>
+                  <option value="cancelada">Cancelada</option>
+                  <option value="nao_compareceu">Faltou</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+            <div>
+              <label class="premium-label">Hora Início</label>
+              <input type="time" id="cons_inicio" class="premium-input" required>
+            </div>
+            <div>
+              <label class="premium-label">Hora Fim</label>
+              <input type="time" id="cons_fim" class="premium-input" required>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 20px;">
+            <label class="premium-label">Tipo / Procedimento</label>
+            <input type="text" id="cons_tipo" class="premium-input" placeholder="Ex: Consulta Primeira Vez, Retorno, Exame...">
+          </div>
+          
+          <div style="margin-bottom: 8px;">
+            <label class="premium-label">Observações Médicas</label>
+            <textarea id="cons_obs" class="premium-input" rows="3" placeholder="Informações adicionais importantes..." style="resize: vertical;"></textarea>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Tipo de Atendimento / Procedimento</label>
-          <input type="text" id="cons_tipo" class="form-input" placeholder="Ex: Consulta Primeira Vez, Retorno, etc.">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Observação</label>
-          <textarea id="cons_obs" class="form-input" rows="2"></textarea>
-        </div>
-        <div class="form-group" id="status-group" style="display:none;">
-          <label class="form-label">Status da Consulta</label>
-          <select id="cons_status" class="form-input">
-            <option value="solicitada">Pendente</option>
-            <option value="confirmada">Confirmada</option>
-            <option value="concluida">Concluída</option>
-            <option value="cancelada">Cancelada</option>
-            <option value="nao_compareceu">Faltou</option>
-          </select>
-        </div>
-        <div style="margin-top:24px; display:flex; justify-content:space-between; align-items:center;">
-          <button type="button" class="admin-btn" style="background:var(--admin-success); color:var(--admin-inverse-text); display:none;" id="btn-abrir-pagamento"><i class="fas fa-dollar-sign"></i> Receber Pagamento</button>
-          <button type="submit" class="admin-btn admin-btn-primary" id="btn-salvar-consulta">Salvar Agendamento</button>
+        
+        <div class="premium-footer">
+          <div style="flex: 1;">
+            <button type="button" class="btn-premium btn-premium-success" id="btn-abrir-pagamento" style="display:none;"><i class="fas fa-dollar-sign"></i> Faturar</button>
+          </div>
+          <button type="button" class="btn-premium btn-premium-cancel close-modal">Cancelar</button>
+          <button type="submit" class="btn-premium btn-premium-primary" id="btn-salvar-consulta"><i class="fas fa-check"></i> Confirmar Agendamento</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Modal Pagamento -->
-  <div class="modal-overlay" id="modal-pagamento" style="z-index: 1000;">
-    <div class="modal-content" style="max-width:400px;">
-      <div class="modal-header">
-        <h2 class="card-title">Receber Pagamento</h2>
-        <i class="fas fa-times close-modal-pagamento" id="close-pagamento-btn"></i>
-      </div>
-      <form id="form-pagamento">
-        <input type="hidden" id="pag_cons_id">
-        <input type="hidden" id="pag_doc_id">
-        
-        <div style="margin-bottom: 15px; background: var(--admin-card-header); padding: 10px; border-radius: 6px;">
-          <strong>Paciente:</strong> <span id="pag_paciente_nome">Paciente Exemplo</span><br>
-          <strong>Procedimento:</strong> <span id="pag_procedimento">Consulta Padrão</span><br>
-          <strong>Valor:</strong> <span id="pag_valor" style="color: #10b981; font-weight:bold; font-size:1.1rem;">R$ 0,00</span>
+  <div class="modal-overlay" id="modal-pagamento" style="z-index: 10000;">
+    <div class="modal-content" style="max-width: 480px;">
+      
+      <div class="premium-header">
+        <div style="display: flex; align-items: center;">
+          <div class="premium-header-icon" style="background: #ecfdf5; color: #10b981;">
+            <i class="fas fa-receipt"></i>
+          </div>
+          <div>
+            <h2 class="card-title" style="font-size: 1.3rem; margin: 0; color: #0f172a;">Receber Pagamento</h2>
+            <p style="margin: 4px 0 0; font-size: 0.85rem; color: #64748b;">Conclua o faturamento do atendimento.</p>
+          </div>
         </div>
+        <button type="button" class="close-modal-pagamento" id="close-pagamento-btn" style="background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; padding: 4px; line-height: 1; transition: color 0.2s;">&times;</button>
+      </div>
+      
+      <form id="form-pagamento">
+        <div class="premium-body">
+          <input type="hidden" id="pag_cons_id">
+          <input type="hidden" id="pag_doc_id">
+          
+          <div class="receipt-card">
+            <div class="receipt-row">
+              <span class="receipt-label">Paciente</span>
+              <span class="receipt-val" id="pag_paciente_nome">--</span>
+            </div>
+            <div class="receipt-row">
+              <span class="receipt-label">Procedimento</span>
+              <span class="receipt-val" id="pag_procedimento">--</span>
+            </div>
+            <div class="receipt-row">
+              <span class="receipt-label">Total a Pagar</span>
+              <span class="receipt-total" id="pag_valor">R$ 0,00</span>
+            </div>
+          </div>
 
-        <div class="form-group">
-          <label class="form-label">Forma de pagamento</label>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <label><input type="radio" name="pag_forma" value="PIX" required> Pix</label>
-            <label><input type="radio" name="pag_forma" value="DINHEIRO"> Dinheiro</label>
-            <label><input type="radio" name="pag_forma" value="CARTAO_DEBITO"> Cartão Débito</label>
-            <label><input type="radio" name="pag_forma" value="CARTAO_CREDITO"> Cartão Crédito</label>
-            <label><input type="radio" name="pag_forma" value="CONVENIO"> Convênio</label>
+          <div style="margin-bottom: 24px;">
+            <label class="premium-label">Forma de Pagamento</label>
+            <div class="radio-card-grid">
+              
+              <label class="radio-card">
+                <input type="radio" name="pag_forma" value="PIX" required>
+                <i class="fab fa-pix radio-icon"></i>
+                <span class="radio-label">Pix</span>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="pag_forma" value="CARTAO_CREDITO">
+                <i class="fas fa-credit-card radio-icon"></i>
+                <span class="radio-label">Crédito</span>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="pag_forma" value="CARTAO_DEBITO">
+                <i class="far fa-credit-card radio-icon"></i>
+                <span class="radio-label">Débito</span>
+              </label>
+
+              <label class="radio-card">
+                <input type="radio" name="pag_forma" value="DINHEIRO">
+                <i class="fas fa-money-bill-wave radio-icon"></i>
+                <span class="radio-label">Dinheiro</span>
+              </label>
+              
+              <label class="radio-card" style="grid-column: span 2; flex-direction: row; justify-content: center;">
+                <input type="radio" name="pag_forma" value="CONVENIO">
+                <i class="fas fa-notes-medical radio-icon"></i>
+                <span class="radio-label">Convênio Médico</span>
+              </label>
+              
+            </div>
+          </div>
+          
+          <div>
+            <label class="premium-label">Nota / Observação Interna (Opcional)</label>
+            <input type="text" id="pag_obs" class="premium-input" placeholder="Ex: Recibo emitido, NF enviada...">
           </div>
         </div>
         
-        <div class="form-group">
-          <label class="form-label">Observação</label>
-          <input type="text" id="pag_obs" class="form-input">
-        </div>
-
-        <div style="margin-top:24px; text-align:right;">
-          <button type="submit" class="admin-btn admin-btn-primary" id="btn-confirmar-pagamento">Confirmar Recebimento</button>
+        <div class="premium-footer">
+          <button type="button" class="btn-premium btn-premium-cancel close-modal-pagamento">Cancelar</button>
+          <button type="submit" class="btn-premium btn-premium-success" id="btn-confirmar-pagamento"><i class="fas fa-check-circle"></i> Confirmar Baixa</button>
         </div>
       </form>
     </div>
